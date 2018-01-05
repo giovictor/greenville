@@ -1,0 +1,5 @@
+Reservation of books for borrowing (1 day)
+If a borrower has overdue loans he is not permitted to borrow books
+General references cannot be borrowed and for room use only
+Reserve books (overnight) 3 days(multiple copies)
+Maximum of 3 books per borrower

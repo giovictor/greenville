@@ -57,26 +57,38 @@
 	</div>
 	<?php 
 	require "dbconnect.php";
+		/*$booksperpages = 12;
+		$totalbookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC";
+		$totalbookQuery = mysqli_query($dbconnect, $totalbookSQL);
+		$totalbookresults = mysqli_num_rows($totalbookQuery);
+
+		$numberofpages = ceil($totalbookresults/$booksperpages);
+
+		if(!isset($_GET['bookpage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['bookpage'];
+		}
+
+		$firstresult = ($page - 1) * $booksperpages;*/
+
 		$bookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC";
 		$bookQuery = mysqli_query($dbconnect, $bookSQL);
 		$book = mysqli_fetch_assoc($bookQuery);
 	?>
-	<div id='bookdisplay'>
+	<div class="table-responsive" id='bookdisplay'>
 		<table class='table table-hover table-bordered table-striped' id='booktable'>
 			<tr>
-				<th>Call No.</th>
 				<th>Title</th>
 				<th>Authors</th>
 				<th>Publication Details</th>
 				<th>Copies</th>
 				<th> </th>
-				
 			</tr>
 		<?php
 			do {
 		?>
 				<tr>
-					<td><?php echo $book['callnumber'];?></td>
 					<td>
 						<button class="btn btn-link btn-sm viewbookinfo" style="color:#1CA843;" id="<?php echo $book['accession_no'];?>">
 							<b><?php echo $book['booktitle'];?></b>
@@ -86,10 +98,10 @@
 					<td><?php echo $book['publisher']." c".$book['publishingyear'];?></td>
 					<td><?php echo $book['copies'];?></td>
 					<td>
-						<!--<button class="btn btn-primary btn-sm addbookcopy" id="<?php echo $book['bookID'];?>" data-toggle="modal" data-target="#addbookcopy" title="Add copies of book.">
+						<button class="btn btn-primary btn-sm addbookcopy" id="<?php echo $book['bookID'];?>" data-toggle="modal" data-target="#addbookcopy" title="Add copies of book.">
 							<span class="glyphicon glyphicon-plus"></span>
-						</button>-->
-						<a href="?page=editupdatebook&bookID=<?php echo $book['bookID'];?>" class="btn btn-success btn-sm" title="Edit book.">
+						</button>
+						<a href="?page=updatebook&bookID=<?php echo $book['bookID'];?>" class="btn btn-success btn-sm" title="Edit book.">
 							<span class="glyphicon glyphicon-pencil"></span>
 						</a>
 						<button data-id="<?php echo $book['bookID'];?>" class="btn btn-danger btn-sm" id="deletebook" data-toggle="modal" data-target="#deleteconfirm" title="Delete book.">
@@ -101,6 +113,16 @@
 			} while($book = mysqli_fetch_assoc($bookQuery));
 		?>
 	</table>
+
+	<!--<ul>
+		<?php
+			for($pages=1; $pages<=$numberofpages; $pages++) {
+		?>
+				<li><a href="?page=books&bookpage=<?php echo $pages;?>"><?php echo $pages; ?></a></li>
+		<?php
+			}
+		?> 
+	</ul>-->
 	<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
 		<input class="btn btn-success btn-sm" id="button" type="submit" name="createpdf" value="Print PDF">
 		<input type="hidden" name="query" value="<?php echo $bookSQL;?>">
@@ -121,6 +143,7 @@
 			$("#confirmdelete").data("id", bookid);
 		});
 
+		
 		$("#confirmdelete").click(function(){
 			var bookid = $(this).data("id");
 			var option = $("#bookgroupby").val();
@@ -138,7 +161,6 @@
 				}
 			});
 		});
-
 		
 		$("#bookgroupby").change(function(){
 			var option = $(this).val();

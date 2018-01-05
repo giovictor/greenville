@@ -1,0 +1,26 @@
+Borrower Side:
+1. Advanced Search
+
+Admin Side:
+1. Modify receipts
+2. Modify reports
+
+Both Sides:
+ 1. Table Pagination
+
+FRONT END CHANGES:
+Make the website mobile responsive
+Embed about us and google maps section under side bar and search form on homepage
+
+ADD FEATURE:
+Restore and permanent delete for archived datas
+
+FIX BUG:
+Evaluate receipts data for return ******
+
+
+
+
+
+
+
