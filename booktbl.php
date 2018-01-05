@@ -10,14 +10,12 @@
 					<div class="form-group">
 						Filter by keyword: 
 						<select name="aedsearchtype" class="aedsearchtype form-control">
-							<option value="All">Any Field</option>
-							<option value="Title">Title</option>
-							<option value="Author">Author</option>
-							<option value="Publisher">Publisher</option>
-							<option value="Year">Year</option>
-							<option value="Call Number">Call Number</option>
-							<option value="ISBN">ISBN</option>
-							<option value="Accession Number">Accession Number</option>
+							<option value="any">Any Field</option>
+							<option value="booktitle">Title</option>
+							<option value="author">Author</option>
+							<option value="publisher">Publisher</option>
+							<option value="publishingyear">Year</option>
+							<option value="accession_no">Accession Number</option>
 						</select>
 					</div>
 					<div class="form-group">
@@ -28,7 +26,7 @@
 			<form style="margin-top:10px;" method="GET" class="form-inline" id="booktablesearchform">
 				Filter by classification:
 				<div class="form-group">
-					<select name="classificationselect" id="classificationselect" class="form-control">
+					<select name="classification" id="classification" class="form-control">
 						<?php
 							require "dbconnect.php";
 							$classificationSQL = "SELECT * FROM classification WHERE status=1";
@@ -57,7 +55,7 @@
 	</div>
 	<?php 
 	require "dbconnect.php";
-		/*$booksperpages = 12;
+		$booksperpages = 10;
 		$totalbookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC";
 		$totalbookQuery = mysqli_query($dbconnect, $totalbookSQL);
 		$totalbookresults = mysqli_num_rows($totalbookQuery);
@@ -70,9 +68,9 @@
 			$page = $_GET['bookpage'];
 		}
 
-		$firstresult = ($page - 1) * $booksperpages;*/
+		$firstresult = ($page - 1) * $booksperpages;
 
-		$bookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC";
+		$bookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC LIMIT $firstresult, $booksperpages";
 		$bookQuery = mysqli_query($dbconnect, $bookSQL);
 		$book = mysqli_fetch_assoc($bookQuery);
 	?>
@@ -112,9 +110,13 @@
 		<?php
 			} while($book = mysqli_fetch_assoc($bookQuery));
 		?>
-	</table>
-
-	<!--<ul>
+		</table>
+		<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
+			<input class="btn btn-success btn-sm" id="button" type="submit" name="createpdf" value="Print PDF">
+			<input type="hidden" name="query" value="<?php echo $bookSQL;?>">
+		</form>
+	</div>
+	<ul class="pagination">
 		<?php
 			for($pages=1; $pages<=$numberofpages; $pages++) {
 		?>
@@ -122,83 +124,86 @@
 		<?php
 			}
 		?> 
-	</ul>-->
-	<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
-		<input class="btn btn-success btn-sm" id="button" type="submit" name="createpdf" value="Print PDF">
-		<input type="hidden" name="query" value="<?php echo $bookSQL;?>">
+	</ul>
+	<form id="pagination-data">
+		<input type="hidden" name="booksperpages" id="booksperpages" value="<?php echo $booksperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
 	</form>
-	</div>
 	<script>
-	$(document).ready(function(){
-		$("#booktablesearchform").submit(function(e) {
-			var keyword = $(".aedsearchbox").val();
-			if(keyword=="") {
-				$("#emptysearch").modal("show");
-				e.preventDefault();
-			}
-		});
-
-		$(document).on("click", "#deletebook", function(){
-			var bookid = $(this).data("id");
-			$("#confirmdelete").data("id", bookid);
-		});
-
-		
-		$("#confirmdelete").click(function(){
-			var bookid = $(this).data("id");
-			var option = $("#bookgroupby").val();
-			$.ajax({
-				url:"deletebook.php",
-				method:"POST",
-				data:{bookid:bookid, option:option},
-				beforeSend:function() {
-					$("#confirmdelete").html("Deleting Book...");
-				},
-				success:function(data) {
-					$("#deleteconfirm").modal("hide");
-					$("#confirmdelete").html("Confirm");
-					$("#bookdisplay").html(data);
+		$(document).ready(function(){
+			$("#booktablesearchform").submit(function(e) {
+				var keyword = $(".aedsearchbox").val();
+				if(keyword=="") {
+					$("#emptysearch").modal("show");
+					e.preventDefault();
 				}
 			});
-		});
-		
-		$("#bookgroupby").change(function(){
-			var option = $(this).val();
-			$.ajax({
-				url:"booktblfilter.php",
-				method:"POST",
-				data:{option:option},
-				success:function(data) {
-					$("#bookdisplay").html(data);
-				}
-			});
-		});
 
-		$(".addbookcopy").click(function(){
-			var bookID = $(this).attr("id");
-			$.ajax({
-				url:"addbookcopyinfo.php",
-				method:"POST",
-				data:{bookID:bookID},
-				success:function(data) {
-					$("#addcopybookdata").html(data);
-					$("#addbookcopy").modal("show");
-				}
+			$(document).on("click", "#deletebook", function(){
+				var bookid = $(this).data("id");
+				$("#confirmdelete").data("id", bookid);
 			});
-		});
 
-		$(".viewbookinfo").click(function(){
-			var accession_no = $(this).attr("id");
-			$.ajax({
-				url:"bookmodalinfo.php",
-				method:"POST",
-				data:{accession_no, accession_no},
-				success:function(data) {
-					$("#content").html(data);
-					$("#bookInfo").modal("show");
-				}
+			
+			$("#confirmdelete").click(function(){
+				var bookid = $(this).data("id");
+				var option = $("#bookgroupby").val();
+				var booksperpages = $("#booksperpages").val();
+				var firstresult = $("#firstresult").val();
+				$.ajax({
+					url:"deletebook.php",
+					method:"POST",
+					data:{bookid:bookid, option:option, booksperpages:booksperpages, firstresult:firstresult},
+					beforeSend:function() {
+						$("#confirmdelete").html("Deleting Book...");
+					},
+					success:function(data) {
+						$("#deleteconfirm").modal("hide");
+						$("#confirmdelete").html("Confirm");
+						$("#bookdisplay").html(data);
+					}
+				});
+			});
+			
+			$("#bookgroupby").change(function(){
+				var option = $(this).val();
+				var booksperpages = $("#booksperpages").val();
+				var firstresult = $("#firstresult").val();
+				$.ajax({
+					url:"booktblfilter.php",
+					method:"POST",
+					data:{option:option, booksperpages:booksperpages,firstresult:firstresult},
+					success:function(data) {
+						$("#bookdisplay").html(data);
+					}
+				});
+			});
+
+			$(".addbookcopy").click(function(){
+				var bookID = $(this).attr("id");
+				$.ajax({
+					url:"addbookcopyinfo.php",
+					method:"POST",
+					data:{bookID:bookID},
+					success:function(data) {
+						$("#addcopybookdata").html(data);
+						$("#addbookcopy").modal("show");
+					}
+				});
+			});
+
+			$(".viewbookinfo").click(function(){
+				var accession_no = $(this).attr("id");
+				$.ajax({
+					url:"bookmodalinfo.php",
+					method:"POST",
+					data:{accession_no, accession_no},
+					success:function(data) {
+						$("#content").html(data);
+						$("#bookInfo").modal("show");
+					}
+				});
 			});
 		});
-	});
 	</script>
 </div>
