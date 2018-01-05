@@ -90,6 +90,7 @@ require "dbconnect.php";
 		$booklog = mysqli_fetch_assoc($booklogQuery);
 		$booklogrows = mysqli_num_rows($booklogQuery);
 
+
 		if($booklogrows>=1) {
 ?>
 <table class="table table-hover" id="returntable">
@@ -177,6 +178,8 @@ require "dbconnect.php";
 	</div>
 <?php
 	}
+
+	$returnedbooksSQL = "SELECT * FROM booklog WHERE IDNumber='$idnumber' AND booklogID='$booklogID'";
 ?>
 <a target="_blank" href="returntransactionreceipt.php?idnumber=<?php echo $getbooklog['IDNumber'];?>">
 	<button id="printbutton" class="btn btn-success"><span class="glyphicon glyphicon-print"></span> Print Receipt</button>
