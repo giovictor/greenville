@@ -8,9 +8,7 @@ if(isset($_POST['option']) && isset($_POST['booksperpages']) && isset($_POST['fi
 	if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
 		$keyword = $_POST['keyword'];
 		$searchtype = $_POST['searchtype'];
-		if($searchtype=="any") {
-			$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE booktitle LIKE '%$keyword%' OR author LIKE '%$keyword%' OR publisher LIKE '%$keyword%' OR publishingyear LIKE '%$keyword%' AND book.status!='Archived' GROUP BY $option ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
-		} else if($searchtype=="accession_no") {
+		if($searchtype=="accession_no") {
 			$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY $option ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
 		} else {
 			$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY $option ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
@@ -127,92 +125,127 @@ $(document).ready(function(){
 	});
 
 
-<?php
-	if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
-?>
-	$("#confirmdelete").click(function(){
-		var bookid = $(this).data("id");
-		var option = $("#bookgroupby").val();
-		var keyword = $("#keyword").val();
-		var searchtype = $("#searchtype").val();
-		var booksperpages = $("#booksperpages").val();
-		var firstresult = $("#firstresult").val();
-		$.ajax({
-			url:"deletebook.php",
-			method:"POST",
-			data:{bookid:bookid, option:option, keyword:keyword, searchtype:searchtype, booksperpages:booksperpages, firstresult:firstresult},
-			beforeSend:function() {
-				$("#confirmdelete").html("Deleting Book...");
-			},
-			success:function(data) {
-				$("#deleteconfirm").modal("hide");
-				$("#confirmdelete").html("Confirm");
-				$("#bookdisplay").html(data);
-			}
+	<?php
+		if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
+	?>
+		$("#confirmdelete").click(function(){
+			var bookid = $(this).data("id");
+			var option = $("#bookgroupby").val();
+			var keyword = $("#keyword").val();
+			var searchtype = $("#searchtype").val();
+			var booksperpages = $("#booksperpages").val();
+			var firstresult = $("#firstresult").val();
+			$.ajax({
+				url:"deletebook.php",
+				method:"POST",
+				data:{bookid:bookid, option:option, keyword:keyword, searchtype:searchtype, booksperpages:booksperpages, firstresult:firstresult},
+				beforeSend:function() {
+					$("#confirmdelete").html("Deleting Book...");
+				},
+				success:function(data) {
+					$("#deleteconfirm").modal("hide");
+					$("#confirmdelete").html("Confirm");
+					$("#bookdisplay").html(data);
+				}
+			});
 		});
-	});
-<?php
-} else if(isset($_POST['classification'])) {
-?>
-	$("#confirmdelete").click(function(){
-		var bookid = $(this).data("id");
-		var option = $("#bookgroupby").val();
-		var classification = $("#classification").val();
-		var booksperpages = $("#booksperpages").val();
-		var firstresult = $("#firstresult").val();
-		$.ajax({
-			url:"deletebook.php",
-			method:"POST",
-			data:{bookid:bookid, option:option, classification:classification, booksperpages:booksperpages, firstresult:firstresult},
-			beforeSend:function() {
-				$("#confirmdelete").html("Deleting Book...");
-			},
-			success:function(data) {
-				$("#deleteconfirm").modal("hide");
-				$("#confirmdelete").html("Confirm");
-				$("#bookdisplay").html(data);
-			}
-		});
-	});
-<?php
-} else {
-?>
-	$("#confirmdelete").click(function(){
-		var bookid = $(this).data("id");
-		var option = $("#bookgroupby").val();
-		var booksperpages = $("#booksperpages").val();
-		var firstresult = $("#firstresult").val();
-		$.ajax({
-			url:"deletebook.php",
-			method:"POST",
-			data:{bookid:bookid, option:option, booksperpages:booksperpages, firstresult:firstresult},
-			beforeSend:function() {
-				$("#confirmdelete").html("Deleting Book...");
-			},
-			success:function(data) {
-				$("#deleteconfirm").modal("hide");
-				$("#confirmdelete").html("Confirm");
-				$("#bookdisplay").html(data);
-			}
-		});
-	});
-<?php
-}
-?>
 
-
-	$(".addbookcopy").click(function(){
-		var bookID = $(this).attr("id");
-		$.ajax({
-			url:"addbookcopyinfo.php",
-			method:"POST",
-			data:{bookID:bookID},
-			success:function(data) {
-				$("#addcopybookdata").html(data);
-				$("#addbookcopy").modal("show");
-			}
+		
+		$(".addbookcopy").click(function(){
+			var bookID = $(this).attr("id");
+			var keyword = $("#keyword").val();
+			var searchtype = $("#searchtype").val();
+			var booksperpages = $("#booksperpages").val();
+			var firstresult = $("#firstresult").val();
+			$.ajax({
+				url:"addbookcopyinfo.php",
+				method:"POST",
+				data:{bookID:bookID, keyword:keyword, searchtype:searchtype, booksperpages:booksperpages, firstresult:firstresult},
+				success:function(data) {
+					$("#addcopybookdata").html(data);
+					$("#addbookcopy").modal("show");
+				}
+			});
 		});
-	});
+	<?php
+	} else if(isset($_POST['classification'])) {
+	?>
+		$("#confirmdelete").click(function(){
+			var bookid = $(this).data("id");
+			var option = $("#bookgroupby").val();
+			var classification = $("#classification").val();
+			var booksperpages = $("#booksperpages").val();
+			var firstresult = $("#firstresult").val();
+			$.ajax({
+				url:"deletebook.php",
+				method:"POST",
+				data:{bookid:bookid, option:option, classification:classification, booksperpages:booksperpages, firstresult:firstresult},
+				beforeSend:function() {
+					$("#confirmdelete").html("Deleting Book...");
+				},
+				success:function(data) {
+					$("#deleteconfirm").modal("hide");
+					$("#confirmdelete").html("Confirm");
+					$("#bookdisplay").html(data);
+				}
+			});
+		});
+
+		$(".addbookcopy").click(function(){
+			var bookID = $(this).attr("id");
+			var classification = $("#classification").val();
+			var booksperpages = $("#booksperpages").val();
+			var firstresult = $("#firstresult").val();
+			$.ajax({
+				url:"addbookcopyinfo.php",
+				method:"POST",
+				data:{bookID:bookID,classification:classification, booksperpages:booksperpages, firstresult:firstresult},
+				success:function(data) {
+					$("#addcopybookdata").html(data);
+					$("#addbookcopy").modal("show");
+				}
+			});
+		});
+	<?php
+	} else {
+	?>
+		$("#confirmdelete").click(function(){
+			var bookid = $(this).data("id");
+			var option = $("#bookgroupby").val();
+			var booksperpages = $("#booksperpages").val();
+			var firstresult = $("#firstresult").val();
+			$.ajax({
+				url:"deletebook.php",
+				method:"POST",
+				data:{bookid:bookid, option:option, booksperpages:booksperpages, firstresult:firstresult},
+				beforeSend:function() {
+					$("#confirmdelete").html("Deleting Book...");
+				},
+				success:function(data) {
+					$("#deleteconfirm").modal("hide");
+					$("#confirmdelete").html("Confirm");
+					$("#bookdisplay").html(data);
+				}
+			});
+		});
+
+		$(".addbookcopy").click(function(){
+			var bookID = $(this).attr("id");
+			var booksperpages = $("#booksperpages").val();
+			var firstresult = $("#firstresult").val();
+			$.ajax({
+				url:"addbookcopyinfo.php",
+				method:"POST",
+				data:{bookID:bookID, booksperpages:booksperpages, firstresult:firstresult},
+				success:function(data) {
+					$("#addcopybookdata").html(data);
+					$("#addbookcopy").modal("show");
+				}
+			});
+		});
+	<?php
+	}
+	?>
 
 	$(".viewbookinfo").click(function(){
 		var accession_no = $(this).attr("id");

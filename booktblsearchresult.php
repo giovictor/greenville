@@ -10,13 +10,6 @@
 					Filter by keyword:
 					<div class="form-group">
 						<select name="aedsearchtype" class="form-control">
-							<option value="any"
-							<?php
-								if(isset($_GET['aedsearchtype']) && $_GET['aedsearchtype']=="any") {
-									echo "selected";
-								}
-							?>
-							>Any Field</option>
 							<option value="booktitle"
 							<?php
 								if(isset($_GET['aedsearchtype']) && $_GET['aedsearchtype']=="booktitle") {
@@ -91,9 +84,7 @@
 			if(isset($_GET['mngbooksearch']) && isset($_GET['aedsearchtype'])) {
 				$keyword = $_GET['mngbooksearch'];
 				$searchtype = $_GET['aedsearchtype'];
-				if($searchtype=="any") {
-					$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE booktitle LIKE '%$keyword%' OR author LIKE '%$keyword%' OR publisher LIKE '%$keyword%' OR publishingyear LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
-				} else if($searchtype=="accession_no") {
+				if($searchtype=="accession_no") {
 					$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
 				} else {
 					$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
@@ -112,9 +103,7 @@
 
 				$firstresult = ($page - 1) * $booksperpages;
 
-				if($searchtype=="any") {
-					$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE booktitle LIKE '%$keyword%' OR author LIKE '%$keyword%' OR publisher LIKE '%$keyword%' OR publishingyear LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
-				} else if($searchtype=="accession_no") {
+				if($searchtype=="accession_no") {
 					$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
 				} else {
 					$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
@@ -305,10 +294,12 @@
 					var bookID = $(this).attr("id");
 					var keyword = $("#keyword").val();
 					var searchtype = $("#searchtype").val();
+					var booksperpages = $("#booksperpages").val();
+					var firstresult = $("#firstresult").val();
 					$.ajax({
-						url:"addbookcopyinfosearchresult.php",
+						url:"addbookcopyinfo.php",
 						method:"POST",
-						data:{bookID:bookID, keyword:keyword, searchtype:searchtype},
+						data:{bookID:bookID, keyword:keyword, searchtype:searchtype, booksperpages:booksperpages, firstresult:firstresult},
 						success:function(data) {
 							$("#addcopybookdata").html(data);
 							$("#addbookcopy").modal("show");
@@ -358,10 +349,12 @@
 				$(".addbookcopy").click(function(){
 					var bookID = $(this).attr("id");
 					var classification = $("#classification").val();
+					var booksperpages = $("#booksperpages").val();
+					var firstresult = $("#firstresult").val();
 					$.ajax({
-						url:"addbookcopyinfoclassification.php",
+						url:"addbookcopyinfo.php",
 						method:"POST",
-						data:{bookID:bookID,classification:classification},
+						data:{bookID:bookID,classification:classification, booksperpages:booksperpages, firstresult:firstresult},
 						success:function(data) {
 							$("#addcopybookdata").html(data);
 							$("#addbookcopy").modal("show");

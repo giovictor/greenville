@@ -10,7 +10,6 @@
 					<div class="form-group">
 						Filter by keyword: 
 						<select name="aedsearchtype" class="aedsearchtype form-control">
-							<option value="any">Any Field</option>
 							<option value="booktitle">Title</option>
 							<option value="author">Author</option>
 							<option value="publisher">Publisher</option>
@@ -181,10 +180,12 @@
 
 			$(".addbookcopy").click(function(){
 				var bookID = $(this).attr("id");
+				var booksperpages = $("#booksperpages").val();
+				var firstresult = $("#firstresult").val();
 				$.ajax({
 					url:"addbookcopyinfo.php",
 					method:"POST",
-					data:{bookID:bookID},
+					data:{bookID:bookID, booksperpages:booksperpages, firstresult:firstresult},
 					success:function(data) {
 						$("#addcopybookdata").html(data);
 						$("#addbookcopy").modal("show");
