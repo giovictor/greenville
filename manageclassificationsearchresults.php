@@ -1,7 +1,6 @@
 <div class="admincontainer">
-	<a href="?page=classifications" style="margin-top:20px;" class="btn btn-success btn-md button">
-		 Back To Classifications 
-		 <span class="glyphicon glyphicon-menu-hamburger"></span>
+	<a href="?page=classifications" style="" class="btn btn-success btn-sm button">
+		View All Classifications
 	</a>
 	<div class="classificationsearch">
 		<form method="GET" class="form-inline" id="csearchform">
@@ -22,11 +21,23 @@
 
 	if(isset($_GET['csearch'])) {
 		$keyword = $_GET['csearch'];
+		$classificationperpages = 10;
+		$totalclassificationSQL = "SELECT * FROM classification WHERE status=1 AND classification LIKE '%$keyword%' ORDER BY classificationID DESC";
+		$totalclassificationQuery = mysqli_query($dbconnect, $totalclassificationSQL);
+		$rows = mysqli_num_rows($totalclassificationQuery);
 
-		$classificationSQL = "SELECT * FROM classification WHERE status=1 AND classification LIKE '%$keyword%' ORDER BY classificationID DESC";
+		$numberofpages = ceil($rows/$classificationperpages);
+		if(!isset($_GET['cpage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['cpage'];
+		}
+
+		$firstresult = ($page - 1) * $classificationperpages;
+
+		$classificationSQL = "SELECT * FROM classification WHERE status=1 AND classification LIKE '%$keyword%' ORDER BY classificationID DESC LIMIT $firstresult, $classificationperpages";
 		$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
 		$classification = mysqli_fetch_assoc($classificationQuery);
-		$rows = mysqli_num_rows($classificationQuery);
 
 	?>
 	<div class="classifications">
@@ -79,6 +90,26 @@
 		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
 		<input type="hidden" name="query" value="<?php echo $classificationSQL;?>">
 	</form>
+	<?php
+		if($numberofpages > 1) {
+	?>
+			<ul class="pagination">
+				<?php
+					for($i=1;$i<=$numberofpages;$i++) {
+				?>
+						<li><a href="?page=classifications&cpage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+	<?php
+		}
+	?>
+	<form id="pagination_data">
+		<input type="hidden" name="keyword" id="keyword" value="<?php echo $keyword; ?>">
+		<input type="hidden" name="classificationperpages" id="classificationperpages" value="<?php echo $classificationperpages; ?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult; ?>">
+	</form>
 </div>
 <script>
 $(document).ready(function(){
@@ -97,10 +128,13 @@ $(document).ready(function(){
 
 	$(".confirmdeleteclassification").click(function(){
 		var classificationID = $(this).data("id");
+		var classificationperpages = $("#classificationperpages").val();
+		var firstresult = $("#firstresult").val();
+		var keyword = $("#keyword").val();
 		$.ajax({
 			url:"deleteclassification.php",
 			method:"POST",
-			data:{classificationID:classificationID},
+			data:{classificationID:classificationID, classificationperpages:classificationperpages, firstresult:firstresult, keyword:keyword},
 			success:function(data) {
 				$("#confirmdeleteclassification").modal("hide");
 				$(".classifications").html(data);

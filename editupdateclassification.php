@@ -8,32 +8,31 @@ if(isset($_GET['classificationID'])) {
 }
 ?>
 <div class="admincontainer">
-	<div class="classificationform">
-	<a href="?page=classifications" style="margin-top:20px;" class="btn btn-success btn-md button">
-		 Back To Classifications 
-		 <span class="glyphicon glyphicon-menu-hamburger"></span>
-	</a>
-	<h4>Manage Classifications</h4>
-		<form id="cform" class="form-inline">
-			<div class="form-group">
-				<label for="classification">Classification: </label>
-				<input type="text" name="classification" id="classification" class="form-control" value="<?php echo $classificationedit['classification'];?>">
-				<input type="hidden" value="<?php echo $classificationID;?>" name="classificationID" id="classificationID">
-			</div>
-			<button id="editclassification" class="btn btn-success btn-sm">Update Classification</button>
-		</form>
-	</div>
+	<div class="classifications">
+		<div class="classificationform">
+			<h4>Update Classification</h4>
+			<a href="?page=classifications" style="float:right;" class="btn btn-success btn-sm button">
+				View All Classifications 
+			</a>
+			<form id="cform" class="form-inline">
+				<div class="form-group">
+					<label for="classification">Classification: </label>
+					<input type="text" name="classification" id="classification" class="form-control" value="<?php echo $classificationedit['classification'];?>">
+					<input type="hidden" value="<?php echo $classificationID;?>" name="classificationID" id="classificationID">
+				</div>
+				<button id="editclassification" class="btn btn-success btn-sm">Update Classification</button>
+			</form>
+		</div>
 	<?php
 	if(!isset($_SESSION['librarian'])) {
 		header("Location:index.php");
 	}
 	require "dbconnect.php";
-		$classificationSQL = "SELECT * FROM classification WHERE status=1 ORDER BY classificationID DESC";
+		$classificationSQL = "SELECT * FROM classification WHERE status=1 AND classificationID='$classificationID' ORDER BY classificationID DESC";
 		$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
 		$classification = mysqli_fetch_assoc($classificationQuery);
 
 	?>
-	<div class="classifications">
 		<table class="table table-hover table-bordered">
 			<tr>
 				<th width="30%">Classification ID</th>

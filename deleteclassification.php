@@ -1,11 +1,19 @@
 <?php
 require "dbconnect.php";
-if(isset($_POST['classificationID'])) {
+if(isset($_POST['classificationID']) && isset($_POST['classificationperpages']) && isset($_POST['firstresult'])) {
 	$classificationID = $_POST['classificationID'];
 	$archiveclassificationSQL = "UPDATE classification SET status=0 WHERE classificationID='$classificationID'";
 	$archiveclassification = mysqli_query($dbconnect, $archiveclassificationSQL);
 
-	$classificationSQL = "SELECT * FROM classification WHERE status=1 ORDER BY classificationID DESC";
+	$classificationperpages = $_POST['classificationperpages'];
+	$firstresult = $_POST['firstresult'];
+	
+	if(isset($_POST['keyword'])) {
+		$keyword = $_POST['keyword'];
+		$classificationSQL = "SELECT * FROM classification WHERE status=1 AND classification LIKE '%$keyword%' ORDER BY classificationID DESC LIMIT $firstresult, $classificationperpages";
+	} else {
+		$classificationSQL = "SELECT * FROM classification WHERE status=1 ORDER BY classificationID DESC LIMIT $firstresult, $classificationperpages";
+	}
 	$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
 	$classification = mysqli_fetch_assoc($classificationQuery);
 ?>
@@ -56,18 +64,44 @@ $(document).ready(function(){
 		$(".confirmdeleteclassification").data("id", classificationID);
 	});
 
-	$(".confirmdeleteclassification").click(function(){
-		var classificationID = $(this).data("id");
-		$.ajax({
-			url:"deleteclassification.php",
-			method:"POST",
-			data:{classificationID:classificationID},
-			success:function(data) {
-				$("#confirmdeleteclassification").modal("hide");
-				$(".classifications").html(data);
-			}
+	<?php
+		if(isset($_POST['keyword'])) {
+	?>
+		$(".confirmdeleteclassification").click(function(){
+			var classificationID = $(this).data("id");
+			var classificationperpages = $("#classificationperpages").val();
+			var firstresult = $("#firstresult").val();
+			var keyword = $("#keyword").val();
+			$.ajax({
+				url:"deleteclassification.php",
+				method:"POST",
+				data:{classificationID:classificationID, classificationperpages:classificationperpages, firstresult:firstresult, keyword:keyword},
+				success:function(data) {
+					$("#confirmdeleteclassification").modal("hide");
+					$(".classifications").html(data);
+				}
+			});
 		});
-	});
+	<?php
+		} else {
+	?>
+		$(".confirmdeleteclassification").click(function(){
+			var classificationID = $(this).data("id");
+			var classificationperpages = $("#classificationperpages").val();
+			var firstresult = $("#firstresult").val();
+			$.ajax({
+				url:"deleteclassification.php",
+				method:"POST",
+				data:{classificationID:classificationID, classificationperpages:classificationperpages, firstresult:firstresult},
+				success:function(data) {
+					$("#confirmdeleteclassification").modal("hide");
+					$(".classifications").html(data);
+				}
+			});
+		});
+	<?php
+		}
+	?>
 });
 </script>
 <?php

@@ -26,7 +26,21 @@
 		header("Location:index.php");
 	}
 	require "dbconnect.php";
-		$classificationSQL = "SELECT * FROM classification WHERE status=1 ORDER BY classificationID DESC";
+		$classificationperpages = 10;
+		$totalclassificationSQL = "SELECT * FROM classification WHERE status=1 ORDER BY classificationID DESC";
+		$totalclassificationQuery = mysqli_query($dbconnect, $totalclassificationSQL);
+		$rows = mysqli_num_rows($totalclassificationQuery);
+
+		$numberofpages = ceil($rows/$classificationperpages);
+		if(!isset($_GET['cpage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['cpage'];
+		}
+
+		$firstresult = ($page - 1) * $classificationperpages;
+
+		$classificationSQL = "SELECT * FROM classification WHERE status=1 ORDER BY classificationID DESC LIMIT $firstresult, $classificationperpages";
 		$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
 		$classification = mysqli_fetch_assoc($classificationQuery);
 	?>
@@ -76,19 +90,40 @@
 		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
 		<input type="hidden" name="query" value="<?php echo $classificationSQL;?>">
 	</form>
+	<?php
+		if($numberofpages > 1) {
+	?>
+			<ul class="pagination">
+				<?php
+					for($i=1;$i<=$numberofpages;$i++) {
+				?>
+						<li><a href="?page=classifications&cpage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+	<?php
+		}
+	?>
+	<form id="pagination_data">
+		<input type="hidden" name="classificationperpages" id="classificationperpages" value="<?php echo $classificationperpages; ?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult; ?>">
+	</form>
 </div>
 <script>
 $(document).ready(function(){
 	$("#cform").submit(function(e){
 		e.preventDefault();
 		var classification = $("#classification").val();
+		var classificationperpages = $("#classificationperpages").val();
+		var firstresult = $("#firstresult").val();
 		if(classification=="") {
 			$("#emptyclassification").modal("show");
 		} else {
 			$.ajax({
 				url:"addclassification.php",
 				method:"POST",
-				data:{classification:classification},
+				data:{classification:classification, classificationperpages:classificationperpages, firstresult:firstresult},
 				beforeSend:function() {
 					$("#addclassification").html("Adding...");
 				},
@@ -117,10 +152,12 @@ $(document).ready(function(){
 
 	$(".confirmdeleteclassification").click(function(){
 		var classificationID = $(this).data("id");
+		var classificationperpages = $("#classificationperpages").val();
+		var firstresult = $("#firstresult").val();
 		$.ajax({
 			url:"deleteclassification.php",
 			method:"POST",
-			data:{classificationID:classificationID},
+			data:{classificationID:classificationID, classificationperpages:classificationperpages, firstresult:firstresult},
 			success:function(data) {
 				$("#confirmdeleteclassification").modal("hide");
 				$(".classifications").html(data);
