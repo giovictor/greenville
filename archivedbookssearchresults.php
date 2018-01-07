@@ -77,6 +77,7 @@ require "dbconnect.php";
 
 	$archivedbookQuery = mysqli_query($dbconnect, $archivedbookSQL);
 	$archivedbook = mysqli_fetch_assoc($archivedbookQuery);
+	$rows = mysqli_num_rows($archivedbookQuery);
 ?>
 <div class="booktblfilter">
 <?php
@@ -115,25 +116,29 @@ require "dbconnect.php";
 			
 		</tr>
 	<?php
-		do {
+		if($rows==0) {
+			echo "<tr><td colspan='9'><center><h4>No results found.</h4></center></td></tr>";
+		} else if($rows>=1) {
+			do {
 	?>
-			<tr>
-				<td><?php echo $archivedbook['booktitle'];?></td>
-				<td><?php echo $archivedbook['authors'];?></td>
-				<td><?php echo $archivedbook['publisher']." c".$archivedbook['publishingyear'];?></td>
-				<td><?php echo $archivedbook['copies'];?></td>
-				<td><?php echo $archivedbook['bookcondition'];?></td>
-				<td>
-					<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbook['bookID'];?>" data-toggle="modal" data-target="#restorebook">
-						<span class="glyphicon glyphicon-refresh"> </span>
-					</button>
-					<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['bookID'];?>" data-toggle="modal" data-target="#permanentdeletebook">
-						<span class="glyphicon glyphicon-trash"> </span>
-					</button>
-				</td>
-			</tr>
+				<tr>
+					<td><?php echo $archivedbook['booktitle'];?></td>
+					<td><?php echo $archivedbook['authors'];?></td>
+					<td><?php echo $archivedbook['publisher']." c".$archivedbook['publishingyear'];?></td>
+					<td><?php echo $archivedbook['copies'];?></td>
+					<td><?php echo $archivedbook['bookcondition'];?></td>
+					<td>
+						<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbook['bookID'];?>" data-toggle="modal" data-target="#restorebook">
+							<span class="glyphicon glyphicon-refresh"> </span>
+						</button>
+						<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['bookID'];?>" data-toggle="modal" data-target="#permanentdeletebook">
+							<span class="glyphicon glyphicon-trash"> </span>
+						</button>
+					</td>
+				</tr>
 	<?php
-		} while($archivedbook = mysqli_fetch_assoc($archivedbookQuery));
+			} while($archivedbook = mysqli_fetch_assoc($archivedbookQuery));
+		}
 	?>
 </table>
 <form id="printpdf" target="_blank" action="pdfarchivedbookbytitle.php" method="POST" class="form-inline">

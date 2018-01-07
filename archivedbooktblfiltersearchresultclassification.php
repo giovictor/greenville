@@ -8,7 +8,7 @@ if(isset($_POST['option']) && isset($_POST['classification'])) {
 
 	$archivedbookQuery = mysqli_query($dbconnect, $archivedbookSQL);
 	$archivedbook = mysqli_fetch_assoc($archivedbookQuery);
-	$checkDB = mysqli_num_rows($archivedbookQuery);
+	$rows = mysqli_num_rows($archivedbookQuery);
 ?>
 <table class='table table-hover table-bordered table-striped' id='booktable'>
 	<tr>
@@ -36,49 +36,53 @@ if(isset($_POST['option']) && isset($_POST['classification'])) {
 		?>
 	</tr>
 	<?php
-		do {
+		if($rows==0) {
+			echo "<tr><td colspan='9'><center><h4>No results found.</h4></center></td></tr>";
+		} else if($rows>=1) {
+			do {
 	?>		
-			<tr>
-				<?php
-					if($option=="bookID") {
-				?>
-						<td><?php echo $archivedbook['booktitle'];?></td>
-						<td><?php echo $archivedbook['authors'];?></td>
-						<td><?php echo $archivedbook['publisher']." c".$archivedbook['publishingyear'];?></td>
-						<td><?php echo $archivedbook['price'];?></td>
-						<td><?php echo $archivedbook['copies'];?></td>
-						<td><?php echo $archivedbook['bookcondition'];?></td>
-						<td>
-							<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbook['bookID'];?>" data-toggle="modal" data-target="#restorebook">
-								<span class="glyphicon glyphicon-refresh"> </span>
-							</button>
-							<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['bookID'];?>" data-toggle="modal" data-target="#permanentdeletebook">
-								<span class="glyphicon glyphicon-trash"> </span>
-							</button>
-						</td>
-				<?php
-					} else if($option=="accession_no") {
-				?>
-						<td><?php echo $archivedbook['accession_no'];?></td>
-						<td><?php echo $archivedbook['booktitle'];?></td>
-						<td><?php echo $archivedbook['authors'];?></td>
-						<td><?php echo $archivedbook['publisher']." c".$archivedbook['publishingyear'];?></td>
-						<td><?php echo $archivedbook['bookcondition'];?></td>
-						<td>
-							<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#restorebook">
-								<span class="glyphicon glyphicon-refresh"> </span>
-							</button>
-							<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#permanentdeletebook">
-								<span class="glyphicon glyphicon-trash"> </span>
-							</button>
-						</td>
+				<tr>
+					<?php
+						if($option=="bookID") {
+					?>
+							<td><?php echo $archivedbook['booktitle'];?></td>
+							<td><?php echo $archivedbook['authors'];?></td>
+							<td><?php echo $archivedbook['publisher']." c".$archivedbook['publishingyear'];?></td>
+							<td><?php echo $archivedbook['price'];?></td>
+							<td><?php echo $archivedbook['copies'];?></td>
+							<td><?php echo $archivedbook['bookcondition'];?></td>
+							<td>
+								<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbook['bookID'];?>" data-toggle="modal" data-target="#restorebook">
+									<span class="glyphicon glyphicon-refresh"> </span>
+								</button>
+								<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['bookID'];?>" data-toggle="modal" data-target="#permanentdeletebook">
+									<span class="glyphicon glyphicon-trash"> </span>
+								</button>
+							</td>
+					<?php
+						} else if($option=="accession_no") {
+					?>
+							<td><?php echo $archivedbook['accession_no'];?></td>
+							<td><?php echo $archivedbook['booktitle'];?></td>
+							<td><?php echo $archivedbook['authors'];?></td>
+							<td><?php echo $archivedbook['publisher']." c".$archivedbook['publishingyear'];?></td>
+							<td><?php echo $archivedbook['bookcondition'];?></td>
+							<td>
+								<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#restorebook">
+									<span class="glyphicon glyphicon-refresh"> </span>
+								</button>
+								<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#permanentdeletebook">
+									<span class="glyphicon glyphicon-trash"> </span>
+								</button>
+							</td>
 
-				<?php
-					}
-				?>
-			</tr>
+					<?php
+						}
+					?>
+				</tr>
 	<?php
-		} while($archivedbook = mysqli_fetch_assoc($archivedbookQuery));
+			} while($archivedbook = mysqli_fetch_assoc($archivedbookQuery));
+		}
 	?>
 </table>
 <?php

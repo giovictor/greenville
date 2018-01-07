@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4f5330c4-ec5a-40de-818f-7af973333c7a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/booktbl.php" afterPath="$PROJECT_DIR$/booktbl.php" />
-    </list>
+    <list default="true" id="4f5330c4-ec5a-40de-818f-7af973333c7a" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,7 +14,7 @@
       <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="389">
+            <state relative-caret-position="-1186">
               <caret line="187" column="61" lean-forward="true" selection-start-line="187" selection-start-column="61" selection-end-line="187" selection-end-column="61" />
               <folding />
             </state>
@@ -113,12 +111,12 @@
       <option name="presentableId" value="Default" />
       <updated>1511425962720</updated>
       <workItem from="1511425965280" duration="261000" />
-      <workItem from="1515119098707" duration="101000" />
+      <workItem from="1515119098707" duration="521000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="362000" />
+    <option name="totallyTimeSpent" value="782000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -169,9 +167,84 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/archivedbooktblfilter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1515055096694" expanded="true" signature="112:708" ph="SELECT bookI... book" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/archivedbooktblfiltersearchresultclassification.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1515080567916" expanded="true" signature="191:893" ph="SELECT bookI... book" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/archivedbooktblfiltersearchresultkeyword.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1515080578013" expanded="true" signature="266:1060" ph="SELECT bookI... book" />
+            <marker date="1515080578013" expanded="true" signature="1121:1767" ph="SELECT bookI... book" />
+            <marker date="1515080578013" expanded="true" signature="1829:2480" ph="SELECT bookI... book" />
+            <marker date="1515080578013" expanded="true" signature="2544:3201" ph="SELECT bookI... book" />
+            <marker date="1515080578013" expanded="true" signature="3260:3912" ph="SELECT bookI... book" />
+            <marker date="1515080578013" expanded="true" signature="3978:4626" ph="SELECT bookI... book" />
+            <marker date="1515080578013" expanded="true" signature="4685:5327" ph="SELECT bookI... book" />
+            <marker date="1515080578013" expanded="true" signature="5398:6053" ph="SELECT bookI... book" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/archivedbooks.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-540">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1515054600616" expanded="true" signature="1509:1552" ph="SELECT * FRO... classification" />
+            <marker date="1515054600616" expanded="true" signature="2564:3159" ph="SELECT bookI... book" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/archivedbookssearchresults.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1515057241773" expanded="true" signature="1479:1522" ph="SELECT * FRO... classification" />
+            <marker date="1515057241773" expanded="true" signature="2535:3377" ph="SELECT bookI... book" />
+            <marker date="1515057241773" expanded="true" signature="3461:4111" ph="SELECT bookI... book" />
+            <marker date="1515057241773" expanded="true" signature="4196:4850" ph="SELECT bookI... book" />
+            <marker date="1515057241773" expanded="true" signature="4938:5598" ph="SELECT bookI... book" />
+            <marker date="1515057241773" expanded="true" signature="5681:6336" ph="SELECT bookI... book" />
+            <marker date="1515057241773" expanded="true" signature="6426:7077" ph="SELECT bookI... book" />
+            <marker date="1515057241773" expanded="true" signature="7160:7805" ph="SELECT bookI... book" />
+            <marker date="1515057241773" expanded="true" signature="7900:8558" ph="SELECT bookI... book" />
+            <marker date="1515057241773" expanded="true" signature="8736:9448" ph="SELECT bookI... book" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/todonotes.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
+        <state relative-caret-position="-1186">
           <caret line="187" column="61" lean-forward="true" selection-start-line="187" selection-start-column="61" selection-end-line="187" selection-end-column="61" />
           <folding />
         </state>

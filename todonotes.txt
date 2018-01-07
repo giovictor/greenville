@@ -18,18 +18,8 @@ Restore and permanent delete for archived datas
 FIX BUG:
 Evaluate receipts data for return ******
 
-
-TABLES THAT NEED PAGINATION:
-Basic Search Results
-Reserve Book Response
-New Collections
-Top 10 Books
-Book Table (w/ Filter)
-Book Table Search Result (w/ Filters)
-Borrower Table
-Borrower Table Search Result
-
 NOTE: PUT PAGINATION ON THE PAGE FILE NOT THE RESPONSE FILE
+AUTHORS AND PUBLISHERS TABLE PAGINATION AND MODIFY REPORTS
 
 
 

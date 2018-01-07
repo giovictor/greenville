@@ -1,7 +1,7 @@
 <title>Borrow Book</title>
 <div class="admincontainer">
 	<div class="borrowform">
-	<h4>Borrow book</h4>
+		<h4>Borrow Book</h4>
 		<form id="borrowform" class="form-inline">
 			<div class="form-group">
 				<label for="idnumber">ID Number:</label>
@@ -11,16 +11,16 @@
 		</form>
 	</div>
 	<div id="generateborrow"> 
-	<form id="borrowerinfo" class="form-inline">
-		<div class="form-group">
-			<label for="borrower">Borrower: </label>
-			<input type="text" id="borrower" class="form-control" size="20" disabled>
-		</div>
-		<div class="form-group">
-			<label for="course">Course: </label>
-			<input type="text" id="course" class="form-control" size="20" disabled>
-		</div>
-	</form>
+		<form id="borrowerinfo" class="form-inline">
+			<div class="form-group">
+				<label for="borrower">Borrower: </label>
+				<input type="text" id="borrower" class="form-control" size="20" disabled>
+			</div>
+			<div class="form-group">
+				<label for="course">Course: </label>
+				<input type="text" id="course" class="form-control" size="20" disabled>
+			</div>
+		</form>
 	</div>
 	
 	<script>

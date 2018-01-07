@@ -32,9 +32,9 @@
 		<li>
 			<a href="?page=bklogs"><span class="glyphicon glyphicon-book"></span> Book Logs</a>
 		</li> 
-		<li>
+		<!--<li>
 			<a href="?page=brlogs"><span class="glyphicon glyphicon-book"></span> Borrower Logs</a>
-		</li> 
+		</li>-->
 		<li>
 			<a href="?page=classifications"><span class="glyphicon glyphicon-th-list"></span> Classifications</a>
 		</li> 

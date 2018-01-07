@@ -1,6 +1,7 @@
 <div class="admincontainer">	
 	<div class="panel panel-success reservationssearchform">
 		<div class="panel-heading">
+			<a href="?page=vrs" class="btn btn-success btn-sm button" style="float:right;">View All Reservations</a>
 			<h3>Reserved Books</h3>
 		</div>
 		<div class="panel-body">
@@ -85,9 +86,11 @@
 		} else if(!empty($expdate) && !empty($borrower) && !empty($book) && !empty($reservedate)) {
 			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
 		} 
-			$reservationsQuery = mysqli_query($dbconnect, $reservationsSQL);
-			$reservations = mysqli_fetch_assoc($reservationsQuery);
-			$rows = mysqli_num_rows($reservationsQuery);
+
+		$reservationsQuery = mysqli_query($dbconnect, $reservationsSQL);
+		$reservations = mysqli_fetch_assoc($reservationsQuery);
+		$rows = mysqli_num_rows($reservationsQuery);
+
 	?>
 	<div class="reservations">
 		<table class="table table-hover">
@@ -135,7 +138,7 @@
 			<input type="hidden" name="query" value="<?php echo $reservationsSQL;?>">
 		</form>
 	<?php
-		}
+		} 
 	?>
 	<script>
 	$(document).ready(function(){
