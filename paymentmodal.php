@@ -1,10 +1,13 @@
 <?php
 require "dbconnect.php";
-if(isset($_POST['idnumber'])) {
+if(isset($_POST['idnumber']) && isset($_POST['borrowersperpages']) && isset($_POST['firstresult'])) {
 	$idnumber = $_POST['idnumber'];
 	$borrowerSQL = "SELECT * FROM borrower WHERE IDNumber='$idnumber'";
 	$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
 	$borrower = mysqli_fetch_assoc($borrowerQuery);
+
+	$borrowersperpages = $_POST['borrowersperpages'];
+	$firstresult = $_POST['firstresult'];
 ?>
 <h4><?php echo $borrower['lastname'].", ".$borrower['firstname']." ".$borrower['mi'];?></h4>
 <div class="takepayment">
@@ -17,6 +20,18 @@ if(isset($_POST['idnumber'])) {
 		<input type="hidden" name="idnumber" id="idnumber" value="<?php echo $idnumber;?>">
 	</form>
 </div>
+		<input type="hidden" name="borrowersperpages" id="borrowersperpages" value="<?php echo $borrowersperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+		<?php
+			if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
+				$keyword = $_POST['keyword'];
+				$searchtype = $_POST['searchtype'];
+		?>
+				<input type="hidden" name="keyword" id="keyword" value="<?php echo $keyword;?>">
+				<input type="hidden" name="searchtype" id="searchtype" value="<?php echo $searchtype;?>">
+		<?php 
+			}
+		?>
 <script>
 $(document).ready(function(){
 	$("#takepaymentform").submit(function(e){
@@ -49,17 +64,45 @@ $(document).ready(function(){
 	$("#payment").keypress(function(){
 		$("#takepaymentalert").html("");
 	});
-
-	$("#paymentmodal").on("hide.bs.modal", function(){
-		$("#payment").val("");
-		$("#takepaymentalert").html("").end();
-		$.ajax({
-			url:"takepaymenttable.php",
-			success:function(data) {
-				$(".borrowerdisplay").html(data);
-			}
-		});
-	});
+	<?php
+		if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
+	?>
+			$("#paymentmodal").on("hide.bs.modal", function(){
+				$("#payment").val("");
+				$("#takepaymentalert").html("").end();
+				var borrowersperpages = $("#borrowersperpages").val();
+				var firstresult = $("#firstresult").val();
+				var keyword = $("#keyword").val();
+				var searchtype = $("#searchtype").val();
+				$.ajax({
+					url:"takepaymenttable.php",
+					method:"POST",
+					data:{borrowersperpages:borrowersperpages, firstresult:firstresult, keyword:keyword, searchtype:searchtype},
+					success:function(data) {
+						$(".borrowerdisplay").html(data);
+					}
+				});
+			});
+	<?php 
+		} else {
+	?>
+			$("#paymentmodal").on("hide.bs.modal", function(){
+				$("#payment").val("");
+				$("#takepaymentalert").html("").end();
+				var borrowersperpages = $("#borrowersperpages").val();
+				var firstresult = $("#firstresult").val();
+				$.ajax({
+					url:"takepaymenttable.php",
+					method:"POST",
+					data:{borrowersperpages:borrowersperpages, firstresult:firstresult},
+					success:function(data) {
+						$(".borrowerdisplay").html(data);
+					}
+				});
+			});
+	<?php
+		}
+	?>
 });
 </script>
 <?php

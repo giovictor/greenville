@@ -35,16 +35,37 @@
 	</div>
 	<?php
 	require "dbconnect.php";
-		if(isset($_GET['mngborrowersearch']) && isset($_GET['mngborrowerbutton'])) {
+		if(isset($_GET['mngborrowerbutton'])) {
 			$keyword = $_GET['mngborrowersearch'];
-					if($_GET['aedsearchtype']=="idnumber") {
-						$borrowerSQL = "SELECT * FROM borrower WHERE IDNumber LIKE '%$keyword%' ORDER BY dateregistered DESC";
-					} else if($_GET['aedsearchtype']=="name") {
-						$borrowerSQL = "SELECT * FROM borrower WHERE CONCAT(lastname, firstname, mi) LIKE '%$keyword%' ORDER BY dateregistered DESC";
-					}
-				$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
-				$borrower = mysqli_fetch_assoc($borrowerQuery);
-				$rows = mysqli_num_rows($borrowerQuery);
+			$searchtype = $_GET['aedsearchtype'];
+			if($_GET['aedsearchtype']=="idnumber") {
+				$totalborrowerSQL = "SELECT * FROM borrower WHERE IDNumber LIKE '%$keyword%' ORDER BY dateregistered DESC";
+			} else if($_GET['aedsearchtype']=="name") {
+				$totalborrowerSQL = "SELECT * FROM borrower WHERE CONCAT(lastname, firstname, mi) LIKE '%$keyword%' ORDER BY dateregistered DESC";
+			}
+
+			$borrowersperpages = 10;
+			$totalborrowerQuery = mysqli_query($dbconnect, $totalborrowerSQL);
+			$rows = mysqli_num_rows($totalborrowerQuery);
+
+			$numberofpages = ceil($rows/$borrowersperpages);
+
+			if(!isset($_GET['borrowerpage'])) {
+				$page = 1;
+			} else {
+				$page = $_GET['borrowerpage'];
+			}
+
+			$firstresult = ($page - 1) * $borrowersperpages;
+
+			if($_GET['aedsearchtype']=="idnumber") {
+				$borrowerSQL = "SELECT * FROM borrower WHERE IDNumber LIKE '%$keyword%' ORDER BY dateregistered DESC LIMIT $firstresult, $borrowersperpages";
+			} else if($_GET['aedsearchtype']=="name") {
+				$borrowerSQL = "SELECT * FROM borrower WHERE CONCAT(lastname, firstname, mi) LIKE '%$keyword%' ORDER BY dateregistered DESC $firstresult, $borrowersperpages";
+			}
+
+			$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
+			$borrower = mysqli_fetch_assoc($borrowerQuery);
 	?>
 	<div class='borrowerdisplay'>
 	 <table class='table table-hover table-striped table-bordered' id='borrowertable'>
@@ -124,6 +145,27 @@
 		<input type="submit" name="createpdf" value="Print PDF" id="button" class="btn btn-success btn-sm">
 	</form>
 	</div>
+	<?php
+		if($numberofpages > 1) {
+	?>
+			<ul class="pagination">
+				<?php
+					for($i=1; $i<=$numberofpages; $i++) {
+				?>
+						<li><a href="index.php?aedsearchtype=<?php echo $searchtype;?>&mngborrowersearch=<?php echo $keyword;?>&mngborrowerbutton=Search&borrowerpage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+	<?php
+		}
+	?>
+	<form id="pagination_data">
+		<input type="hidden" name="keyword" id="keyword" value="<?php echo $keyword;?>">
+		<input type="hidden" name="searchtype" id="searchtype" value="<?php echo $searchtype;?>">
+		<input type="hidden" name="borrowersperpages" id="borrowersperpages" value="<?php echo $borrowersperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+	</form>
 	<script>
 	$(document).ready(function(){
 		$("#borrowersearchform").submit(function(e){
@@ -141,10 +183,14 @@
 
 		$(".confirmdeactivateborrower").click(function(){
 			var idnumber = $(this).data("id");
+			var borrowersperpages = $("#borrowersperpages").val();
+			var firstresult = $("#firstresult").val();
+			var keyword = $("#keyword").val();
+			var searchtype = $("#searchtype").val();
 			$.ajax({
 				url:"deactivateborrower.php",
 				method:"POST",
-				data:{idnumber:idnumber},
+				data:{idnumber:idnumber,  borrowersperpages:borrowersperpages, firstresult:firstresult, keyword:keyword, searchtype:searchtype},
 				success:function(data) {
 					$("#deactivateborrower").modal("hide");
 					$(".borrowerdisplay").html(data);
@@ -160,10 +206,14 @@
 
 		$(".confirmactivateborrower").click(function(){
 			var idnumber = $(this).data("id");
+			var borrowersperpages = $("#borrowersperpages").val();
+			var firstresult = $("#firstresult").val();
+			var keyword = $("#keyword").val();
+			var searchtype = $("#searchtype").val();
 			$.ajax({
 				url:"activateborrower.php",
 				method:"POST",
-				data:{idnumber:idnumber},
+				data:{idnumber:idnumber,  borrowersperpages:borrowersperpages, firstresult:firstresult, keyword:keyword, searchtype:searchtype},
 				success:function(data) {
 					$("#activateborrower").modal("hide");
 					$(".borrowerdisplay").html(data);
@@ -173,10 +223,14 @@
 
 		$(".paymentbutton").click(function(){
 			var idnumber = $(this).attr("id");
+			var keyword = $("#keyword").val();
+			var searchtype = $("#searchtype").val();
+			var borrowersperpages = $("#borrowersperpages").val();
+			var firstresult = $("#firstresult").val();
 			$.ajax({
 				url:"paymentmodal.php",
 				method:"POST",
-				data:{idnumber:idnumber},
+				data:{idnumber:idnumber, borrowersperpages:borrowersperpages, firstresult:firstresult, keyword:keyword, searchtype:searchtype},
 				success:function(data) {
 					$("#takepaymentdata").html(data);
 					$("#paymentmodal").modal("show");

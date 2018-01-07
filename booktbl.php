@@ -115,15 +115,21 @@
 			<input type="hidden" name="query" value="<?php echo $bookSQL;?>">
 		</form>
 	</div>
-	<ul class="pagination">
-		<?php
-			for($pages=1; $pages<=$numberofpages; $pages++) {
-		?>
-				<li><a href="?page=books&bookpage=<?php echo $pages;?>"><?php echo $pages; ?></a></li>
-		<?php
-			}
-		?> 
-	</ul>
+	<?php
+		if($numberofpages > 1) {
+	?>
+		<ul class="pagination">
+			<?php
+				for($pages=1; $pages<=$numberofpages; $pages++) {
+			?>
+					<li><a href="?page=books&bookpage=<?php echo $pages;?>"><?php echo $pages; ?></a></li>
+			<?php
+				}
+			?> 
+		</ul>
+	<?php
+		}
+	?>
 	<form id="pagination-data">
 		<input type="hidden" name="booksperpages" id="booksperpages" value="<?php echo $booksperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">

@@ -1,12 +1,24 @@
 <?php
 require "dbconnect.php";
-if(isset($_POST['idnumber'])) {
+if(isset($_POST['idnumber']) && isset($_POST['borrowersperpages']) && isset($_POST['firstresult'])) {
 	$idnumber = $_POST['idnumber'];
-
 	$activateborrowerstatusSQL = "UPDATE borrower SET status='Active' WHERE IDNumber='$idnumber'";
 	$activateborrowerstatus = mysqli_query($dbconnect, $activateborrowerstatusSQL);
 
-	$borrowerSQL = "SELECT * FROM borrower ORDER BY dateregistered DESC";
+	$borrowersperpages = $_POST['borrowersperpages'];
+	$firstresult = $_POST['firstresult'];
+
+	if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
+		$keyword = $_POST['keyword'];
+		$searchtype = $_POST['searchtype'];
+		if($searchtype=="idnumber") {
+			$borrowerSQL = "SELECT * FROM borrower WHERE IDNumber LIKE '%$keyword%' ORDER BY dateregistered DESC LIMIT $firstresult, $borrowersperpages";
+ 		} else if($searchtype=="name") {
+			$borrowerSQL = "SELECT * FROM borrower WHERE CONCAT(lastname, firstname, mi) LIKE '%$keyword%' ORDER BY dateregistered DESC $firstresult, $borrowersperpages";
+		}
+	} else {
+		$borrowerSQL = "SELECT * FROM borrower ORDER BY dateregistered DESC LIMIT $firstresult, $borrowersperpages";
+	}
 	$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
 	$borrower = mysqli_fetch_assoc($borrowerQuery);
 ?>
@@ -17,8 +29,8 @@ if(isset($_POST['idnumber'])) {
 					<th>Contact Number</th>
 					<th>Course</th>
 					<th>Date Registered</th>
-					<th width="8%">Account Type</th>
-					<th width="5%">Account Balance</th>
+					<th>Account Type</th>
+					<th>Account Balance</th>
 					<th>Status</th>
 					<th> </th>
 				</tr>
@@ -101,18 +113,45 @@ $(document).ready(function(){
 		$(".confirmdeactivateborrower").data("id",idnumber);
 	});
 
-	$(".confirmdeactivateborrower").click(function(){
-		var idnumber = $(this).data("id");
-		$.ajax({
-			url:"deactivateborrower.php",
-			method:"POST",
-			data:{idnumber:idnumber},
-			success:function(data) {
-				$("#deactivateborrower").modal("hide");
-				$(".borrowerdisplay").html(data);
-			}
-		});
-	});
+	<?php
+		if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
+	?>	
+			$(".confirmdeactivateborrower").click(function(){
+				var idnumber = $(this).data("id");
+				var borrowersperpages = $("#borrowersperpages").val();
+				var firstresult = $("#firstresult").val();
+				var keyword = $("#keyword").val();
+				var searchtype = $("#searchtype").val();
+				$.ajax({
+					url:"deactivateborrower.php",
+					method:"POST",
+					data:{idnumber:idnumber,  borrowersperpages:borrowersperpages, firstresult:firstresult, keyword:keyword, searchtype:searchtype},
+					success:function(data) {
+						$("#deactivateborrower").modal("hide");
+						$(".borrowerdisplay").html(data);
+					}
+				});
+			});
+	<?php
+		} else {
+	?>
+			$(".confirmdeactivateborrower").click(function(){
+				var idnumber = $(this).data("id");
+				var borrowersperpages = $("#borrowersperpages").val();
+				var firstresult = $("#firstresult").val();
+				$.ajax({
+					url:"deactivateborrower.php",
+					method:"POST",
+					data:{idnumber:idnumber, borrowersperpages:borrowersperpages, firstresult:firstresult},
+					success:function(data) {
+						$("#deactivateborrower").modal("hide");
+						$(".borrowerdisplay").html(data);
+					}
+				});
+			});
+	<?php
+		}
+	?>
 
 
 	$(document).on("click",".activatebutton", function(){
@@ -120,31 +159,86 @@ $(document).ready(function(){
 		$(".confirmactivateborrower").data("id",idnumber);
 	});
 
-	$(".confirmactivateborrower").click(function(){
-		var idnumber = $(this).data("id");
-		$.ajax({
-			url:"activateborrower.php",
-			method:"POST",
-			data:{idnumber:idnumber},
-			success:function(data) {
-				$("#activateborrower").modal("hide");
-				$(".borrowerdisplay").html(data);
-			}
-		});
-	});
+	<?php
+		if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
+	?>	
+			$(".confirmactivateborrower").click(function(){
+				var idnumber = $(this).data("id");
+				var borrowersperpages = $("#borrowersperpages").val();
+				var firstresult = $("#firstresult").val();
+				var keyword = $("#keyword").val();
+				var searchtype = $("#searchtype").val();
+				$.ajax({
+					url:"activateborrower.php",
+					method:"POST",
+					data:{idnumber:idnumber,  borrowersperpages:borrowersperpages, firstresult:firstresult, keyword:keyword, searchtype:searchtype},
+					success:function(data) {
+						$("#deactivateborrower").modal("hide");
+						$(".borrowerdisplay").html(data);
+					}
+				});
+			});
+	<?php
+		} else {
+	?>
+			$(".confirmactivateborrower").click(function(){
+				var idnumber = $(this).data("id");
+				var borrowersperpages = $("#borrowersperpages").val();
+				var firstresult = $("#firstresult").val();
+				$.ajax({
+					url:"activateborrower.php",
+					method:"POST",
+					data:{idnumber:idnumber, borrowersperpages:borrowersperpages, firstresult:firstresult},
+					success:function(data) {
+						$("#deactivateborrower").modal("hide");
+						$(".borrowerdisplay").html(data);
+					}
+				});
+			});
+	<?php
+		}
+	?>
 
-	$(".paymentbutton").click(function(){
-		var idnumber = $(this).attr("id");
-		$.ajax({
-			url:"paymentmodal.php",
-			method:"POST",
-			data:{idnumber:idnumber},
-			success:function(data) {
-				$("#takepaymentdata").html(data);
-				$("#paymentmodal").modal("show");
-			}
+
+	<?php
+	if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
+	?>
+		$(".paymentbutton").click(function(){
+			var idnumber = $(this).attr("id");
+			var keyword = $("#keyword").val();
+			var searchtype = $("#searchtype").val();
+			var borrowersperpages = $("#borrowersperpages").val();
+			var firstresult = $("#firstresult").val();
+			$.ajax({
+				url:"paymentmodal.php",
+				method:"POST",
+				data:{idnumber:idnumber, borrowersperpages:borrowersperpages, firstresult:firstresult, keyword:keyword, searchtype:searchtype},
+				success:function(data) {
+					$("#takepaymentdata").html(data);
+					$("#paymentmodal").modal("show");
+				}
+			});
 		});
-	});
+	<?php
+	} else {
+	?>
+		$(".paymentbutton").click(function(){
+			var idnumber = $(this).attr("id");
+			var borrowersperpages = $("#borrowersperpages").val();
+			var firstresult = $("#firstresult").val();
+			$.ajax({
+				url:"paymentmodal.php",
+				method:"POST",
+				data:{idnumber:idnumber, borrowersperpages:borrowersperpages, firstresult:firstresult},
+				success:function(data) {
+					$("#takepaymentdata").html(data);
+					$("#paymentmodal").modal("show");
+				}
+			});
+		});
+	<?php
+	}
+	?>
 
 	$(".viewborrowerinfo").click(function(){
 		var idnumber = $(this).attr("id");

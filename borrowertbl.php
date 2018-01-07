@@ -22,8 +22,23 @@
 		</div>
 	</div>
 	<?php 
-	require "dbconnect.php";
-		$borrowerSQL = "SELECT * FROM borrower ORDER BY dateregistered DESC";
+		require "dbconnect.php";
+		$borrowersperpages = 10;
+		$totalborrowerSQL = "SELECT * FROM borrower ORDER BY dateregistered DESC";
+		$totalborrowerQuery = mysqli_query($dbconnect, $totalborrowerSQL);
+		$rows = mysqli_num_rows($totalborrowerQuery);
+
+		$numberofpages = ceil($rows/$borrowersperpages);
+
+		if(!isset($_GET['borrowerpage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['borrowerpage'];
+		}
+
+		$firstresult = ($page - 1) * $borrowersperpages;
+
+		$borrowerSQL = "SELECT * FROM borrower ORDER BY dateregistered DESC LIMIT $firstresult, $borrowersperpages";
 		$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
 		$borrower = mysqli_fetch_assoc($borrowerQuery);
 
@@ -36,13 +51,14 @@
 						<th>Contact Number</th>
 						<th>Course</th>
 						<th>Date Registered</th>
-						<th width="8%">Account Type</th>
-						<th width="5%">Account Balance</th>
+						<th>Account Type</th>
+						<th>Account Balance</th>
 						<th>Status</th>
 						<th> </th>
 					</tr>
 		<?php		
-			do {?>
+			do {
+		?>
 					<tr>
 						<td>
 							<button class="btn btn-link btn-sm viewlinks viewborrowerinfo" style="color:#1CA843;" id="<?php echo $borrower['IDNumber'];?>">
@@ -108,14 +124,33 @@
 							?>
 						</td>
 					</tr>
-	<?php
-			} while($borrower = mysqli_fetch_assoc($borrowerQuery));
-	?>
-	</table>
+		<?php
+				} while($borrower = mysqli_fetch_assoc($borrowerQuery));
+		?>
+		</table>
 	</div>
 	<form id="printpdf" target="_blank" action="pdfborrower.php" method="POST">
 		<input type="hidden" name="query" value="<?php echo $borrowerSQL;?>">
 		<input type="submit" name="createpdf" value="Print PDF" id="button" class="btn btn-success btn-sm">
+	</form>
+	<?php
+		if($numberofpages > 1) {
+	?>
+			<ul class="pagination">
+				<?php
+					for($i=1; $i<=$numberofpages; $i++) {
+				?>
+						<li><a href="index.php?page=borrowers&borrowerpage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+	<?php
+		}
+	?>
+	<form id="pagination_data">
+		<input type="hidden" name="borrowersperpages" id="borrowersperpages" value="<?php echo $borrowersperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
 	</form>
 	<script>
 	$(document).ready(function(){
@@ -134,10 +169,12 @@
 
 		$(".confirmdeactivateborrower").click(function(){
 			var idnumber = $(this).data("id");
+			var borrowersperpages = $("#borrowersperpages").val();
+			var firstresult = $("#firstresult").val();
 			$.ajax({
 				url:"deactivateborrower.php",
 				method:"POST",
-				data:{idnumber:idnumber},
+				data:{idnumber:idnumber, borrowersperpages:borrowersperpages, firstresult:firstresult},
 				success:function(data) {
 					$("#deactivateborrower").modal("hide");
 					$(".borrowerdisplay").html(data);
@@ -153,10 +190,12 @@
 
 		$(".confirmactivateborrower").click(function(){
 			var idnumber = $(this).data("id");
+			var borrowersperpages = $("#borrowersperpages").val();
+			var firstresult = $("#firstresult").val();
 			$.ajax({
 				url:"activateborrower.php",
 				method:"POST",
-				data:{idnumber:idnumber},
+				data:{idnumber:idnumber, borrowersperpages:borrowersperpages, firstresult:firstresult},
 				success:function(data) {
 					$("#activateborrower").modal("hide");
 					$(".borrowerdisplay").html(data);
@@ -166,10 +205,12 @@
 
 		$(".paymentbutton").click(function(){
 			var idnumber = $(this).attr("id");
+			var borrowersperpages = $("#borrowersperpages").val();
+			var firstresult = $("#firstresult").val();
 			$.ajax({
 				url:"paymentmodal.php",
 				method:"POST",
-				data:{idnumber:idnumber},
+				data:{idnumber:idnumber, borrowersperpages:borrowersperpages, firstresult:firstresult},
 				success:function(data) {
 					$("#takepaymentdata").html(data);
 					$("#paymentmodal").modal("show");
