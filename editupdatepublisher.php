@@ -10,9 +10,9 @@ if(isset($_GET['publisherID'])) {
 <div class="admincontainer">
 	<div class="publishers">
 		<div class="publisherform">
-			<h4>Manage publishers</h4>
+			<h4>Update Publisher</h4>
 			<a href="?page=publishers" style="float:right;" class="btn btn-success btn-sm button">
-				Back To Publishers
+				View All Publishers
 			</a>
 			<form id="pform" class="form-inline">
 				<div class="form-group">

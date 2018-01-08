@@ -52,7 +52,7 @@
 				<li><a href="?page=archvsborrowers">Archived Borrowers</a></li>
 				<li><a href="?page=archvsrs">Archived Reservations</a></li>
 				<li><a href="?page=archvsbklogs">Archived Book Logs</a></li>
-				<li><a href="?page=archvsbrlogs">Archived Borrower Logs</a></li>
+				<!--<li><a href="?page=archvsbrlogs">Archived Borrower Logs</a></li>-->
 				<li><a href="?page=archvsc">Archived Classification</a></li>
 				<li><a href="?page=archvsa">Archived Authors</a></li>
 				<li><a href="?page=archvsp">Archived Publishers</a></li>

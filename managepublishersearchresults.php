@@ -1,7 +1,6 @@
 <div class="admincontainer">
-	<a href="?page=publishers" style="margin-top:20px;" class="btn btn-success btn-md button">
-		Back To Publishers
-		<span class="glyphicon glyphicon-menu-hamburger"> </span>
+	<a href="?page=publishers" class="btn btn-success btn-sm button">
+		View All Publishers		
 	</a>
 	<div class="publishersearch">
 		<form method="GET" class="form-inline" id="psearchform">

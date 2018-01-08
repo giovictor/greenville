@@ -54,59 +54,66 @@ if(isset($_POST['bookid']) && isset($_POST['option']) && isset($_POST['booksperp
 	</tr>
 	<?php
 		if($rows==0) {
-			echo "<tr><td colspan='5'><h4><center>No results found.</center></h4></td></tr>";
-		} else {
+			if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
+				echo "<tr><td colspan='5'><h4><center>No results found for '$keyword'.</center></h4></td></tr>";
+			} else if(isset($_POST['classification'])) {
+				echo "<tr><td colspan='5'><h4><center>No books available in this classification.</center></h4></td></tr>";
+			} else {
+				echo "<tr><td colspan='5'><h4><center>No results found.</center></h4></td></tr>";
+			}
+		} else if($rows>=1) {
 			do {
 	?>		
-			<tr>
-				<?php
-					if($option=="bookID") {
-				?>
-						<td>
-							<button class="btn btn-link btn-sm viewbookinfo" style="color:#1CA843;" id="<?php echo $book['accession_no'];?>">
-								<b><?php echo $book['booktitle'];?></b>
-							</button>
-						</td>
-						<td><?php echo $book['authors'];?></td>
-						<td><?php echo $book['publisher']." c".$book['publishingyear'];?></td>
-						<td><?php echo $book['copies'];?></td>
-						<td>
-							<button class="btn btn-primary btn-sm addbookcopy" id="<?php echo $book['bookID'];?>" data-toggle="modal" data-target="#addbookcopy" title="Add copies of book.">
-								<span class="glyphicon glyphicon-plus"></span>
-							</button>
-							<a href="?page=updatebook&bookID=<?php echo $book['bookID'];?>" class="btn btn-success btn-sm">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</a>
-							<button data-id="<?php echo $book['bookID'];?>" class="btn btn-danger btn-sm" id="deletebook" data-toggle="modal" data-target="#deleteconfirm">
-								<span class="glyphicon glyphicon-trash"></span>
-							</button>
-						</td>
-				<?php
-					} else if($option=="accession_no") {
-				?>
-						<td><?php echo $book['accession_no'];?></td>
-						<td>
-							<button class="btn btn-link btn-sm viewbookinfo" style="color:#1CA843;" id="<?php echo $book['accession_no'];?>">
-								<b><?php echo $book['booktitle'];?></b>
-							</button>
-						</td>
-						<td><?php echo $book['authors'];?></td>
-						<td><?php echo $book['publisher']." c".$book['publishingyear'];?></td>
-						<td>
-							<a href="?page=updatebook&acc=<?php echo $book['accession_no'];?>" class="btn btn-success btn-sm">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</a>
-							<button data-id="<?php echo $book['accession_no'];?>" class="btn btn-danger btn-sm" id="deletebook" data-toggle="modal" data-target="#deleteconfirm">
-								<span class="glyphicon glyphicon-trash"></span>
-							</button>
-						</td>
+				<tr>
+					<?php
+						if($option=="bookID") {
+					?>
+							<td>
+								<button class="btn btn-link btn-sm viewbookinfo" style="color:#1CA843;" id="<?php echo $book['accession_no'];?>">
+									<b><?php echo $book['booktitle'];?></b>
+								</button>
+							</td>
+							<td><?php echo $book['authors'];?></td>
+							<td><?php echo $book['publisher']." c".$book['publishingyear'];?></td>
+							<td><?php echo $book['copies'];?></td>
+							<td>
+								<button class="btn btn-primary btn-sm addbookcopy" id="<?php echo $book['bookID'];?>" data-toggle="modal" data-target="#addbookcopy" title="Add copies of book.">
+									<span class="glyphicon glyphicon-plus"></span>
+								</button>
+								<a href="?page=updatebook&bookID=<?php echo $book['bookID'];?>" class="btn btn-success btn-sm">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+								<button data-id="<?php echo $book['bookID'];?>" class="btn btn-danger btn-sm" id="deletebook" data-toggle="modal" data-target="#deleteconfirm">
+									<span class="glyphicon glyphicon-trash"></span>
+								</button>
+							</td>
+					<?php
+						} else if($option=="accession_no") {
+					?>
+							<td><?php echo $book['accession_no'];?></td>
+							<td>
+								<button class="btn btn-link btn-sm viewbookinfo" style="color:#1CA843;" id="<?php echo $book['accession_no'];?>">
+									<b><?php echo $book['booktitle'];?></b>
+								</button>
+							</td>
+							<td><?php echo $book['authors'];?></td>
+							<td><?php echo $book['publisher']." c".$book['publishingyear'];?></td>
+							<td>
+								<a href="?page=updatebook&acc=<?php echo $book['accession_no'];?>" class="btn btn-success btn-sm">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+								<button data-id="<?php echo $book['accession_no'];?>" class="btn btn-danger btn-sm" id="deletebook" data-toggle="modal" data-target="#deleteconfirm">
+									<span class="glyphicon glyphicon-trash"></span>
+								</button>
+							</td>
 
-				<?php
-					}
-				?>
-			</tr>
+					<?php
+						}
+					?>
+				</tr>
 	<?php
-		} while($book = mysqli_fetch_assoc($bookQuery));
+			} while($book = mysqli_fetch_assoc($bookQuery));
+		}
 	?>
 </table>
 <?php
@@ -268,6 +275,5 @@ $(document).ready(function(){
 });
 </script>
 <?php
-	}
 }
 ?>

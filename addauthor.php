@@ -1,11 +1,14 @@
 <?php
 require "dbconnect.php";
-if(isset($_POST['author'])) {
+if(isset($_POST['author']) && isset($_POST['authorsperpages']) && isset($_POST['firstresult'])) {
 	$author = $_POST['author'];
 	$addAuthorSQL = "INSERT INTO author(author) VALUES('$author')";
 	$addAuthorQuery = mysqli_query($dbconnect, $addAuthorSQL);
 
-	$authorSQL = "SELECT * FROM author WHERE status=1 ORDER BY authorID DESC";
+	$authorsperpages = $_POST['authorsperpages'];
+	$firstresult = $_POST['firstresult'];
+
+	$authorSQL = "SELECT * FROM author WHERE status=1 ORDER BY authorID DESC LIMIT $firstresult, $authorsperpages";
 	$authorQuery = mysqli_query($dbconnect, $authorSQL);
 	$author = mysqli_fetch_assoc($authorQuery);
 ?>

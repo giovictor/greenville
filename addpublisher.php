@@ -1,11 +1,14 @@
 <?php
 require "dbconnect.php";
-if(isset($_POST['publisher'])) {
+if(isset($_POST['publisher'])  && isset($_POST['publishersperpages']) && isset($_POST['firstresult'])) {
 	$publisher = $_POST['publisher'];
 	$addpublisherSQL = "INSERT INTO publisher(publisher) VALUES('$publisher')";
 	$addpublisherQuery = mysqli_query($dbconnect, $addpublisherSQL);
 
-	$publisherSQL = "SELECT * FROM publisher WHERE status=1 ORDER BY publisherID DESC";
+	$publishersperpages = $_POST['publishersperpages'];
+	$firstresult = $_POST['firstresult'];
+
+	$publisherSQL = "SELECT * FROM publisher WHERE status=1 ORDER BY publisherID DESC LIMIT $firstresult, $publishersperpages";
 	$publisherQuery = mysqli_query($dbconnect, $publisherSQL);
 	$publisher = mysqli_fetch_assoc($publisherQuery);
 ?>

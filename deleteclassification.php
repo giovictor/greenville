@@ -18,7 +18,7 @@ if(isset($_POST['classificationID']) && isset($_POST['classificationperpages']) 
 	$classification = mysqli_fetch_assoc($classificationQuery);
 	$rows = mysqli_num_rows($classificationQuery);
 
-	if($rows>=1) {
+	
 ?>
 <table class="table table-hover table-bordered" id="ctable">
 		<tr>
@@ -27,38 +27,45 @@ if(isset($_POST['classificationID']) && isset($_POST['classificationperpages']) 
 			<th width="8%"> </th>
 		</tr>
 	<?php
-	do {
+		if($rows==0) {
+			if(isset($_POST['keyword'])) {
+				echo "<tr><td colspan='3'><center><h4>No classifications available for search keyword '$keyword'.</h4></center></td></tr>";
+			} else {
+				echo "<tr><td colspan='3'><center><h4>No classifications available.</h4></center></td></tr>";
+			}
+		} else if($rows>=1) {
+			do {
 	?>
-		<tr>
-			<td><?php echo $classificationID = $classification['classificationID'];?></td>
-			<td><?php echo $classification['classification'];?></td>
-			<td> 
-				<a href="?page=editclassification&classificationID=<?php echo $classification['classificationID'];?>"  class="btn btn-success btn-sm" title="Edit classification.">
-					<span class="glyphicon glyphicon-pencil"></span>
-				</a>
-			<?php
-				$checkclassificationSQL = "SELECT COUNT(*) AS existing FROM book WHERE classificationID='$classificationID'";
-				$checkclassificationQuery = mysqli_query($dbconnect, $checkclassificationSQL);
-				$checkclassification = mysqli_fetch_assoc($checkclassificationQuery);
-				if($checkclassification['existing']==0) {
-			?>
-					<button class="btn btn-danger btn-sm deletebutton" data-id="<?php echo $classification['classificationID'];?>" title="Delete classification." data-toggle="modal" data-target="#confirmdeleteclassification">
-						<span class="glyphicon glyphicon-trash"></span>
+			<tr>
+				<td><?php echo $classificationID = $classification['classificationID'];?></td>
+				<td><?php echo $classification['classification'];?></td>
+				<td> 
+					<a href="?page=editclassification&classificationID=<?php echo $classification['classificationID'];?>"  class="btn btn-success btn-sm" title="Edit classification.">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</a>
+				<?php
+					$checkclassificationSQL = "SELECT COUNT(*) AS existing FROM book WHERE classificationID='$classificationID'";
+					$checkclassificationQuery = mysqli_query($dbconnect, $checkclassificationSQL);
+					$checkclassification = mysqli_fetch_assoc($checkclassificationQuery);
+					if($checkclassification['existing']==0) {
+				?>
+						<button class="btn btn-danger btn-sm deletebutton" data-id="<?php echo $classification['classificationID'];?>" title="Delete classification." data-toggle="modal" data-target="#confirmdeleteclassification">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+				<?php
+					} else if($checkclassification['existing']>=1) {
+				?>
+					<button class="btn btn-danger btn-sm deletebutton" title="This classification cannot be deleted due to foreign key constraint." disabled>
+							<span class="glyphicon glyphicon-trash"></span>
 					</button>
-			<?php
-				} else if($checkclassification['existing']>=1) {
-			?>
-				<button class="btn btn-danger btn-sm deletebutton" title="This classification cannot be deleted due to foreign key constraint." disabled>
-						<span class="glyphicon glyphicon-trash"></span>
-				</button>
-			<?php
-				}
-			?>
-			</td>
-		</tr>
+				<?php
+					}
+				?>
+				</td>
+			</tr>
 	<?php	
-		} while($classification = mysqli_fetch_assoc($classificationQuery));
-	}
+			} while($classification = mysqli_fetch_assoc($classificationQuery));
+		}
 	?>
 </table>
 <script>

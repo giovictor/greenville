@@ -86,13 +86,14 @@
 		?>
 		</table>
 	</div>
-	<form method="POST" action="pdfclassifications.php" target="_blank" class="form-inline">
+	<!--<form method="POST" action="pdfclassifications.php" target="_blank" class="form-inline">
 		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
 		<input type="hidden" name="query" value="<?php echo $classificationSQL;?>">
-	</form>
+	</form>-->
 	<?php
 		if($numberofpages > 1) {
 	?>
+			<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
 			<ul class="pagination">
 				<?php
 					for($i=1;$i<=$numberofpages;$i++) {
@@ -115,13 +116,15 @@ $(document).ready(function(){
 	$("#cform").submit(function(e){
 		e.preventDefault();
 		var classification = $("#classification").val();
+		var classificationperpages = $("#classificationperpages").val();
+		var firstresult = $("#firstresult").val();
 		if(classification=="") {
 			$("#emptyclassification").modal("show");
 		} else {
 			$.ajax({
 				url:"addclassification.php",
 				method:"POST",
-				data:{classification:classification},
+				data:{classification:classification, classificationperpages:classificationperpages, firstresult:firstresult},
 				beforeSend:function() {
 					$("#addclassification").html("Adding...");
 				},

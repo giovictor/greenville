@@ -16,8 +16,6 @@ if(isset($_POST['authorID']) && isset($_POST['authorsperpages']) && isset($_POST
 	$authorQuery = mysqli_query($dbconnect, $authorSQL);
 	$author = mysqli_fetch_assoc($authorQuery);
 	$rows = mysqli_num_rows($authorQuery);
-
-	if($rows>=1) {
 ?>
 <table class="table table-hover table-bordered" id="atable">
 		<tr>
@@ -26,7 +24,14 @@ if(isset($_POST['authorID']) && isset($_POST['authorsperpages']) && isset($_POST
 			<th width="8%"> </th>
 		</tr>
 	<?php
-		do {
+		if($rows==0) {
+			if(isset($_POST['keyword'])) {
+				echo "<tr><td colspan='3'><center><h4>No authors available for search keyword '$keyword'.</h4></center></td></tr>";
+			} else {
+				echo "<tr><td colspan='3'><center><h4>No authors available.</h4></center></td></tr>";
+			}
+		} else if($rows>=1) {
+			do {
 	?>
 			<tr>
 				<td><?php echo $authorID = $author['authorID'];?></td>

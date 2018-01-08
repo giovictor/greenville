@@ -89,13 +89,14 @@
 		?>
 		</table>
 	</div>
-	<form method="POST" action="pdfauthors.php" target="_blank" class="form-inline">
+	<!--<form method="POST" action="pdfauthors.php" target="_blank" class="form-inline">
 		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
 		<input type="hidden" name="query" value="<?php echo $authorSQL;?>">
-	</form>
+	</form>-->
 	<?php
 		if($numberofpages > 1) {
 	?>
+			<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
 			<ul class="pagination">
 				<?php
 					for($i=1;$i<=$numberofpages;$i++) {
@@ -118,13 +119,15 @@ $(document).ready(function(){
 	$("#aform").submit(function(e) {
 		e.preventDefault();
 		var author = $("#author").val();
+		var authorsperpages = $("#authorsperpages").val();
+		var firstresult = $("#firstresult").val();
 		if(author=="") {
 			$("#emptyauthor").modal("show");
 		} else {
 			$.ajax({
 				url:"addauthor.php",
 				method:"POST",
-				data:{author:author},
+				data:{author:author, authorsperpages:authorsperpages, firstresult:firstresult},
 				beforeSend:function() {
 					$("#addauthor").html("Adding...");
 				},

@@ -17,8 +17,6 @@ if(isset($_POST['publisherID']) && isset($_POST['publishersperpages']) && isset(
 	$publisherQuery = mysqli_query($dbconnect, $publisherSQL);
 	$publisher = mysqli_fetch_assoc($publisherQuery);
 	$rows = mysqli_num_rows($publisherQuery);
-
-	if($rows>=1) {
 ?>
 <table class="table table-hover table-bordered" id="ptable">
 		<tr>
@@ -27,7 +25,14 @@ if(isset($_POST['publisherID']) && isset($_POST['publishersperpages']) && isset(
 			<th width="8%"> </th>
 		</tr>
 	<?php
-		do {
+		if($rows==0) {
+			if(isset($_POST['keyword'])) {
+				echo "<tr><td colspan='3'><center><h4>No publishers available for search keyword '$keyword'.</h4></center></td></tr>";
+			} else {
+				echo "<tr><td colspan='3'><center><h4>No publishers available.</h4></center></td></tr>";
+			}
+		} else if($rows>=1) {
+			do {
 	?>
 		<tr>
 			<td><?php echo $publisherID = $publisher['publisherID'];?></td>
@@ -58,8 +63,8 @@ if(isset($_POST['publisherID']) && isset($_POST['publishersperpages']) && isset(
 			</td>
 		</tr>
 	<?php	
-		} while($publisher = mysqli_fetch_assoc($publisherQuery));
-	}
+			} while($publisher = mysqli_fetch_assoc($publisherQuery));
+		}
 	?>
 </table>
 <script>
