@@ -9,15 +9,12 @@
 			<br>
 			<div class="form-group">
 				Limit to: <select name="selectsearchtype" class="selectsearchtype form-control">
-					<option value="All">Any Field</option>
-					<option value="Title">Title</option>
-					<option value="Author">Author</option>
-					<option value="Publisher">Publisher</option>
-					<option value="Year">Year</option>
-					<option value="Call Number">Call Number</option>
-					<option value="ISBN">ISBN</option>
-					<option value="Accession Number">Accession Number</option>
-					<option value="Classification">Classification</option>
+					<option value="any">Any Field</option>
+					<option value="booktitle">Title</option>
+					<option value="author">Author</option>
+					<option value="publisher">Publisher</option>
+					<option value="publishingyear">Year</option>
+					<option value="accession_no">Accession Number</option>
 				</select>
 			</div>
 		</form>

@@ -243,15 +243,11 @@
 			<?php
 				if(isset($_GET['page'])) {
 					$page=$_GET['page'];
-						if($page=="collections") {
-							include "collectionssearch.php";
-							include "collections.php";
-						} else if($page=="collectionssearchresults") {
-							include "collectionssearchresult.php";
-						} 
+					if($page=="collections") {
+						include "collectionssearch.php";
+						include "collections.php";
+					} 
 				} 
-
-			
 			?>
 		</div>
 		
@@ -296,6 +292,8 @@
 				 	include "archivedbooklogssearchresults.php";
 				 } else if(isset($_GET['archivedborrower']) && isset($_GET['archivedlogindate']) && isset($_GET['archivedlogintime']) && isset($_GET['archivedlogoutdate']) && isset($_GET['archivedlogouttime'])) {
 				 	include "archivedborrowerlogssearchresults.php";
+				 } else if(isset($_GET['collectionssearch'])) {
+					include "collectionssearchresult.php";
 				 }
 			?>
 		</div>

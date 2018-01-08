@@ -1,8 +1,8 @@
 <?php
 require "dbconnect.php";
 include "modals.php";
-	if(isset($_GET['classification'])) {
-		$classification = $_GET['classification'];
+	if(isset($_GET['classificationID'])) {
+		$classification = $_GET['classificationID'];
 			$sql = "SELECT * FROM classification WHERE classificationID='$classification'";
 			$query = mysqli_query($dbconnect, $sql);
 			$classification = mysqli_fetch_assoc($query); 
@@ -10,33 +10,27 @@ include "modals.php";
 
 ?>
 <title><?php echo $classification['classification'];?></title>
+<?php
+	$booksperpages = 10;
+	$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID'  AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
+	$totalbookQuery = mysqli_query($dbconnect, $totalbookSQL);
+	$rows = mysqli_num_rows($totalbookQuery);
+	$numberofpages = ceil($rows/$booksperpages);
+
+	if(!isset($_GET['bookpage'])) {
+		$page = 1;
+	} else {
+		$page = $_GET['bookpage'];
+	}
+
+	$firstresult = ($page - 1) * $booksperpages;
+
+	$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID'  AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
+	$bookQuery = mysqli_query($dbconnect, $bookSQL);
+	$book = mysqli_fetch_assoc($bookQuery);
+?>
 <div class="table-responsive" id="bookscollection">
 	<table class="table table-hover" id="collectionstable">
-		<tr>
-			<?php 
-				if(isset($_SESSION['borrower'])) {
-			?>
-				<th colspan='6'>
-					<h3><center><?php echo strtoupper($classification['classification']);?></center></h3>
-				</th>
-			<?php
-				} else {
-			?>
-				<th colspan='4'>
-					<h3><center><?php echo strtoupper($classification['classification']);?></center></h3>
-				</th>
-			<?php
-				}
-			?>
-		</tr>
-<?php
-	$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID'  AND book.status!='Archived' GROUP BY bookID";
-	$bookQuery = mysqli_query($dbconnect, $bookSQL);
-	$checkDB = mysqli_num_rows($bookQuery);
-	$book = mysqli_fetch_assoc($bookQuery);
-	
-
-?>
 		<tr>
 			<th>Title</th>
 			<th>Authors</th>
@@ -51,13 +45,13 @@ include "modals.php";
 		?>
 		</tr>
 			<?php
-				if($checkDB==0) {
+				if($rows==0) {
 					echo "<tr>
 							<td colspan='6'>
 								<center><h4>No books in this classification is available.</h4></center>
 							</td>
 						</tr>";
-				} else if($checkDB>=1) {
+				} else if($rows>=1) {
 					do {
 			?>
 				<tr>
@@ -183,6 +177,17 @@ include "modals.php";
 			?>
 		</table>
 	</div>
+	<ul class="pagination">
+		<?php
+			for($i=1;$i<=$numberofpages; $i++) {
+		?>
+				<li><a href="index.php?page=collections&classificationID=<?php echo $classificationID;?>&bookpage=<?php echo $i;?>"><?php echo $i;?></a></li>
+		<?php
+			}
+		?>
+	</ul>
+	<input type="hidden" name="booksperpages" id="booksperpages" value="<?php echo $booksperpages;?>">
+	<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
 <?php
 	}
 ?>
@@ -194,10 +199,12 @@ include "modals.php";
 			$(this).css("opacity", "0.7");
 			var accession_no = $(this).attr("id");
 			var classification = $(".classification").attr("id");
+			var booksperpages = $("#booksperpages").val();
+			var firstresult = $("#firstresult").val();
 				$.ajax({
 					url:"collectionsreserve.php",
 					method:"GET",
-					data:{accession_no:accession_no, classification:classification},
+					data:{accession_no:accession_no, classification:classification, booksperpages:booksperpages, firstresult:firstresult },
 					success:function(data) {
 						$("#bookscollection").html(data);
 					}

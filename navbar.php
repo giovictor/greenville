@@ -33,7 +33,7 @@
 							<?php
 								do {
 							?>
-									<li><a href="?page=collections&classification=<?php echo $classification['classificationID'];?>"><?php echo $classification['classification'];?></a></li>
+									<li><a href="?page=collections&classificationID=<?php echo $classification['classificationID'];?>"><?php echo $classification['classification'];?></a></li>
 							<?php
 								} while($classification = mysqli_fetch_assoc($classificationQuery));
 							?>

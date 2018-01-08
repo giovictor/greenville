@@ -1,91 +1,93 @@
 <?php
 require "dbconnect.php";
 include "modals.php";
-	if(isset($_GET['classification'])) {
-		$classification = $_GET['classification'];
-			$sql = "SELECT * FROM classification WHERE classificationID='$classification'";
-			$query = mysqli_query($dbconnect, $sql);
-			$classification = mysqli_fetch_assoc($query); 
-			$classificationID = $classification['classificationID'];
+if(isset($_GET['searchbutton'])) {
+	$keyword = $_GET['collectionssearch'];
+	$searchtype = $_GET['selectsearchtype'];
+	$classificationID = $_GET['classificationID'];
+	
+	$sql = "SELECT * FROM classification WHERE classificationID='$classificationID'";
+	$query = mysqli_query($dbconnect, $sql);
+	$classification = mysqli_fetch_assoc($query); 
 ?>
 <div class="collectionsearch">
-<h2><?php echo strtoupper($classification['classification']);?></h2>
-<h4>Search for Greenville College's <?php echo $classification['classification']; ?> collections</h4>
-		<form action="?page=collectionssearchresults&classification=<?php echo $classification['classificationID'];?>" method="POST" class="form-inline" id="collectionssearchform">
-			<div class="form-group">
-			Limit to: <select name="selectsearchtype" class="form-control selectsearchtype">
-				<option value="Title"
-					<?php
-						if($_POST['selectsearchtype']=="Title") {
-							echo "selected='selected'";
-						}
-					?>
-				>Title</option>
-				<option value="Author"
-					<?php
-						if($_POST['selectsearchtype']=="Author") {
-							echo "selected='selected'";
-						}
-					?>
-				>Author</option>
-				<option value="Publisher"
-					<?php
-						if($_POST['selectsearchtype']=="Publisher") {
-							echo "selected='selected'";
-						}
-					?>
-				>Publisher</option>
-				<option value="Year"
-					<?php
-						if($_POST['selectsearchtype']=="Year") {
-							echo "selected='selected'";
-						}
-					?>
-				>Year</option>
-				<option value="Call Number"
-					<?php
-						if($_POST['selectsearchtype']=="Call Number") {
-							echo "selected='selected'";
-						}
-					?>
-				>Call Number</option>
-				<option value="Accession Number"
-					<?php
-						if($_POST['selectsearchtype']=="Accession Number") {
-							echo "selected='selected'";
-						}
-					?>
-				>Accession Number</option>
-			</select>
-			</div>
-			<div class="form-group">
-				<input class="form-control collectionssearchbox" type="text" name="collectionssearch">
-				<input id="button" class="btn btn-success btn-sm" type="submit" name="searchbutton" value="Search">
-			</div>
-		</form>
+	<h2><?php echo strtoupper($classification['classification']);?></h2>
+	<h4>Search for Greenville College's <?php echo $classification['classification']; ?> collections</h4>
+	<form method="GET" class="form-inline" id="collectionssearchform">
+		<div class="form-group">
+		Limit to: <select name="selectsearchtype" class="form-control selectsearchtype">
+			<option value="booktitle"
+				<?php
+					if($_GET['selectsearchtype']=="booktitle") {
+						echo "selected='selected'";
+					}
+				?>
+			>Title</option>
+			<option value="author"
+				<?php
+					if($_GET['selectsearchtype']=="author") {
+						echo "selected='selected'";
+					}
+				?>
+			>Author</option>
+			<option value="publisher"
+				<?php
+					if($_GET['selectsearchtype']=="publisher") {
+						echo "selected='selected'";
+					}
+				?>
+			>Publisher</option>
+			<option value="publishingyear"
+				<?php
+					if($_GET['selectsearchtype']=="publishingyear") {
+						echo "selected='selected'";
+					}
+				?>
+			>Year</option>
+			<option value="accession_no"
+				<?php
+					if($_GET['selectsearchtype']=="accession_no") {
+						echo "selected='selected'";
+					}
+				?>
+			>Accession Number</option>
+		</select>
+		</div>
+		<div class="form-group">
+			<input class="form-control collectionssearchbox" type="text" name="collectionssearch">
+			<input id="button" class="btn btn-success btn-sm" type="submit" name="searchbutton" value="Search">
+		</div>
+		<input type="hidden" name="classificationID" value="<?php echo $classificationID;?>">
+	</form>
 </div>
 <?php
-}
+		$booksperpages = 10;
+			if($searchtype=="accession_no") {
+				$totalsearchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND book.accession='$keyword' AND book.status!='Archived' GROUP BY booktitle ORDER BY book.accession_no DESC";
+			} else {
+				$totalsearchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY booktitle ORDER BY book.accession_no DESC";
+			}
+
+			$totalsearchresultsQuery = mysqli_query($dbconnect, $totalsearchresultsSQL);
+			$rows = mysqli_num_rows($totalsearchresultsQuery);
+			$numberofpages = ceil($rows/$booksperpages);
+
+			if(!isset($_GET['bookpage'])) {
+				$page = 1;
+			} else {
+				$page = $_GET['bookpage'];
+			}
+
+			$firstresult = ($page - 1) * $booksperpages;
+
+			if($searchtype=="accession_no") {
+				$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND book.accession='$keyword' AND book.status!='Archived' GROUP BY booktitle ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
+			} else {
+				$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY booktitle ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
+			}
 ?>
 <div class="table-responsive" id="bookscollection">
 <table class="table table-hover" id="collectionstable">
-	<tr>
-	<?php 
-		if(isset($_SESSION['borrower'])) {
-	?>
-		<th colspan='6'>
-			<h3><center><?php echo strtoupper($classification['classification']);?></center></h3>
-		</th>
-	<?php
-		} else {
-	?>
-		<th colspan='4'>
-			<h3><center><?php echo strtoupper($classification['classification']);?></center></h3>
-		</th>
-	<?php
-		}
-	?>
-	</tr>
 	<tr>
 		<th>Title</th>
 		<th>Authors</th>
@@ -99,31 +101,14 @@ include "modals.php";
 			}
 		?>
 	</tr>
-<?php
-	if(isset($_POST['searchbutton'])) {
-		$keyword = $_POST['collectionssearch'];
-		$searchtype = $_POST['selectsearchtype'];
-			if($searchtype=="Title") {
-				$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND booktitle LIKE '%$keyword%' AND book.status!='Archived' GROUP BY booktitle";
-			} else if($searchtype=="Author") {
-				$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND author.author LIKE '%$keyword%' AND book.status!='Archived' GROUP BY booktitle";
-			} else if($searchtype=="Publisher") {
-				$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID JOIN publisher ON publisher.publisherID=book.publisherID WHERE classification.classificationID='$classificationID' AND publisher.publisher LIKE '%$keyword%' AND book.status!='Archived' GROUP BY booktitle";
-			} else if($searchtype=="Year") {
-				$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND publishingyear LIKE '%$keyword%' AND book.status!='Archived' GROUP BY booktitle";
-			} else if($searchtype=="Call Number") {
-				$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND callnumber LIKE '%$keyword%' AND book.status!='Archived' GROUP BY booktitle";
-			} else if($searchtype=="Accession Number") {
-				$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND book.accession_no LIKE '%$keyword%' AND book.status!='Archived' GROUP BY booktitle";
-			}
-
-			$searchresultsQuery = mysqli_query($dbconnect, $searchresultsSQL);
-			$searchresults = mysqli_fetch_assoc($searchresultsQuery);
-			$checkDB = mysqli_num_rows($searchresultsQuery);
-			if($checkDB==0) {
+	<?php
+			if($rows==0) {
 				echo "<tr><td colspan='6'>No results found.</td></tr>";
-			} else {
-				do {?>
+			} else if($rows>=1) {
+				$searchresultsQuery = mysqli_query($dbconnect, $searchresultsSQL);
+				$searchresults = mysqli_fetch_assoc($searchresultsQuery);
+				do {
+	?>
 				<tr>
 					<?php
 						$bookID = $searchresults['bookID'];
@@ -240,19 +225,35 @@ include "modals.php";
 				</tr>
 		<?php
 			} while($searchresults = mysqli_fetch_assoc($searchresultsQuery));
-		?>
+	}
+	?>
+			</table>
+		</div>
 		<input type="hidden" name="keyword" class="keyword" id="<?php echo $keyword;?>">
 		<input type="hidden" name="searchtype" class="searchtype" id="<?php echo $searchtype;?>">
 		<input type="hidden" name="classification" class="classification" id="<?php echo $classificationID;?>">
+		<input type="hidden" name="booksperpages" id="booksperpages" value="<?php echo $booksperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+
+		<?php
+			if($numberofpages > 1) {
+		?>
+			<ul class="pagination">
+				<?php
+					for($i=1;$i<=$numberofpages;$i++) {
+				?>
+						<li><a href="index.php?selectsearchtype=<?php echo $searchtype;?>&collectionssearch=<?php echo $keyword;?>&searchbutton=Search&classificationID=<?php echo $classificationID;?>&bookpage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+		<?php
+			}	
+		?>
+		<title><?php echo $keyword;?> - Search Results</title>
 <?php
-	}
 }
 ?>
-
-</table>
-</div>
-<title><?php echo $keyword;?> - Search Results</title>
-
 <script>
 $(document).ready(function() {
 	$(".reservebutton").click(function() {
@@ -262,14 +263,16 @@ $(document).ready(function() {
 		var keyword = $(".keyword").attr("id");
 		var searchtype = $(".searchtype").attr("id");
 		var classification = $(".classification").attr("id");
-			$.ajax({
-				url:"collectionssearchresultreserve.php",
-				method:"GET",
-				data:{accession_no:accession_no, keyword:keyword, searchtype:searchtype, classification:classification},
-				success:function(data) {
-					$("#bookscollection").html(data);
-				}
-			});
+		var booksperpages = $("#booksperpages").val();
+		var firstresult = $("#firstresult").val();
+		$.ajax({
+			url:"collectionsreserve.php",
+			method:"GET",
+			data:{accession_no:accession_no, keyword:keyword, searchtype:searchtype, classification:classification, booksperpages:booksperpages, firstresult:firstresult},
+			success:function(data) {
+				$("#bookscollection").html(data);
+			}
+		});
 	});
 
 	$(".modalShow").click(function() {
@@ -285,9 +288,6 @@ $(document).ready(function() {
 			});
 	});
 
-	$("#selectallchk").click(function(){
-		$("input:checkbox").not(this).prop("checked", this.checked);
-	});
 	$("#collectionssearchform").submit(function(e){
 		var searchbox = $(".collectionssearchbox").val();
 			if(searchbox=="") {

@@ -2,41 +2,45 @@
 session_start();
 require "dbconnect.php";
 include "modals.php";
-	$borrowername=$_SESSION['borrower'];
+	$borrowername = $_SESSION['borrower'];
 	$sql = "SELECT IDNumber FROM borrower WHERE firstname='$borrowername'";
 	$query = mysqli_query($dbconnect, $sql);
 	$res = mysqli_fetch_assoc($query);
 	$idnum = $res['IDNumber']; 
 
-	if(isset($_GET['accession_no']) && isset($_GET['classification'])) {
+	if(isset($_GET['accession_no']) && isset($_GET['classification']) && isset($_GET['booksperpages']) && isset($_GET['firstresult'])) {
 		$accession_no = $_GET['accession_no'];
+		$classificationID = $_GET['classification'];
+		$booksperpages = $_GET['booksperpages'];
+		$firstresult = $_GET['firstresult'];
 
-		$classification = $_GET['classification'];
-			$sql = "SELECT * FROM classification WHERE classificationID='$classification'";
-			$query = mysqli_query($dbconnect, $sql);
-			$classification = mysqli_fetch_assoc($query); 
-			$classificationID = $classification['classificationID'];
+		$date = date("Y-m-d");
+		$addDay = strtotime($date."+ 2 days");
+		$expdate = date("Y-m-d", $addDay);
 
-	
-	$date = date("Y-m-d");
-	$addDay = strtotime($date."+ 2 days");
-	$expdate = date("Y-m-d", $addDay);
+		$reserveSQL = "INSERT INTO reservation(IDNumber, accession_no, reservationdate, expdate) VALUES('$idnum','$accession_no','$date','$expdate')";
+		$reserveQuery = mysqli_query($dbconnect, $reserveSQL);
+		
 
-	$reserveSQL = "INSERT INTO reservation(IDNumber, accession_no, reservationdate, expdate) VALUES('$idnum','$accession_no','$date','$expdate')";
-	$reserveQuery = mysqli_query($dbconnect, $reserveSQL);
-	
+		$updatebookstatusSQL = "UPDATE book SET status='Reserved' WHERE accession_no='$accession_no'";
+		$updatebookstatusQuery = mysqli_query($dbconnect,$updatebookstatusSQL);
 
-	$updatebookstatusSQL = "UPDATE book SET status='Reserved' WHERE accession_no='$accession_no'";
-	$updatebookstatusQuery = mysqli_query($dbconnect,$updatebookstatusSQL);
+		if(isset($_GET['searchtype']) && isset($_GET['keyword'])) {
+			$keyword = $_GET['keyword'];
+			$searchtype = $_GET['searchtype'];
+			if($searchtype=="accession_no") {
+				$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND book.accession='$keyword' AND book.status!='Archived' GROUP BY booktitle ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
+			} else {
+				$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY booktitle ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
+			}
+		} else {
+			$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID'  AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
+		}
 
-}
+		$bookQuery = mysqli_query($dbconnect, $bookSQL);
+		$book = mysqli_fetch_assoc($bookQuery);
 ?>
 <table class="table table-hover">
-	<tr>
-		<th colspan='7'>
-			<h3><center><?php echo strtoupper($classification['classification']);?></center></h3>
-		</th>
-	</tr>
 	<tr>
 		<th>Title</th>
 		<th>Authors</th>
@@ -50,14 +54,9 @@ include "modals.php";
 			}
 		?>
 	</tr>
-<?php
-	$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID' AND book.status!='Archived' GROUP BY bookID";
-	 
-	$bookQuery = mysqli_query($dbconnect, $bookSQL);
-	$book = mysqli_fetch_assoc($bookQuery);
-
-	do {
-?>
+	<?php
+		do {
+	?>
 		<tr>
 			<?php
 				$bookID = $book['bookID'];
@@ -180,20 +179,49 @@ include "modals.php";
 
 <script>
 	$(document).ready(function() {
-		$(".reservebutton").click(function() {
-			$(this).attr("disabled", true);
-			$(this).css("opacity", "0.7");
-			var accession_no = $(this).attr("id");
-			var classification = $(".classification").attr("id");
+		<?php
+			if(isset($_GET['searchtype']) && isset($_GET['keyword'])) {
+		?>	
+			$(".reservebutton").click(function() {
+				$(this).attr("disabled", true);
+				$(this).css("opacity", "0.7");
+				var accession_no = $(this).attr("id");
+				var keyword = $(".keyword").attr("id");
+				var searchtype = $(".searchtype").attr("id");
+				var classification = $(".classification").attr("id");
+				var booksperpages = $("#booksperpages").val();
+				var firstresult = $("#firstresult").val();
 				$.ajax({
-					url:"collectionsreserve.php",
+					url:"collectionssearchresultreserve.php",
 					method:"GET",
-					data:{accession_no:accession_no, classification:classification},
+					data:{accession_no:accession_no, keyword:keyword, searchtype:searchtype, classification:classification, booksperpages:booksperpages, firstresult:firstresult},
 					success:function(data) {
 						$("#bookscollection").html(data);
 					}
 				});
-		});
+			});
+		<?php
+			} else {
+		?>
+				$(".reservebutton").click(function() {
+					$(this).attr("disabled", true);
+					$(this).css("opacity", "0.7");
+					var accession_no = $(this).attr("id");
+					var classification = $(".classification").attr("id");
+					var booksperpages = $("#booksperpages").val();
+					var firstresult = $("#firstresult").val();
+					$.ajax({
+						url:"collectionsreserve.php",
+						method:"GET",
+						data:{accession_no:accession_no, classification:classification, booksperpages:booksperpages, firstresult:firstresult },
+						success:function(data) {
+							$("#bookscollection").html(data);
+						}
+					});
+				});
+		<?php
+			}
+		?>
 
 		$(".modalShow").click(function() {
 			var accession_no = $(this).attr("id");
@@ -213,3 +241,6 @@ include "modals.php";
 		});
 	});
 </script>
+<?php
+	}
+?>
