@@ -59,10 +59,12 @@ $(document).ready(function(){
 
 	$(".confirmdeleteauthor").click(function(){
 		var authorID = $(this).data("id");
+		var authorsperpages = $("#authorsperpages").val();
+		var firstresult = $("#firstresult").val();
 		$.ajax({
 			url:"deleteauthor.php",
 			method:"POST",
-			data:{authorID:authorID},
+			data:{authorID:authorID, authorsperpages:authorsperpages, firstresult:firstresult},
 			success:function(data) {
 				$("#confirmdeleteauthor").modal("hide");
 				$(".authors").html(data);

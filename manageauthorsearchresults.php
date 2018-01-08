@@ -1,7 +1,6 @@
 <div class="admincontainer">	
-	<a href="?page=authors" style="margin-top:20px;"  class="btn btn-success btn-md button">
-		Back To Authors
-		<span class="glyphicon glyphicon-menu-hamburger"></span>
+	<a href="?page=authors" class="btn btn-success btn-sm button">
+		View All Authors
 	</a>
 	<div class="authorsearch">
 		<form method="GET" class="form-inline" id="asearchform">
@@ -21,12 +20,24 @@
 	require "dbconnect.php";
 	if(isset($_GET['asearch'])) {
 		$keyword = $_GET['asearch'];
+		$authorsperpages = 10;
+		$totalauthorSQL = "SELECT * FROM author WHERE status=1 AND author LIKE '%$keyword%' ORDER BY authorID DESC";
+		$totalauthorQuery = mysqli_query($dbconnect, $totalauthorSQL);
+		$rows = mysqli_num_rows($totalauthorQuery);
 
-		$authorSQL = "SELECT * FROM author WHERE status=1 AND author LIKE '%$keyword%' ORDER BY authorID DESC";
+		$numberofpages = ceil($rows/$authorsperpages);
+
+		if(!isset($_GET['apage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['apage'];
+		}
+
+		$firstresult = ($page - 1) * $authorsperpages;
+
+		$authorSQL = "SELECT * FROM author WHERE status=1 AND author LIKE '%$keyword%' ORDER BY authorID DESC LIMIT $firstresult, $authorsperpages";
 		$authorQuery = mysqli_query($dbconnect, $authorSQL);
 		$author = mysqli_fetch_assoc($authorQuery);
-		$rows = mysqli_num_rows($authorQuery)
-
 	?>
 	<div class="authors">
 		<table class="table table-hover table-bordered" id="atable">
@@ -79,9 +90,37 @@
 		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
 		<input type="hidden" name="query" value="<?php echo $authorSQL;?>">
 	</form>
+	<?php
+		if($numberofpages > 1) {
+	?>
+			<ul class="pagination">
+				<?php
+					for($i=1;$i<=$numberofpages;$i++) {
+				?>
+						<li><a href="index.php?page=asearch=<?php echo $keyword;?>&apage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+	<?php
+		}
+	?>
+	<form id="pagination_data">
+		<input type="hidden" name="keyword" id="keyword" value="<?php echo $keyword;?>">
+		<input type="hidden" name="authorsperpages" id="authorsperpages" value="<?php echo $authorsperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+	</form>
 </div>
 <script>
 $(document).ready(function(){
+	$("#asearchform").submit(function(e){
+		var searchbox = $("#asearchbox").val();
+		if(searchbox=="") {
+			$("#emptysearch").modal("show");
+			e.preventDefault();
+		} 
+	});
+
 	$(document).on("click",".deletebutton",function(){
 		var authorID = $(this).data("id");
 		$(".confirmdeleteauthor").data("id",authorID);
@@ -89,10 +128,13 @@ $(document).ready(function(){
 
 	$(".confirmdeleteauthor").click(function(){
 		var authorID = $(this).data("id");
+		var authorsperpages = $("#authorsperpages").val();
+		var firstresult = $("#firstresult").val();
+		var keyword = $("#keyword").val();
 		$.ajax({
 			url:"deleteauthor.php",
 			method:"POST",
-			data:{authorID:authorID},
+			data:{authorID:authorID, authorsperpages:authorsperpages, firstresult:firstresult, keyword:keyword},
 			success:function(data) {
 				$("#confirmdeleteauthor").modal("hide");
 				$(".authors").html(data);

@@ -1,12 +1,55 @@
 <?php
 require "dbconnect.php";
-if(isset($_POST['booklogID'])) {
+if(isset($_POST['booklogID']) && isset($_POST['booklogsperpages']) && isset($_POST['firstresult'])) {
 	$booklogID = $_POST['booklogID'];
 
 	$archivebooklogSQL = "UPDATE booklog SET showstatus=0 WHERE booklogID='$booklogID'";
 	$archivebooklog = mysqli_query($dbconnect, $archivebooklogSQL);
 
-	$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC";
+	$booklogsperpages = $_POST['booklogsperpages'];
+	$firstresult = $_POST['firstresult'];
+
+	if(isset($_POST['dateborrowed']) && isset($_POST['datereturned']) && isset($_POST['borrower']) && isset($_POST['book'])) {
+		$dateborrowed = $_POST['dateborrowed']; 
+		$datereturned = $_POST['datereturned']; 
+		$borrower = $_POST['borrower'];
+		$book = $_POST['book'];
+	}
+
+	if(!empty($dateborrowed) && empty($datereturned) && empty($book) && empty($borrower)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($datereturned) && empty($dateborrowed) && empty($book) && empty($borrower)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned='$datereturned' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($book) && empty($dateborrowed) && empty($datereturned) && empty($borrower)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE booktitle LIKE '%$book%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($borrower) && empty($dateborrowed) && empty($datereturned) && empty($book)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$borrower%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($dateborrowed) && !empty($datereturned) && empty($book) && empty($borrower)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND datereturned='$datereturned' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($dateborrowed) && !empty($borrower) && empty($datereturned) && empty($book)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$borrower%'  AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($dateborrowed) && !empty($book) && empty($datereturned) &&  empty($borrower)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND booktitle LIKE '%$book%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($datereturned) && !empty($borrower) && empty($dateborrowed) && empty($book)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned='$datereturned' AND CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$borrower%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($datereturned) && !empty($book) && empty($dateborrowed) && empty($borrower)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned='$datereturned' AND booktitle LIKE '%$book%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($book) && !empty($borrower) && empty($dateborrowed) && empty($datereturned)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($dateborrowed) && !empty($datereturned) && !empty($borrower) && empty($book)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND datereturned='$datereturned' AND CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$borrower%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($dateborrowed) && !empty($datereturned) && !empty($book) && empty($borrower)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND datereturned='$datereturned' AND booktitle LIKE '%$book%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($dateborrowed) && !empty($book) && !empty($borrower) && empty($datereturned)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND booktitle LIKE '%$book%' AND CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$borrower%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($datereturned) && !empty($book) && !empty($borrower) && empty($dateborrowed)) {
+		$booklogsSQL = "SELECT booklogID, showstatus,  borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned='$datereturned' AND booktitle LIKE '%$book%' AND CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$borrower%' AND datereturned IS NOT NULL  AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else if(!empty($dateborrowed) && !empty($datereturned) && !empty($borrower) && !empty($book)) {
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND datereturned='$datereturned' AND booktitle LIKE '%$book%' AND CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$borrower%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	} else {
+	 	$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
+	}
+
 	$booklogsQuery = mysqli_query($dbconnect, $booklogsSQL);
 	$booklogs = mysqli_fetch_assoc($booklogsQuery);
 	$rows = mysqli_num_rows($booklogsQuery);
@@ -99,18 +142,47 @@ $(document).ready(function(){
 		$(".confirmarchiverecord").data("id",booklogID);
 	});
 
-	$(".confirmarchiverecord").click(function(){
-		var booklogID = $(this).data("id");
-		$.ajax({
-			url:"archivebooklogs.php",
-			method:"POST",
-			data:{booklogID:booklogID},
-			success:function(data) {
-				$("#confirmarchivebooklog").modal("hide");
-				$(".booklogs").html(data);
-			}
-		});
-	});
+	<?php
+		if(isset($_POST['dateborrowed']) && isset($_POST['datereturned']) && isset($_POST['borrower']) && isset($_POST['book'])) {
+	?>
+			$(".confirmarchiverecord").click(function(){
+				var booklogID = $(this).data("id");
+				var dateborrowed = $("#dateborrowed").val();
+				var datereturned = $("#datereturned").val();
+				var borrower = $("#borrower").val();
+				var book = $("#book").val();
+				var booklogsperpages = $("#booklogsperpages").val();
+				var firstresult = $("#firstresult").val();
+				$.ajax({
+					url:"archivebooklogs.php",
+					method:"POST",
+					data:{booklogID:booklogID, booklogsperpages:booklogsperpages, firstresult:firstresult, dateborrowed:dateborrowed, datereturned:datereturned, borrower:borrower, book:book},
+					success:function(data) {
+						$("#confirmarchivebooklog").modal("hide");
+						$(".booklogs").html(data);
+					}
+				});
+			});
+	<?php
+		} else {
+	?>
+			$(".confirmarchiverecord").click(function(){
+				var booklogID = $(this).data("id");
+				var booklogsperpages = $("#booklogsperpages").val();
+				var firstresult = $("#firstresult").val();
+				$.ajax({
+					url:"archivebooklogs.php",
+					method:"POST",
+					data:{booklogID:booklogID, booklogsperpages:booklogsperpages, firstresult:firstresult},
+					success:function(data) {
+						$("#confirmarchivebooklog").modal("hide");
+						$(".booklogs").html(data);
+					}
+				});
+			});
+	<?php
+		}
+	?>
 
 	$(".borrowerinfo").click(function(){
 		var idnumber = $(this).attr("id");

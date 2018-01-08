@@ -1,7 +1,7 @@
-<title>Manage Classifications</title>
+<title>Classifications</title>
 <div class="admincontainer">
 	<div class="classificationform">
-	<h4>Manage Classifications</h4>
+		<h4>Classifications</h4>
 		<form id="cform" class="form-inline">
 			<div class="form-group">
 				<label for="classification">Classification: </label>
@@ -115,15 +115,13 @@ $(document).ready(function(){
 	$("#cform").submit(function(e){
 		e.preventDefault();
 		var classification = $("#classification").val();
-		var classificationperpages = $("#classificationperpages").val();
-		var firstresult = $("#firstresult").val();
 		if(classification=="") {
 			$("#emptyclassification").modal("show");
 		} else {
 			$.ajax({
 				url:"addclassification.php",
 				method:"POST",
-				data:{classification:classification, classificationperpages:classificationperpages, firstresult:firstresult},
+				data:{classification:classification},
 				beforeSend:function() {
 					$("#addclassification").html("Adding...");
 				},

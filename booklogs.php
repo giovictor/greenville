@@ -49,10 +49,23 @@
 		header("Location:");
 	}
 	require "dbconnect.php";
-		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC";
+		$totalbooklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC";
+		$totalbooklogsQuery = mysqli_query($dbconnect, $totalbooklogsSQL);
+		$rows = mysqli_num_rows($totalbooklogsQuery);
+
+		$booklogsperpages = 10;
+		$numberofpages = ceil($rows/$booklogsperpages);
+
+		if(!isset($_GET['booklogspage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['booklogspage'];
+		}
+
+		$firstresult = ($page - 1) * $booklogsperpages;
+		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
 		$booklogsQuery = mysqli_query($dbconnect, $booklogsSQL);
 		$booklogs = mysqli_fetch_assoc($booklogsQuery);
-		$rows = mysqli_num_rows($booklogsQuery);
 
 		$holidaySQL = "SELECT * FROM holiday";
 			$holidayQuery = mysqli_query($dbconnect, $holidaySQL);
@@ -147,8 +160,26 @@
 			<input type="hidden" name="query" value="<?php echo $booklogsSQL;?>">
 		</form>
 	<?php
+		} 
+
+		if($numberofpages > 1) {
+	?>
+			<ul class="pagination">
+				<?php
+					for($i=1;$i<=$numberofpages;$i++) {
+				?>
+						<li><a href="index.php?page=bklogs&booklogspage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+	<?php
 		}
 	?>
+	<form id="pagination_data">
+		<input type="hidden" name="booklogsperpages" id="booklogsperpages" value="<?php echo $booklogsperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+	</form>
 	<script>
 	$(document).ready(function(){
 		$(document).on("click",".archivebutton",function(){
@@ -158,10 +189,12 @@
 
 		$(".confirmarchiverecord").click(function(){
 			var booklogID = $(this).data("id");
+			var booklogsperpages = $("#booklogsperpages").val();
+			var firstresult = $("#firstresult").val();
 			$.ajax({
 				url:"archivebooklogs.php",
 				method:"POST",
-				data:{booklogID:booklogID},
+				data:{booklogID:booklogID, booklogsperpages:booklogsperpages, firstresult:firstresult},
 				success:function(data) {
 					$("#confirmarchivebooklog").modal("hide");
 					$(".booklogs").html(data);

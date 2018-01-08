@@ -56,40 +56,85 @@
 		$book = $_GET['book'];
 
 		if(!empty($reservedate) && empty($expdate) && empty($borrower) && empty($book)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND showstatus=1 ORDER BY reservationID DESC";
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND showstatus=1 ORDER BY reservationID DESC";
 		} else if(!empty($expdate) && empty($reservedate) && empty($borrower) && empty($book)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND showstatus=1 ORDER BY reservationID DESC";
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND showstatus=1 ORDER BY reservationID DESC";
 		} else if(!empty($borrower) && empty($reservedate) && empty($expdate) && empty($book)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC";
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC";
 		} else if(!empty($book) && empty($reservedate) && empty($expdate) && empty($borrower)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
 		} else if(!empty($reservedate) && !empty($expdate) && empty($borrower) && empty($book)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND showstatus=1 ORDER BY reservationID DESC";
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND showstatus=1 ORDER BY reservationID DESC";
 		}  else if(!empty($reservedate) && !empty($borrower) && empty($expdate) && empty($book)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC";
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC";
 		} else if(!empty($reservedate) && !empty($book) && empty($expdate) && empty($borrower)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
 		} else if(!empty($expdate) && !empty($borrower) && empty($reservedate) && empty($book)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC";
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC";
+		} else if(!empty($expdate) && !empty($book) && empty($reservedate) && empty($borrower)) {
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+		} else if(!empty($borrower) && !empty($book) && empty($reservedate) && empty($expdate)) {
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+		} else if(!empty($reservedate) && !empty($expdate) && !empty($borrower) && empty($book)) {
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC";
+		} else if(!empty($reservedate) && !empty($expdate) && !empty($book) && empty($borrower)) {
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+		} else if(!empty($reservedate) && !empty($borrower) && !empty($book) && empty($expdate)) {
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+		}  else if(!empty($expdate) && !empty($borrower) && !empty($book) && empty($reservedate)) {
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+		} else if(!empty($expdate) && !empty($borrower) && !empty($book) && !empty($reservedate)) {
+			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+		} 
+
+		$reserveperpages = 10;
+		$totalreservationsQuery = mysqli_query($dbconnect, $totalreservationsSQL);
+		$rows = mysqli_num_rows($totalreservationsQuery);
+
+		$numberofpages = ceil($rows/$reserveperpages);
+
+		if(!isset($_GET['reservepage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['reservepage'];
+		}
+
+		$firstresult = ($page - 1) * $reserveperpages;
+
+		if(!empty($reservedate) && empty($expdate) && empty($borrower) && empty($book)) {
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
+		} else if(!empty($expdate) && empty($reservedate) && empty($borrower) && empty($book)) {
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
+		} else if(!empty($borrower) && empty($reservedate) && empty($expdate) && empty($book)) {
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
+		} else if(!empty($book) && empty($reservedate) && empty($expdate) && empty($borrower)) {
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
+		} else if(!empty($reservedate) && !empty($expdate) && empty($borrower) && empty($book)) {
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
+		}  else if(!empty($reservedate) && !empty($borrower) && empty($expdate) && empty($book)) {
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
+		} else if(!empty($reservedate) && !empty($book) && empty($expdate) && empty($borrower)) {
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
+		} else if(!empty($expdate) && !empty($borrower) && empty($reservedate) && empty($book)) {
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
 		} else if(!empty($expdate) && !empty($book) && empty($reservedate) && empty($borrower)) {
 			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
 		} else if(!empty($borrower) && !empty($book) && empty($reservedate) && empty($expdate)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
 		} else if(!empty($reservedate) && !empty($expdate) && !empty($borrower) && empty($book)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC";
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
 		} else if(!empty($reservedate) && !empty($expdate) && !empty($book) && empty($borrower)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
 		} else if(!empty($reservedate) && !empty($borrower) && !empty($book) && empty($expdate)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
 		}  else if(!empty($expdate) && !empty($borrower) && !empty($book) && empty($reservedate)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
 		} else if(!empty($expdate) && !empty($borrower) && !empty($book) && !empty($reservedate)) {
-			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC";
+			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
 		} 
 
 		$reservationsQuery = mysqli_query($dbconnect, $reservationsSQL);
 		$reservations = mysqli_fetch_assoc($reservationsQuery);
-		$rows = mysqli_num_rows($reservationsQuery);
 
 	?>
 	<div class="reservations">
@@ -135,11 +180,33 @@
 	?>
 		<form method="POST" action="pdfreservations.php" target="_blank" class="form-inline">
 			<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-			<input type="hidden" name="query" value="<?php echo $reservationsSQL;?>">
+			<input type="hidden" name="query" value="<?php echo $totalreservationsSQL;?>">
 		</form>
 	<?php
-		} 
+		}
+
+		if($numberofpages > 1) {
 	?>
+			<ul class="pagination">
+				<?php
+					for($i=1;$i<=$numberofpages;$i++) {
+				?>
+						<li><a href="index.php?reservedate=<?php echo $reservedate;?>&expdate=<?php echo $expdate;?>&borrower=<?php echo $borrower;?>&book=<?php echo $book;?>&reservesearchbutton=Search&reservepage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+	<?php
+		}
+	?>
+	<form id="pagination_data">
+		<input type="hidden" name="reservedate" id="reservedate" value="<?php echo $reservedate;?>">
+		<input type="hidden" name="expdate" id="expdate" value="<?php echo $expdate;?>">
+		<input type="hidden" name="borrower" id="borrower" value="<?php echo $borrower;?>">
+		<input type="hidden" name="book" id="book" value="<?php echo $book;?>">
+		<input type="hidden" name="reserveperpages" id="reserveperpages" value="<?php echo $reserveperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+	</form>
 	<script>
 	$(document).ready(function(){
 		$(document).on("click",".deletereserve",function(){
@@ -149,10 +216,16 @@
 
 		$(".confirmcancelreserve").click(function(){
 			var reservationID = $(this).data("id");
+			var reservedate = $("#reservedate").val();
+			var expdate = $("#expdate").val();
+			var borrower = $("#borrower").val();
+			var book = $("#book").val();
+			var reserveperpages = $("#reserveperpages").val();
+			var firstresult = $("#firstresult").val();
 			$.ajax({
 				url:"deletereservecancel.php",
 				method:"POST",
-				data:{reservationID:reservationID},
+				data:{reservationID:reservationID,  reserveperpages:reserveperpages, firstresult:firstresult, reservedate:reservedate, expdate:expdate, borrower:borrower, book:book},
 				success:function(data) {
 					$("#confirmadmincancelreserve").modal("hide");
 					$(".reservations").html(data);
@@ -188,7 +261,7 @@
 		});
 	});
 	</script>
-	<?php
+<?php
 	}
-	?>
+?>
 </div>

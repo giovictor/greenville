@@ -1,14 +1,11 @@
 <?php
 require "dbconnect.php";
-if(isset($_POST['classification']) && isset($_POST['classificationperpages']) && isset($_POST['firstresult'])) {
+if(isset($_POST['classification'])) {
 	$classification = $_POST['classification'];
 	$addclassificationSQL = "INSERT INTO classification(classification) VALUES('$classification')";
 	$addclassificationQuery = mysqli_query($dbconnect, $addclassificationSQL);
-
-	$classificationperpages = $_POST['classificationperpages'];
-	$firstresult = $_POST['firstresult'];
-
-	$classificationSQL = "SELECT * FROM classification WHERE status=1 ORDER BY classificationID DESC LIMIT $firstresult, $classificationperpages";
+	
+	$classificationSQL = "SELECT * FROM classification WHERE status=1 ORDER BY classificationID DESC";
 	$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
 	$classification = mysqli_fetch_assoc($classificationQuery);
 ?>

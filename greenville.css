@@ -1,4 +1,12 @@
 /*================================CUSTOMIZED==================================*/
+.pagination li a {
+	color:#1CA843;
+	font-weight:bold;
+}
+.pagination li a:hover {
+	color:#1CA843;
+	text-decoration:underline;
+}
 .map {
 	margin:30px;
 	width:400px;

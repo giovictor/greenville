@@ -49,10 +49,24 @@
 		header("Location:index.php");
 	}
 	require "dbconnect.php";
-		$reservationsSQL = "SELECT reservationID,borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE showstatus=1 ORDER BY reservationID DESC";
+		$reserveperpages = 10;
+		$totalreservationsSQL = "SELECT reservationID,borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE showstatus=1 ORDER BY reservationID DESC";
+		$totalreservationsQuery = mysqli_query($dbconnect, $totalreservationsSQL);
+		$rows = mysqli_num_rows($totalreservationsQuery);
+
+		$numberofpages = ceil($rows/$reserveperpages);
+
+		if(!isset($_GET['reservepage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['reservepage'];
+		}
+
+		$firstresult = ($page - 1) * $reserveperpages;
+
+		$reservationsSQL = "SELECT reservationID,borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
 		$reservationsQuery = mysqli_query($dbconnect, $reservationsSQL);
 		$reservations = mysqli_fetch_assoc($reservationsQuery);
-		$rows = mysqli_num_rows($reservationsQuery);
 	?>
 	<div class="reservations">
 		<table class="table table-hover">
@@ -100,8 +114,26 @@
 			<input type="hidden" name="query" value="<?php echo $reservationsSQL;?>">
 		</form>
 	<?php
+		} 
+
+		if($numberofpages > 1) {
+	?>
+			<ul class="pagination">
+				<?php
+					for($i=1;$i<=$numberofpages;$i++) {
+				?>
+						<li><a href="index.php?page=vrs&reservepage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+	<?php
 		}
 	?>
+	<form id="pagination_data">
+		<input type="hidden" name="reserveperpages" id="reserveperpages" value="<?php echo $reserveperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+	</form>
 	<script>
 	$(document).ready(function(){
 		$(document).on("click",".deletereserve",function(){
@@ -111,10 +143,12 @@
 
 		$(".confirmcancelreserve").click(function(){
 			var reservationID = $(this).data("id");
+			var reserveperpages = $("#reserveperpages").val();
+			var firstresult = $("#firstresult").val();
 			$.ajax({
 				url:"deletereservecancel.php",
 				method:"POST",
-				data:{reservationID:reservationID},
+				data:{reservationID:reservationID, reserveperpages:reserveperpages, firstresult:firstresult},
 				success:function(data) {
 					$("#confirmadmincancelreserve").modal("hide");
 					$(".reservations").html(data);
@@ -130,9 +164,11 @@
 			if(reservedate=="" && expdate=="" && borrower=="" && book=="") {
 				$("#emptysearch").modal("show");
 				e.preventDefault();
-			} else if(reservedate > expdate) {
-				$("#invalidreservedate").modal("show");
-				e.preventDefault();
+			} else {
+				 if(reservedate > expdate) {
+					$("#invalidreservedate").modal("show");
+					e.preventDefault();
+				}
 			}
 		});
 

@@ -59,10 +59,12 @@ $(document).ready(function(){
 
 	$(".confirmdeletepublisher").click(function(){
 		var publisherID = $(this).data("id");
+		var publishersperpages = $("#publishersperpages").val();
+		var firstresult = $("#firstresult").val();
 		$.ajax({
 			url:"deletepublisher.php",
 			method:"POST",
-			data:{publisherID:publisherID},
+			data:{publisherID:publisherID, publishersperpages:publishersperpages, firstresult:firstresult},
 			success:function(data) {
 				$("#confirmdeletepublisher").modal("hide");
 				$(".publishers").html(data);

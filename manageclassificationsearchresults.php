@@ -1,5 +1,5 @@
 <div class="admincontainer">
-	<a href="?page=classifications" style="" class="btn btn-success btn-sm button">
+	<a href="?page=classifications" class="btn btn-success btn-sm button">
 		View All Classifications
 	</a>
 	<div class="classificationsearch">
@@ -97,7 +97,7 @@
 				<?php
 					for($i=1;$i<=$numberofpages;$i++) {
 				?>
-						<li><a href="?page=classifications&cpage=<?php echo $i;?>"><?php echo $i;?></a></li>
+						<li><a href="?page=csearch=<?php echo $keyword;?>&cpage=<?php echo $i;?>"><?php echo $i;?></a></li>
 				<?php
 					}
 				?>

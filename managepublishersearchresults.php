@@ -21,11 +21,24 @@
 	require "dbconnect.php";
 	if(isset($_GET['psearch'])) {
 		$keyword = $_GET['psearch'];
+		$publishersperpages = 10;
+		$totalpublisherSQL = "SELECT * FROM publisher WHERE status=1 AND publisher LIKE '%$keyword%' ORDER BY publisherID DESC";
+		$totalpublisherQuery = mysqli_query($dbconnect, $totalpublisherSQL);
+		$rows = mysqli_num_rows($totalpublisherQuery);
 
-		$publisherSQL = "SELECT * FROM publisher WHERE status=1 AND publisher LIKE '%$keyword%' ORDER BY publisherID DESC";
+		$numberofpages = ceil($rows/$publishersperpages);
+
+		if(!isset($_GET['ppage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['ppage'];
+		}
+
+		$firstresult = ($page - 1) * $publishersperpages;
+
+		$publisherSQL = "SELECT * FROM publisher WHERE status=1 AND publisher LIKE '%$keyword%' ORDER BY publisherID DESC LIMIT $firstresult, $publishersperpages";
 		$publisherQuery = mysqli_query($dbconnect, $publisherSQL);
 		$publisher = mysqli_fetch_assoc($publisherQuery);
-		$rows = mysqli_num_rows($publisherQuery);
 
 	?>
 	<div class="publishers">
@@ -79,6 +92,26 @@
 		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
 		<input type="hidden" name="query" value="<?php echo $publisherSQL;?>">
 	</form>
+	<?php
+		if($numberofpages > 1) {
+	?>
+			<ul class="pagination">
+				<?php
+					for($i=1;$i<=$numberofpages;$i++) {
+				?>
+						<li><a href="index.php?psearch=<?php echo $keyword;?>&apage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+	<?php
+		}
+	?>
+	<form id="pagination_data">
+		<input type="hidden" name="keyword" id="keyword" value="<?php echo $keyword;?>">
+		<input type="hidden" name="publishersperpages" id="publishersperpages" value="<?php echo $publishersperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+	</form>
 </div>
 <script>
 $(document).ready(function(){
@@ -97,10 +130,13 @@ $(document).ready(function(){
 
 	$(".confirmdeletepublisher").click(function(){
 		var publisherID = $(this).data("id");
+		var publishersperpages = $("#publishersperpages").val();
+		var firstresult = $("#firstresult").val();
+		var keyword = $("#keyword").val();
 		$.ajax({
 			url:"deletepublisher.php",
 			method:"POST",
-			data:{publisherID:publisherID},
+			data:{publisherID:publisherID, publishersperpages:publishersperpages, firstresult:firstresult, keyword:keyword},
 			success:function(data) {
 				$("#confirmdeletepublisher").modal("hide");
 				$(".publishers").html(data);

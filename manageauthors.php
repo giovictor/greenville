@@ -1,7 +1,7 @@
-<title>Manage Authors</title>
+<title>Authors</title>
 <div class="admincontainer">
 	<div class="authorform">
-	<h4>Manage authors</h4>
+		<h4>Authors</h4>
 		<form id="aform" class="form-inline">
 			<div class="form-group">
 				<label for="author">Author: </label>
@@ -26,7 +26,22 @@
 		header("Location:index.php");
 	}
 	require "dbconnect.php";
-		$authorSQL = "SELECT * FROM author WHERE status=1 ORDER BY authorID DESC";
+		$authorsperpages = 10;
+		$totalauthorSQL = "SELECT * FROM author WHERE status=1 ORDER BY authorID DESC";
+		$totalauthorQuery = mysqli_query($dbconnect, $totalauthorSQL);
+		$rows = mysqli_num_rows($totalauthorQuery);
+
+		$numberofpages = ceil($rows/$authorsperpages);
+
+		if(!isset($_GET['apage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['apage'];
+		}
+
+		$firstresult = ($page - 1) * $authorsperpages;
+
+		$authorSQL = "SELECT * FROM author WHERE status=1 ORDER BY authorID DESC LIMIT $firstresult, $authorsperpages";
 		$authorQuery = mysqli_query($dbconnect, $authorSQL);
 		$author = mysqli_fetch_assoc($authorQuery);
 
@@ -78,10 +93,29 @@
 		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
 		<input type="hidden" name="query" value="<?php echo $authorSQL;?>">
 	</form>
+	<?php
+		if($numberofpages > 1) {
+	?>
+			<ul class="pagination">
+				<?php
+					for($i=1;$i<=$numberofpages;$i++) {
+				?>
+						<li><a href="index.php?page=authors&apage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
+	<?php
+		}
+	?>
+	<form id="pagination_data">
+		<input type="hidden" name="authorsperpages" id="authorsperpages" value="<?php echo $authorsperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+	</form>
 </div>
 <script>
 $(document).ready(function(){
-	$("#aform").submit(function(e){
+	$("#aform").submit(function(e) {
 		e.preventDefault();
 		var author = $("#author").val();
 		if(author=="") {
@@ -119,10 +153,12 @@ $(document).ready(function(){
 
 	$(".confirmdeleteauthor").click(function(){
 		var authorID = $(this).data("id");
+		var authorsperpages = $("#authorsperpages").val();
+		var firstresult = $("#firstresult").val();
 		$.ajax({
 			url:"deleteauthor.php",
 			method:"POST",
-			data:{authorID:authorID},
+			data:{authorID:authorID, authorsperpages:authorsperpages, firstresult:firstresult},
 			success:function(data) {
 				$("#confirmdeleteauthor").modal("hide");
 				$(".authors").html(data);

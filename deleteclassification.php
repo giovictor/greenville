@@ -16,6 +16,9 @@ if(isset($_POST['classificationID']) && isset($_POST['classificationperpages']) 
 	}
 	$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
 	$classification = mysqli_fetch_assoc($classificationQuery);
+	$rows = mysqli_num_rows($classificationQuery);
+
+	if($rows>=1) {
 ?>
 <table class="table table-hover table-bordered" id="ctable">
 		<tr>
@@ -54,7 +57,8 @@ if(isset($_POST['classificationID']) && isset($_POST['classificationperpages']) 
 			</td>
 		</tr>
 	<?php	
-	} while($classification = mysqli_fetch_assoc($classificationQuery));
+		} while($classification = mysqli_fetch_assoc($classificationQuery));
+	}
 	?>
 </table>
 <script>

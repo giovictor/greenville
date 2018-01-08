@@ -46,10 +46,25 @@
 	</div>
 	<?php
 	require "dbconnect.php";
-		$borrowedbooksSQL = "SELECT borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NULL ORDER BY booklogID DESC";
+		$totalborrowedbooksSQL = "SELECT borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NULL ORDER BY booklogID DESC";
+		$totalborrowedbooksQuery = mysqli_query($dbconnect, $totalborrowedbooksSQL);
+		$rows = mysqli_num_rows($totalborrowedbooksQuery);
+
+		$borrowedperpages = 10;
+		$numberofpages = ceil($rows/$borrowedperpages);
+
+		if(!isset($_GET['borrowedpage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['borrowedpage'];
+		}
+
+		$firstresult = ($page - 1) * $borrowedperpages;
+
+		$borrowedbooksSQL = "SELECT borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NULL ORDER BY booklogID DESC LIMIT $firstresult, $borrowedperpages";
 		$borrowedbooksQuery = mysqli_query($dbconnect, $borrowedbooksSQL);
 		$borrowedbooks = mysqli_fetch_assoc($borrowedbooksQuery);
-		$rows = mysqli_num_rows($borrowedbooksQuery);
+
 		$currentdate = date("Y-m-d");
 
 		$holidaySQL = "SELECT * FROM holiday";
@@ -158,6 +173,20 @@
 			<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
 			<input type="hidden" name="query" value="<?php echo $borrowedbooksSQL;?>">
 		</form>
+	<?php
+		}
+
+		if($numberofpages > 1) {
+	?>
+			<ul class="pagination">
+				<?php
+					for($i=1;$i<=$numberofpages;$i++) {
+				?>
+						<li><a href="index.php?page=vbr&borrowedpage=<?php echo $i;?>"><?php echo $i;?></a></li>
+				<?php
+					}
+				?>
+			</ul>
 	<?php
 		}
 	?>
