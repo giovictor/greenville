@@ -12,27 +12,28 @@
 <body>
 	<?php
 		require "dbconnect.php";
-		$holidaySQL = "SELECT * FROM holiday";
-		$holidayQuery = mysqli_query($dbconnect, $holidaySQL);
-		$holiday = mysqli_fetch_assoc($holidayQuery);
-		$holidayrows = mysqli_num_rows($holidayQuery);
-		$holidayarray = array();
-		if($holidayrows > 0) {
-			do {
-				$startdate = $holiday['startdate'];
-				$enddate = $holiday['enddate'];
-				$startdateobj = new DateTime($startdate);
-				$enddateobj = new DateTime($enddate);
-				$enddateobj->modify("+1 day");
-				$holidaydates = new DatePeriod($startdateobj, new DateInterval("P1D"), $enddateobj);
-				foreach($holidaydates AS $dates) {
-					$holidayarray[] = $dates->format("Y-m-d");
-				}
-			} while($holiday = mysqli_fetch_assoc($holidayQuery));
-		}
-
-		print_r($holidayarray);
+		$bookSQL = "SELECT * FROM book";
+		$bookQuery = mysqli_query($dbconnect, $bookSQL);
+		$book = mysqli_fetch_assoc($bookQuery);
+		$rows = mysqli_num_rows($bookQuery);
 	?>
+	<table class="table table-striped">
+		<tr>
+			<th>Accession Number</th>
+			<th>Book Title</th>
+		</tr>
+		<?php
+			if($rows % 5==0) {}
+			do {
+		?>
+					<tr>
+						<td><?php echo $book['accession_no'];?></td>
+						<td><?php echo $book['booktitle'];?></td>
+					</tr>
+		<?php
+			} while($book = mysqli_fetch_assoc($bookQuery));
+		?>
+	</table>
 	<script src="jquery-3.2.0.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>  
 </body>

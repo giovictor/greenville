@@ -137,6 +137,16 @@
 		$reservations = mysqli_fetch_assoc($reservationsQuery);
 
 	?>
+	<?php
+		if($rows>=1) {
+	?>
+			<form method="POST" action="pdfreservations.php" target="_blank" class="form-inline">
+				<input type="hidden" name="query" value="<?php echo $totalreservationsSQL;?>">
+				<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+			</form>
+	<?php
+		}
+	?>
 	<div class="reservations">
 		<table class="table table-hover">
 			<tr>
@@ -175,18 +185,12 @@
 			?>
 		</table>
 	</div>
+	
 	<?php
-		if($rows>=1) {
-	?>
-		<form method="POST" action="pdfreservations.php" target="_blank" class="form-inline">
-			<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-			<input type="hidden" name="query" value="<?php echo $totalreservationsSQL;?>">
-		</form>
-	<?php
-		}
-
 		if($numberofpages > 1) {
 	?>
+			<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
+			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 			<ul class="pagination">
 				<?php
 					for($i=1;$i<=$numberofpages;$i++) {
@@ -200,10 +204,10 @@
 		}
 	?>
 	<form id="pagination_data">
-		<input type="hidden" name="reservedate" id="reservedate" value="<?php echo $reservedate;?>">
-		<input type="hidden" name="expdate" id="expdate" value="<?php echo $expdate;?>">
-		<input type="hidden" name="borrower" id="borrower" value="<?php echo $borrower;?>">
-		<input type="hidden" name="book" id="book" value="<?php echo $book;?>">
+		<input type="hidden" name="reservedate" class="reservedate" value="<?php echo $reservedate;?>">
+		<input type="hidden" name="expdate" class="expdate" value="<?php echo $expdate;?>">
+		<input type="hidden" name="borrower" class="borrower" value="<?php echo $borrower;?>">
+		<input type="hidden" name="book" class="book" value="<?php echo $book;?>">
 		<input type="hidden" name="reserveperpages" id="reserveperpages" value="<?php echo $reserveperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
 	</form>
@@ -216,16 +220,16 @@
 
 		$(".confirmcancelreserve").click(function(){
 			var reservationID = $(this).data("id");
-			var reservedate = $("#reservedate").val();
-			var expdate = $("#expdate").val();
-			var borrower = $("#borrower").val();
-			var book = $("#book").val();
+			var reservedate = $(".reservedate").val();
+			var expdate = $(".expdate").val();
+			var borrower = $(".borrower").val();
+			var book = $(".book").val();
 			var reserveperpages = $("#reserveperpages").val();
 			var firstresult = $("#firstresult").val();
 			$.ajax({
 				url:"deletereservecancel.php",
 				method:"POST",
-				data:{reservationID:reservationID,  reserveperpages:reserveperpages, firstresult:firstresult, reservedate:reservedate, expdate:expdate, borrower:borrower, book:book},
+				data:{reservationID:reservationID, reserveperpages:reserveperpages, firstresult:firstresult, reservedate:reservedate, expdate:expdate, borrower:borrower, book:book},
 				success:function(data) {
 					$("#confirmadmincancelreserve").modal("hide");
 					$(".reservations").html(data);

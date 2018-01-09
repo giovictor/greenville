@@ -1,6 +1,7 @@
 <div class="admincontainer">	
 	<div class="panel panel-success booklogssearchform">
 		<div class="panel-heading">
+			<a href="?page=bklogs" style="float:right;" class="btn btn-success btn-sm button">View All Book Logs</a>
 			<h3>Book Logs</h3>
 		</div>
 		<div class="panel-body">
@@ -220,17 +221,10 @@
 		</table>
 	</div>
 	<?php
-		if($rows>=1) {
-	?>
-		<form method="POST" action="pdfbooklogs.php" target="_blank" class="form-inline">
-			<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-			<input type="hidden" name="query" value="<?php echo $booklogsSQL;?>">
-		</form>
-	<?php
-		}
-
 		if($numberofpages > 1) {
 	?>
+			<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
+			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 			<ul class="pagination">
 				<?php
 					for($i=1;$i<=$numberofpages;$i++) {
@@ -244,10 +238,10 @@
 		}
 	?>
 	<form id="pagination_data">
-		<input type="hidden" name="dateborrowed" id="dateborrowed" value="<?php echo $dateborrowed;?>">
-		<input type="hidden" name="datereturned" id="datereturned" value="<?php echo $datereturned;?>">
-		<input type="hidden" name="borrower" id="booklogsperpages" value="<?php echo $borrower;?>">
-		<input type="hidden" name="book" id="booklogsperpages" value="<?php echo $book;?>">
+		<input type="hidden" name="dateborrowed" class="dateborrowed" value="<?php echo $dateborrowed;?>">
+		<input type="hidden" name="datereturned" class="datereturned" value="<?php echo $datereturned;?>">
+		<input type="hidden" name="borrower" class="borrower" value="<?php echo $borrower;?>">
+		<input type="hidden" name="book" class="book" value="<?php echo $book;?>">
 		<input type="hidden" name="booklogsperpages" id="booklogsperpages" value="<?php echo $booklogsperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
 	</form>
@@ -260,10 +254,10 @@
 
 		$(".confirmarchiverecord").click(function(){
 			var booklogID = $(this).data("id");
-			var dateborrowed = $("#dateborrowed").val();
-			var datereturned = $("#datereturned").val();
-			var borrower = $("#borrower").val();
-			var book = $("#book").val();
+			var dateborrowed = $(".dateborrowed").val();
+			var datereturned = $(".datereturned").val();
+			var borrower = $(".borrower").val();
+			var book = $(".book").val();
 			var booklogsperpages = $("#booklogsperpages").val();
 			var firstresult = $("#firstresult").val();
 			$.ajax({

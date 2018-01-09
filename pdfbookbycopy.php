@@ -3,7 +3,7 @@ set_time_limit(0);
 require "dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
 
-if(isset($_POST['createpdf'])) {
+if(isset($_POST['query'])) {
 	$pdf = new Dompdf();
 	ob_start();
 	require "dbconnect.php";
@@ -17,32 +17,32 @@ if(isset($_POST['createpdf'])) {
 	<link rel='stylesheet' href='greenville.css'>
 	<div id="header">
 		<div id="logoandschool">
-			<img id="gvclogopdf" src="pics/gvclogo.jpg">
+			<img id="gvclogopdf" src="pics/gvclogo.png">
 			<h2>Greenville College Library</h2>
 		</div>
 			<p>112 Belfast Street Corner San Salvador, Greenpark Village, Manggahan, Pasig City</p>
 			<p>682-37-12 | 681-35-54</p>
-			<h3>Book List</h3>
-			<p><?php echo date("F d, Y"." | "."l");?></p>
+			<h3>Book Report (By Accession Number)</h3>
+			Generated on: <p><?php echo date("F d, Y"." | "."l");?></p>
 	</div>
 	<div class="datapdf">
-		<table class='table table-hover table-striped' id='booktable'>
+		<table>
 				<tr>
-					<th width='5%'>Accession Number</th>
-					<th width='5%'>Call No.</th>
-					<th width='22%'>Title</th>
-					<th width='34%'>Authors</th>
-					<th width='34%'>Publication Details</th>
+					<th>Accession Number</th>
+					<th>Title</th>
+					<th>Authors</th>
+					<th>Publication Details</th>
+					<th>Classification</th>
 				</tr>
 	<?php
 	do {
 	?>			
 				<tr>
 					<td><?php echo $book['accession_no'];?></td>
-					<td><?php echo $book['callnumber'];?></td>
 					<td><?php echo $book['booktitle'];?></td>
 					<td><?php echo $book['authors'];?></td>
 					<td><?php echo $book['publisher']." c".$book['publishingyear'];?></td>
+					<td><?php echo $book['classification'];?></td>
 				</tr>
 	<?php
 	} while($book = mysqli_fetch_assoc($bookQuery));

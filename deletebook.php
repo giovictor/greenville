@@ -28,7 +28,7 @@ if(isset($_POST['bookid']) && isset($_POST['option']) && isset($_POST['booksperp
 	$bookQuery = mysqli_query($dbconnect, $bookSQL);
 	$book = mysqli_fetch_assoc($bookQuery);
 	$rows = mysqli_num_rows($bookQuery);
-
+	
 ?>
 <table class='table table-hover table-bordered table-striped' id='booktable'>
 	<tr>
@@ -116,23 +116,6 @@ if(isset($_POST['bookid']) && isset($_POST['option']) && isset($_POST['booksperp
 		}
 	?>
 </table>
-<?php
-	if($option=="bookID") {
-?>
-<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
-	<input class="btn btn-success btn-sm" id="button" type="submit" name="createpdf" value="Print PDF">
-	<input type="hidden" name="query" value="<?php echo $bookSQL;?>">
-</form>
-<?php
-} else if($option=="accession_no") {
-?>
-<form id="printpdf" target="_blank" action="pdfbookbycopy.php" method="POST" class="form-inline">
-	<input class="btn btn-success btn-sm" id="button" type="submit" name="createpdf" value="Print PDF">
-	<input type="hidden" name="query" value="<?php echo $bookSQL;?>">
-</form>
-<?php
-}
-?>
 <script>
 $(document).ready(function(){
 	$(document).on("click", "#deletebook", function(){

@@ -3,7 +3,7 @@ set_time_limit(0);
 require "dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
 
-if(isset($_POST['createpdf'])) {
+if(isset($_POST['query'])) {
 	$pdf = new Dompdf();
 	ob_start();
 	require "dbconnect.php";
@@ -17,7 +17,7 @@ if(isset($_POST['createpdf'])) {
 	<link rel='stylesheet' href='greenville.css'>
 	<div id="header">
 		<div id="logoandschool">
-			<img id="gvclogopdf" src="pics/gvclogo.jpg">
+			<img id="gvclogopdf" src="pics/gvclogo.png">
 			<h2>Greenville College Library</h2>
 		</div>
 			<p>112 Belfast Street Corner San Salvador, Greenpark Village, Manggahan, Pasig City</p>
@@ -26,7 +26,7 @@ if(isset($_POST['createpdf'])) {
 			<p><?php echo date("F d, Y"." | "."l");?></p>
 	</div>
 	<div class="datapdf">
-		<table class="table table-hover table-striped">
+		<table>
 			<tr>
 				<th>ID Number</th>
 				<th>Borrower</th>
@@ -34,10 +34,9 @@ if(isset($_POST['createpdf'])) {
 				<th>Title</th>
 				<th>Reservation Date</th>
 				<th>Expiration Date</th>
-				<th> </th>
 			</tr>
 			<?php
-					do {
+				do {
 			?>
 				<tr>
 					<td><?php echo $reservations['IDNumber'];?></td>
@@ -55,8 +54,8 @@ if(isset($_POST['createpdf'])) {
 <?php
 	$data = ob_get_clean();
 	$pdf->loadHtml($data);
-	$pdf->setPaper("A4","portrait");
+	$pdf->setPaper("A4","landscape");
 	$pdf->render();
-	$pdf->stream("gvcreservationsdata",array("Attachment"=>0));
+	$pdf->stream("gvcreservationsdata");
 }	
 ?>

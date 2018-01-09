@@ -14,7 +14,7 @@ if(isset($_POST['barcode1']) && isset($_POST['barcode2'])) {
 		$createbarcodeQuery = mysqli_query($dbconnect, $createbarcodeSQL);
 		$createbarcode = mysqli_fetch_assoc($createbarcodeQuery);
 		echo "<div id='barcode'>";
-		echo "<div style='margin-left:10%;'>".$generator->getBarcode($createbarcode['barcode'],$generator::TYPE_CODE_128, 1, 50)."</div>";
+		echo "<div style='margin-left:47px;'>".$generator->getBarcode($createbarcode['barcode'],$generator::TYPE_CODE_128, 1, 50)."</div>";
 		echo $createbarcode['barcode']."<br>";
 		echo $createbarcode['callnumber']." ".$createbarcode['accession_no']." - ".$createbarcode['booktitle'];
 		echo "</div>";
@@ -25,7 +25,7 @@ if(isset($_POST['barcode1']) && isset($_POST['barcode2'])) {
 		$i=1;
 		do {
 			echo "<div id='barcode'>";
-			echo "<div style='margin-left:10%;'>".$generator->getBarcode($createbarcode['barcode'],$generator::TYPE_CODE_128, 1, 50)."</div>";
+			echo "<div style='margin-left:47px;'>".$generator->getBarcode($createbarcode['barcode'],$generator::TYPE_CODE_128, 1, 50)."</div>";
 			echo $createbarcode['barcode']."<br>";
 			echo $createbarcode['callnumber']." ".$createbarcode['accession_no']." - ".$createbarcode['booktitle'];
 			echo "</div>";
@@ -33,8 +33,8 @@ if(isset($_POST['barcode1']) && isset($_POST['barcode2'])) {
 	}
 ?>
 </div>
-<a target="_blank" href="printbarcode.php?barcode1=<?php echo $barcode1;?>&barcode2=<?php echo $barcode2;?>">
-	<button class="btn btn-success btn-sm button" id="printbutton">
+<a target="_blank"  href="printbarcode.php?barcode1=<?php echo $barcode1;?>&barcode2=<?php echo $barcode2;?>">
+	<button class="btn btn-success btn-sm button">
 		Print Barcode <span class="glyphicon glyphicon-print"></span>
 	</button>
 </a>

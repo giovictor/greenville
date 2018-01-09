@@ -141,6 +141,12 @@
 		</form>
 	</div>
 	<div class="table-responsive" id="bookdisplay">
+		<!--<div class="reportbtn">
+			<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
+					<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+					<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
+			</form>
+		</div>-->
 		<table class='table table-hover table-bordered table-striped' id='booktable'>
 				<tr>
 					<th>Title</th>
@@ -186,15 +192,13 @@
 	<?php
 		}
 	?>
-		<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
-			<input class="btn btn-success btn-sm" id="button" type="submit" name="createpdf" value="Print PDF">
-			<input type="hidden" name="query" value="<?php echo $bookSQL;?>">
-		</form>
 	</div>
 	<?php
 		if($numberofpages>1) {
 			if(isset($_GET['aedsearchtype']) && isset($_GET['mngbooksearch'])) {
 	?>
+				<p style="margin-top:20px;">Showing <?php echo $totalbookresults;?> results</p>
+				<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
 				<ul class="pagination">
 					<?php
 						for($pages=1; $pages<=$numberofpages; $pages++) {
@@ -207,6 +211,8 @@
 	<?php
 			} else if(isset($_GET['classification'])) {
 	?>
+				<p style="margin-top:20px;">Showing <?php echo $totalbookresults;?> results</p>
+				<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
 				<ul class="pagination">
 					<?php
 						for($pages=1; $pages<=$numberofpages; $pages++) {

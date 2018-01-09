@@ -41,7 +41,8 @@ include "modals.php";
 		<tr>
 			<th>Title</th>
 			<th>Authors</th>
-			<th>Call No:</th>
+			<th>Publication Details</th>
+			<th>Classification</th>
 			<th>Available</th>
 			<th> </th>
 		</tr>
@@ -66,7 +67,8 @@ include "modals.php";
 				</button>
 			</td>
 			<td><?php echo $book['authors']; ?></td>
-			<td><?php echo $book['callnumber']; ?></td>
+			<td><?php echo $book['publisher']." c".$book['publishingyear'];?></td>
+			<td><?php echo $book['classification']; ?></td>
 			<td>
 				<?php
 				$checkQuantitySQL = "SELECT COUNT(accession_no) AS quantity FROM book WHERE status='On Shelf' AND bookID='$bookID'";

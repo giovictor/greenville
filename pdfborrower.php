@@ -3,7 +3,7 @@ set_time_limit(0);
 require "dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
 
-if(isset($_POST['createpdf'])) {
+if(isset($_POST['query'])) {
 	$pdf = new Dompdf();
 	ob_start();
 	require "dbconnect.php";
@@ -17,25 +17,25 @@ if(isset($_POST['createpdf'])) {
 	<link rel='stylesheet' href='greenville.css'>
 	<div id="header">
 		<div id="logoandschool">
-			<img id="gvclogopdf" src="pics/gvclogo.jpg">
+			<img id="gvclogopdf" src="pics/gvclogo.png">
 			<h2>Greenville College Library</h2>
 		</div>
 			<p>112 Belfast Street Corner San Salvador, Greenpark Village, Manggahan, Pasig City</p>
 			<p>682-37-12 | 681-35-54</p>
-			<h3>Borrower List</h3>
-			<p><?php echo date("F d, Y"." | "."l");?></p>
+			<h3>Borrower Report</h3>
+			Generated on: <p><?php echo date("F d, Y"." | "."l");?></p>
 	</div>
 	<div class="datapdf">
-		<table class='table table-hover table-striped' id='booktable'>
+		<table>
 				<tr>
-					<th width='15%'>ID Number</th>
-					<th width='15%'>Name</th>
-					<th width='5%'>Contact Number</th>
-					<th width='15%'>Course</th>
-					<th width='10%'>Date Registered</th>
-					<th width='5%'>Account Type</th>
-					<th width='5%'>Account Balance</th>
-					<th width='5%'>Status</th>
+					<th>ID Number</th>
+					<th>Name</th>
+					<th>Contact Number</th>
+					<th>Course</th>
+					<th>Date Registered</th>
+					<th>Account Type</th>
+					<th>Account Balance</th>
+					<th>Status</th>
 				</tr>
 	<?php
 	do {
@@ -58,7 +58,7 @@ if(isset($_POST['createpdf'])) {
 <?php
 	$data = ob_get_clean();
 	$pdf->loadHtml($data);
-	$pdf->setPaper("A4","portrait");
+	$pdf->setPaper("A4","landscape");
 	$pdf->render();
 	$pdf->stream("gvcborrowerdata",array("Attachment"=>0));
 }	

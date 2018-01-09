@@ -167,17 +167,9 @@
 		</table>
 	</div>
 	<?php
-		if($rows>=1) {
-	?>
-		<form method="POST" action="pdfborrowedbooks.php" target="_blank" class="form-inline">
-			<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-			<input type="hidden" name="query" value="<?php echo $borrowedbooksSQL;?>">
-		</form>
-	<?php
-		}
-
 		if($numberofpages > 1) {
 	?>
+			<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 			<ul class="pagination">
 				<?php
 					for($i=1;$i<=$numberofpages;$i++) {

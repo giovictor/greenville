@@ -43,6 +43,12 @@
 		$borrower = mysqli_fetch_assoc($borrowerQuery);
 
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfborrower.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalborrowerSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class='borrowerdisplay'>
 		<table class='table table-hover table-striped table-bordered' id='borrowertable'>
 					<tr>
@@ -129,13 +135,10 @@
 		?>
 		</table>
 	</div>
-	<form id="printpdf" target="_blank" action="pdfborrower.php" method="POST">
-		<input type="hidden" name="query" value="<?php echo $borrowerSQL;?>">
-		<input type="submit" name="createpdf" value="Print PDF" id="button" class="btn btn-success btn-sm">
-	</form>
 	<?php
 		if($numberofpages > 1) {
 	?>
+			<p style='margin-top:20px;'>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 			<ul class="pagination">
 				<?php
 					for($i=1; $i<=$numberofpages; $i++) {

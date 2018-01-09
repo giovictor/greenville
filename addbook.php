@@ -16,7 +16,7 @@ if(isset($_POST['addbutton'])) {
 	$getmaxaccessionnoQuery = mysqli_query($dbconnect, $getmaxaccessionnoSQL);
 	$getmaxaccessionno = mysqli_fetch_assoc($getmaxaccessionnoQuery);
 	$max = $getmaxaccessionno['max'] + 1;
-
+	
 	for($i=1; $i<=$copies; $i++) {
 		$accession_no = $max++;
 
@@ -111,9 +111,11 @@ if(isset($_POST['addbutton'])) {
 		$barcode = $accession_no.$rand;
 		$updatebarcodeSQL = "UPDATE book SET barcode='$barcode' WHERE accession_no='$accession_no'";
 		$updatebarcode = mysqli_query($dbconnect, $updatebarcodeSQL);
-		
+
 		header("Location:index.php?page=updatebook&bookID=$bookID");
 			
 	}
+
+	
 }	
 ?>

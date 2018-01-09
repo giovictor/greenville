@@ -55,7 +55,7 @@
 	<?php 
 	require "dbconnect.php";
 		$booksperpages = 10;
-		$totalbookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC";
+		$totalbookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC";
 		$totalbookQuery = mysqli_query($dbconnect, $totalbookSQL);
 		$totalbookresults = mysqli_num_rows($totalbookQuery);
 
@@ -69,11 +69,17 @@
 
 		$firstresult = ($page - 1) * $booksperpages;
 
-		$bookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC LIMIT $firstresult, $booksperpages";
+		$bookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC LIMIT $firstresult, $booksperpages";
 		$bookQuery = mysqli_query($dbconnect, $bookSQL);
 		$book = mysqli_fetch_assoc($bookQuery);
 	?>
 	<div class="table-responsive" id='bookdisplay'>
+		<!--<div class="reportbtn">
+			<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
+					<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+					<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
+			</form>
+		</div>-->
 		<table class='table table-hover table-bordered table-striped' id='booktable'>
 			<tr>
 				<th>Title</th>
@@ -110,14 +116,11 @@
 			} while($book = mysqli_fetch_assoc($bookQuery));
 		?>
 		</table>
-		<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
-			<input class="btn btn-success btn-sm" id="button" type="submit" name="createpdf" value="Print PDF">
-			<input type="hidden" name="query" value="<?php echo $bookSQL;?>">
-		</form>
 	</div>
 	<?php
 		if($numberofpages > 1) {
 	?>
+		<p style='margin-top:20px;'>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 		<ul class="pagination">
 			<?php
 				for($pages=1; $pages<=$numberofpages; $pages++) {

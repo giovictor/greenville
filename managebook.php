@@ -79,68 +79,17 @@
 </div>
 <script>
 	$(document).ready(function(){
-		var click = 1;
-		$("#addauthortxt").click(function(){
-			click++;
-			$("#addtable").append('<tr id="atxtrow'+click+'"><input type="text" style="width:200px;" name="author[]" class="form-control authortxtbox"><button id="'+click+'" type="button" class="btn btn-danger btn-sm removeatxt"><span class="glyphicon glyphicon-remove"></span></button>')
-		});
-
-		$(document).on("click",".removeatxt", function(){
-			var id = $(this).attr("id");
-			$("#atxtrow"+id+'').remove();
-		});
-		
-	/*	$("#addbook").submit(function(e){
-			e.preventDefault();
-			var accession_no = $("#accession_no").val();
+		$("#addbook").submit(function(e){
 			var title = $("#title").val();
-			var classification = $("#classification").val();
-			var ISBN = $("#ISBN").val();
-			var callnumber = $("#callnumber").val();
-			var publisher = $("#publisher").val();
-			var year = $("#year").val();
-			var pages = $("#pages").val();
 			var copies = $("#copies").val();
-			var author = $("#author").val();
-			var price = $("#price").val();
-
-			if(accession_no=="" || title=="" || copies=="") {
+			if(title=="" || copies=="") {
 				$("#bookemptyinput").modal("show");
-			} else {
- 				$.ajax({
-					url:"addbook.php",
-					method:"POST",
-					data:$("#addbook").serialize(),
-					beforeSend:function() {
-						$("#addbutton").val("Adding...");
-					},
-					success:function(data) {
-						if(data=="Need Numeric Values") {
-							$("#invalidbookinput").modal("show");
-							$("#addbutton").val("Add Book");
-						} else {
-							$("#addbook")[0].reset();
-							$("#addmsg").modal("show");
-							$("#addbutton").val("Add Book");
-						}
-					}
-				});
-			}
+				e.preventDefault();
+			} 
 		});
-
-		$("#emptyinput").on("hide.bs.modal", function(){
-			$("#title").focus();
-		});
-
-		$("#invalidbookinput").on("hide.bs.modal", function(){
-			$("#year").val("");
-			$("#ISBN").val("");
-			$("#copies").val("");
-			$("#pages").val("");
-			$("#price").val("");
-		});
-});
+	});
 </script>
+
 
 
 

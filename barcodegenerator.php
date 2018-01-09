@@ -18,7 +18,7 @@
 	</form>
 	<div id="booksearchresults"></div>
 	<div class="barcodegenerator">
-		<p style="margin:10px 0px 10px 0px;">Input an accession number or a range of accession numbers.</p>
+		<h4>Input an accession number or a range of accession numbers.</h4>
 		<form id="barcodeform" class="form-inline">
 			<label>Accession Number:</label>
 			<input type="text" name="barcode1" id="barcode1" class="form-control"> - 

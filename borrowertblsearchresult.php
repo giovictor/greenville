@@ -61,12 +61,18 @@
 			if($_GET['aedsearchtype']=="idnumber") {
 				$borrowerSQL = "SELECT * FROM borrower WHERE IDNumber LIKE '%$keyword%' ORDER BY dateregistered DESC LIMIT $firstresult, $borrowersperpages";
 			} else if($_GET['aedsearchtype']=="name") {
-				$borrowerSQL = "SELECT * FROM borrower WHERE CONCAT(lastname, firstname, mi) LIKE '%$keyword%' ORDER BY dateregistered DESC $firstresult, $borrowersperpages";
+				$borrowerSQL = "SELECT * FROM borrower WHERE CONCAT(lastname, firstname, mi) LIKE '%$keyword%' ORDER BY dateregistered DESC LIMIT $firstresult, $borrowersperpages";
 			}
 
 			$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
 			$borrower = mysqli_fetch_assoc($borrowerQuery);
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfborrower.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalborrowerSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class='borrowerdisplay'>
 	 <table class='table table-hover table-striped table-bordered' id='borrowertable'>
 					<tr>
@@ -140,14 +146,12 @@
 		}
 	?>
 	</table>
-	<form id="printpdf" target="_blank" action="pdfborrower.php" method="POST">
-		<input type="hidden" name="query" value="<?php echo $borrowerSQL;?>">
-		<input type="submit" name="createpdf" value="Print PDF" id="button" class="btn btn-success btn-sm">
-	</form>
 	</div>
 	<?php
 		if($numberofpages > 1) {
 	?>
+			<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
+			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 			<ul class="pagination">
 				<?php
 					for($i=1; $i<=$numberofpages; $i++) {

@@ -29,7 +29,6 @@ if(isset($_POST['createpdf'])) {
 	<div class="datapdf">
 		<table class='table table-hover table-bordered table-striped' id='booktable'>
 		<tr>
-			<th width="5%">Call No.</th>
 			<th width="25%">Title</th>
 			<th width="28%">Authors</th>
 			<th width="21%">Publication Details</th>

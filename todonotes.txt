@@ -13,13 +13,42 @@ Make the website mobile responsive
 Embed about us and google maps section under side bar and search form on homepage
 
 ADD FEATURE:
+Modify Archive Tables
 Restore and permanent delete for archived datas
 
 FIX BUG:
 Evaluate receipts data for return ******
+Books REPORTS
 
 NOTE: PUT PAGINATION ON THE PAGE FILE NOT THE RESPONSE FILE
 
+REPORTS
+Reservations:
+    - All
+    - Search Results
+Borrowed Books:
+    - All
+    - Search Results
+Book Logs:
+    - All
+    - Search Results
+Classifications:
+    - All
+    - Search Results
+Authors:
+    - All
+    - Search Results
+Publishers:
+    - All
+    - Search Results
+
+
+<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
+
+<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
+<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
+
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
 
 
 

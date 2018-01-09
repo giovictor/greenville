@@ -68,6 +68,16 @@
 		$reservationsQuery = mysqli_query($dbconnect, $reservationsSQL);
 		$reservations = mysqli_fetch_assoc($reservationsQuery);
 	?>
+	<?php
+		if($rows>=1) {
+	?>
+		<form id="printpdf" target="_blank" action="pdfreservations.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalreservationsSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	<?php
+		}
+	?>
 	<div class="reservations">
 		<table class="table table-hover">
 			<tr>
@@ -107,17 +117,9 @@
 		</table>
 	</div>
 	<?php
-		if($rows>=1) {
-	?>
-		<form method="POST" action="pdfreservations.php" target="_blank" class="form-inline">
-			<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-			<input type="hidden" name="query" value="<?php echo $reservationsSQL;?>">
-		</form>
-	<?php
-		} 
-
 		if($numberofpages > 1) {
 	?>
+			<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 			<ul class="pagination">
 				<?php
 					for($i=1;$i<=$numberofpages;$i++) {

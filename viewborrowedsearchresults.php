@@ -1,6 +1,7 @@
 <div class="admincontainer">	
 	<div class="panel panel-success borrowedbookssearchform">
 		<div class="panel-heading">
+			<a href="?page=bklogs" style="float:right;" class="btn btn-success btn-sm button">View All Borrowed Books</a>
 			<h3>Borrowed Books</h3>
 		</div>
 		<div class="panel-body">
@@ -233,17 +234,10 @@
 		</table>
 	</div>
 	<?php
-		if($rows>=1) {
-	?>
-		<form method="POST" action="pdfborrowedbooks.php" target="_blank" class="form-inline">
-			<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-			<input type="hidden" name="query" value="<?php echo $borrowedbooksSQL;?>">
-		</form>
-	<?php
-		}
-
 		if($numberofpages > 1) {
 	?>
+			<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
+			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 			<ul class="pagination">
 				<?php
 					for($i=1;$i<=$numberofpages;$i++) {

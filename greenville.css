@@ -713,7 +713,8 @@ input[id=aedsearchbutton] {
 }
 /*RESERVATION AND booklog AND LOGS TABLES*/
 .reservations {
-	padding-bottom:50px;
+	/*padding-bottom:50px;*/
+	margin-top:20px;
 }
 .reservations td, .reservations th {
 	font-size:0.9em;
@@ -898,6 +899,7 @@ input[id=aedsearchbutton] {
 	color:white;
 	font-weight:normal;
 }
+
 .barcode {
 	margin-top:20px;
 }
@@ -907,6 +909,10 @@ input[id=aedsearchbutton] {
 	width:200px; 
 	height:150px;
 	font-size:0.8em;
+}
+
+.barcodebtn {
+	clear: both;
 }
 .printbarcode {
 	margin-top:20px;
@@ -918,6 +924,7 @@ input[id=aedsearchbutton] {
 	height:185px;
 	font-size:0.8em;
 	border:solid black 1px;
+	clear:both;
 }
 /*==================================FOOTER====================================*/
 .footer {
@@ -975,20 +982,21 @@ input[id=aedsearchbutton] {
 	margin-top:20px;
 }
 
-.datapdf #booktable, .datapdf #booktable th, .datapdf #booktable td {
-	font-size:0.8em;
-	text-align:center;
-	margin-right:40px;
-}
 .datapdf td, .datapdf th {
-	font-size:0.8em;
 	font-family:'Open Sans', sans-serif;
+	border:solid black 1px;
+	padding:10px;
 	text-align:center;
 }
+
 .datapdf th {
-	background-color:#1C8A43;
-	color:white;
+	font-size:1em;
 }
+
+.datapdf td {
+	font-size:0.8em;
+}
+
 #receiptheader, #receiptbody {
 	font-size:0.5em;
 }

@@ -961,7 +961,7 @@
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body">
-				<p>Some fields are required. (Accession Number, Title and Number of Copies)</p>
+				<p>Some fields are required. (Book Title and Number of Copies)</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-success btn-md button" data-dismiss="modal">Close</button>

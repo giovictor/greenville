@@ -24,7 +24,7 @@ if(isset($_POST['editbutton'])) {
 		if($checkpublisher==0) {
 			$insertpublisherSQL = "INSERT INTO publisher(publisher) VALUES('$publisher')";
 			$insertpublisher = mysqli_query($dbconnect, $insertpublisherSQL);
-			$publisherID = mysql_insert_id($dbconnect);
+			$publisherID = mysqli_insert_id($dbconnect);
 			
 			$newpublisherSQL = "SELECT * FROM publisher WHERE publisherID='$publisherID'";
 			$newpublisherQuery = mysqli_query($dbconnect, $newpublisherSQL);
