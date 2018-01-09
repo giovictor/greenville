@@ -44,7 +44,7 @@
 		<li>
 			<a href="?page=publishers"><span class="glyphicon glyphicon-copyright-mark"></span> Publishers</a>
 		</li> 
-		<li>
+		<!--<li>
 			<a type="button" data-toggle="collapse" data-target="#archives"><span class="glyphicon glyphicon-list-alt"> </span> Archives <div class="caret"></div></a>
 		</li>
 			<div class="collapse" id="archives">
@@ -52,11 +52,12 @@
 				<li><a href="?page=archvsborrowers">Archived Borrowers</a></li>
 				<li><a href="?page=archvsrs">Archived Reservations</a></li>
 				<li><a href="?page=archvsbklogs">Archived Book Logs</a></li>
-				<!--<li><a href="?page=archvsbrlogs">Archived Borrower Logs</a></li>-->
+				<li><a href="?page=archvsbrlogs">Archived Borrower Logs</a></li>
 				<li><a href="?page=archvsc">Archived Classification</a></li>
 				<li><a href="?page=archvsa">Archived Authors</a></li>
 				<li><a href="?page=archvsp">Archived Publishers</a></li>
 			</div>
+		-->
 		<li>
 			<a href="?page=genbc"><span class="glyphicon glyphicon-barcode"></span> Generate Barcodes</a></li>
 		</li>

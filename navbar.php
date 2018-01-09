@@ -55,8 +55,8 @@
 						<ul class="dropdown-menu">
 							<li><a href="?page=reservations">Reservations</a></li>
 							<li><a href="?page=borrowerbooklogs">Book Logs</a></li>
-							<li><a href="#">Edit Profile</a></li>
-							<li><a href="#">Change Password</a></li>
+							<!--<li><a href="#">Edit Profile</a></li>-->
+							<li><a data-toggle="modal" data-target="#changepassword">Change Password</a></li>
 							<li><a href="sessionunset.php">Log Out</a></li>
 						</ul>
 					</li>
@@ -66,8 +66,8 @@
 					<li class="dropdown">
 						<a href="#" data-toggle="dropdown" class="dropdown-toggle"><?php echo $_SESSION['librarian'];?> <div class="caret"></div></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Edit Profile</a></li>
-							<li><a href="#">Change Password</a></li>
+							<!--<li><a href="#">Edit Profile</a></li>
+							<li><a data-toggle="modal" data-target="#changepassword">Change Password</a></li>-->
 							<li><a href="sessionunset.php">Log Out</a></li>
 						</ul>
 					</li>

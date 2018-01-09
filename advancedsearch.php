@@ -1,7 +1,7 @@
 <div class="advancedsearch">
 <h3>Advanced Search</h3>
 <h4>Search for library's materials and collections</h4>
-<form action="?page=advancedsearchresult" method="GET" class="form-inline">
+<form action="?page=advancedsearchresult" method="GET" class="form-inline" id="advancedsearch">
 	<div class="form-group">
 		<select name="selectsearchtype" class="selectsearchtype form-control">
 			<option>Any Field</option>
@@ -53,7 +53,7 @@
 		</select>
 	</div>
 
-	<input id="advancedsearchbutton" class="btn btn-success btn-sm" type="submit" name="advancedsearchbutton" value="Search">
+	<button type="button" id="advancedsearchbutton" class="btn btn-success btn-sm button" data-toggle="modal" data-target="#feature">Search</button>
 	<input id="resetbutton" class="btn btn-success btn-sm" type="reset" value="Reset">
 </form>
 </div>

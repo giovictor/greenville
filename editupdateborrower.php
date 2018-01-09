@@ -26,7 +26,7 @@ if(isset($_GET['idNum'])) {
 					<table cellpadding="10">
 					<tr>
 						<td>ID Number:</td>
-						<td><input type="text" name="idnumber" class="form-control" value="<?php echo $borrower['IDNumber']; ?>" style="width:400px;"></td>
+						<td><input type="text" name="idnumber" class="form-control" value="<?php echo $borrower['IDNumber']; ?>" style="width:400px;" disabled></td>
 					</tr>
 					<tr>
 						<td>Contact No: </td>

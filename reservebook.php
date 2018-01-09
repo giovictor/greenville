@@ -16,8 +16,39 @@ include "modals.php";
 		$firstresult = $_GET['firstresult'];
 	
 	$date = date("Y-m-d");
-	$addDay = strtotime($date."+ 2 days");
-	$expdate = date("Y-m-d", $addDay);
+	$holidaySQL = "SELECT * FROM holiday";
+	$holidayQuery = mysqli_query($dbconnect, $holidaySQL);
+	$holiday = mysqli_fetch_assoc($holidayQuery);
+	$startdate = $holiday['startdate'];
+	$enddate = $holiday['enddate'];
+
+	$datetime = new DateTime($date);
+	$datetimestamp = $datetime->getTimestamp();
+	$startdatetime = new DateTime($startdate);
+	$endddatetime = new DateTime($enddate);
+	$realenddatetime = $endddatetime->modify("+ 1 day");
+	$holidaydates = new DatePeriod($startdatetime, new DateInterval('P1D'), $realenddatetime);
+
+	foreach($holidaydates AS $dates) {
+		$holidaydate[] = $dates->format("Y-m-d");
+	}
+
+	for($i=0; $i<2; $i++) {
+		$addday = 86400;
+		$nextday = date("D", ($datetimestamp + $addday));
+		$nextdaydate = date("Y-m-d",($datetimestamp + $addday));
+
+		if($nextday=="Sat" || $nextday=="Sun") {
+			$i--;
+		} else if(in_array($nextdaydate, $holidaydate)) {
+			$i--;
+		}
+
+		$datetimestamp = $datetimestamp + $addday;
+	}
+
+	$datetime->setTimestamp($datetimestamp);
+	$expdate = $datetime->format("Y-m-d");
 
 	$reserveSQL = "INSERT INTO reservation(IDNumber, accession_no, reservationdate, expdate) VALUES('$idnum','$accession_no','$date','$expdate')";
 	$reserveQuery = mysqli_query($dbconnect, $reserveSQL);

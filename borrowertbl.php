@@ -43,12 +43,12 @@
 		$borrower = mysqli_fetch_assoc($borrowerQuery);
 
 	?>
-	<div class="reportpdf">
+	<!--<div class="reportpdf">
 		<form id="printpdf" target="_blank" action="pdfborrower.php" method="POST">
 			<input type="hidden" name="query" value="<?php echo $totalborrowerSQL;?>">
 			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
 		</form>
-	</div>
+	</div>-->
 	<div class='borrowerdisplay'>
 		<table class='table table-hover table-striped table-bordered' id='borrowertable'>
 					<tr>

@@ -239,6 +239,22 @@
 	</div>
 </div>
 
+<div class="modal fade" id="feature">
+	<div class="modal-dialog alertmodal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<p>Feature is not done yet. We are now working on it.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success btn-md button" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="modal fade" id="notallowedborrower2">
 	<div class="modal-dialog alertmodal">
 		<div class="modal-content">

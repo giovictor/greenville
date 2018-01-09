@@ -17,6 +17,7 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
 		} else if($checkAdmin>=1) {
 			$admin = mysqli_fetch_assoc($adminLoginQuery);
 			$_SESSION['librarian']=$admin['username'];
+			$_SESSION['userID']=$admin['userID'];
 			echo "Librarian Login";
 		} else if($checkBorrower>=1) {
 			$borrower = mysqli_fetch_assoc($borrowerLoginQuery);

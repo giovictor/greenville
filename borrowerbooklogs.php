@@ -10,50 +10,53 @@ if(!isset($_SESSION['borrower'])) {
 	$checkDB = mysqli_num_rows($booklogsQuery);
 ?>
 <title>Book Logs - <?php echo $borrower;?></title>
-<div class="booklogssearchform">
-	<h3>Book Logs</h3>
-	<form method="GET" id="borrowerbooklogssearch">
-		<table>
-			<tr>
-				<td>
-					<label>Date Borrowed:</label>
-				</td>
-				<td>
-					<input type="date" size="10" name="dateborrowed" class="form-control" id="dateborrowed">
-				</td>
-				<td>
-					<label>Due Date:</label>
-				</td>
-				<td>
-					<input type="date" size="15" name="duedate" class="form-control" id="duedate">
-				</td>
-				<td>
-					<label>Date Returned:</label>
-				</td>
-				<td>
-					<input type="date" size="15" name="datereturned" class="form-control" id="datereturned">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label>Book:</label>
-				</td>
-				<td>
-					<input type="text" size="10" name="book" class="form-control" id="book" placeholder="Search for a book">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<input type="submit" name="borrowerbooklogssearchbutton" class="btn btn-success btn-sm button" value="Search">
-				</td>
-			</tr>
-		</table>
-	</form>
+<div class="panel panel-success borrowerlogssearchform" id="borrowerbooklogspanel">
+	<div class="panel-heading">
+		<h3>Book Logs</h3>
+	</div>
+	<div class="panel-body">
+		<form method="GET" id="borrowerbooklogssearch">
+			<table>
+				<tr>
+					<td>
+						<label>Date Borrowed:</label>
+					</td>
+					<td>
+						<input type="date" size="10" name="dateborrowed" class="form-control" id="dateborrowed">
+					</td>
+					<td>
+						<label>Due Date:</label>
+					</td>
+					<td>
+						<input type="date" size="15" name="duedate" class="form-control" id="duedate">
+					</td>
+					<td>
+						<label>Date Returned:</label>
+					</td>
+					<td>
+						<input type="date" size="15" name="datereturned" class="form-control" id="datereturned">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Book:</label>
+					</td>
+					<td>
+						<input type="text" size="10" name="book" class="form-control" id="book" placeholder="Search for a book">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="submit" name="borrowerbooklogssearchbutton" class="btn btn-success btn-sm button" value="Search">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
 </div>
 <div class="booklogs">
 	<table class='table table-hover'>
 			<tr>
-				<th>Call No.</th>
 				<th>Title</th>
 				<th>Date Borrowed</th>
 				<th>Due Date</th>
@@ -68,7 +71,6 @@ if(!isset($_SESSION['borrower'])) {
 	<?php
 		do {?>
 		 	<tr>
-		 		<td><?php echo $booklogsDisplay['callnumber'];?></td>
 		 		<td><?php echo $booklogsDisplay['booktitle'];?></td>
 		 		<td><?php echo $booklogsDisplay['dateborrowed'];?></td>
 		 		<td><?php echo $booklogsDisplay['duedate'];?></td>

@@ -89,7 +89,7 @@
 					$("#confirmnewpassword").val("").focus();
 				} else {
 					$.ajax({
-						url:"changeborrowerpassword.php",
+						url:"changepassword.php",
 						method:"POST",
 						data:{currentpassword:currentpassword, newpassword:newpassword, confirmnewpassword:confirmnewpassword},
 						success:function(data) {

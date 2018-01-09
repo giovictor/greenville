@@ -11,29 +11,8 @@
 </head>
 <body>
 	<?php
-		require "dbconnect.php";
-		$bookSQL = "SELECT * FROM book";
-		$bookQuery = mysqli_query($dbconnect, $bookSQL);
-		$book = mysqli_fetch_assoc($bookQuery);
-		$rows = mysqli_num_rows($bookQuery);
+		echo $pass = md5("gvclib112");
 	?>
-	<table class="table table-striped">
-		<tr>
-			<th>Accession Number</th>
-			<th>Book Title</th>
-		</tr>
-		<?php
-			if($rows % 5==0) {}
-			do {
-		?>
-					<tr>
-						<td><?php echo $book['accession_no'];?></td>
-						<td><?php echo $book['booktitle'];?></td>
-					</tr>
-		<?php
-			} while($book = mysqli_fetch_assoc($bookQuery));
-		?>
-	</table>
 	<script src="jquery-3.2.0.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>  
 </body>

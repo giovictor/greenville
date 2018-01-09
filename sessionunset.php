@@ -17,6 +17,7 @@ if(isset($_SESSION['borrower'])) {
 	unset($_SESSION['borrowerID']);
 } else {
 	unset($_SESSION['librarian']);
+	unset($_SESSION['userID']);
 }
 
 

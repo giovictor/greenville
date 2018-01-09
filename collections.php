@@ -177,6 +177,7 @@ include "modals.php";
 			?>
 		</table>
 	</div>
+	<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 	<ul class="pagination">
 		<?php
 			for($i=1;$i<=$numberofpages; $i++) {
