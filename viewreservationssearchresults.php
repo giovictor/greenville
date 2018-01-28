@@ -1,3 +1,8 @@
+<?php
+	if(!isset($_SESSION['librarian'])) {
+		header("Location:index.php");
+	}
+?>
 <div class="admincontainer">	
 	<div class="panel panel-success reservationssearchform">
 		<div class="panel-heading">

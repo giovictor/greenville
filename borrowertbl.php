@@ -1,4 +1,9 @@
 <title>Borrowers</title>
+<?php
+	if(!isset($_SESSION['librarian'])) {
+		header("Location:index.php");
+	}
+?>
 <div class="admincontainer">
 	<a href="?page=addborrower" class="btn btn-success btn-sm button">Add Borrower <span class="glyphicon glyphicon-plus"></span></a>
 	<div class="panel panel-success" style="margin-top:20px;height:140px;">
@@ -48,7 +53,7 @@
 			<input type="hidden" name="query" value="<?php echo $totalborrowerSQL;?>">
 			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
 		</form>
-	</div>-->
+</div>-->
 	<div class='borrowerdisplay'>
 		<table class='table table-hover table-striped table-bordered' id='borrowertable'>
 					<tr>

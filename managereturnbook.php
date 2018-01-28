@@ -1,4 +1,9 @@
 <title>Return Book</title>
+<?php
+	if(!isset($_SESSION['librarian'])) {
+		header("Location:index.php");
+	}
+?>
 <div class="admincontainer">
 	<h4>Return Book</h4>
 	<form id="returnform" class="form-inline">

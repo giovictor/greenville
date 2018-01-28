@@ -2,7 +2,7 @@
 require "dbconnect.php";
 include "editborrower.php";
 if(!isset($_SESSION['librarian'])) {
-	header("Location:greenvillecollegelibrary.php");
+	header("Location:index.php");
 }
 
 if(isset($_GET['idNum'])) {

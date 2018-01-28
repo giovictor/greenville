@@ -1,5 +1,10 @@
 <div class="admincontainer">
 <?php
+	if(!isset($_SESSION['librarian'])) {
+		header("Location:index.php");
+	}
+?>
+<?php
 require "dbconnect.php";
 if(isset($_GET['bookID'])) {
 	$bookID = $_GET['bookID'];

@@ -1,4 +1,9 @@
 <title>Settings</title>
+<?php
+	if(!isset($_SESSION['librarian'])) {
+		header("Location:index.php");
+	}
+?>
 <div class="admincontainer">
 <div class="settings">
 <h3>SETTINGS</h3>

@@ -1,4 +1,9 @@
 <title>Barcode Generator</title>
+<?php
+	if(!isset($_SESSION['librarian'])) {
+		header("Location:index.php");
+	}
+?>
 <div class="admincontainer">
 	<h3 style="margin:20px 0px 20px 0px;">Barcode Generator</h3>
 	<form id="booksearchform" class="form-inline">

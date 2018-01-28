@@ -46,7 +46,7 @@
 	</div>
 	<?php
 	if(!isset($_SESSION['librarian'])) {
-		header("Location:");
+		header("Location:index.php");
 	}
 	require "dbconnect.php";
 		$totalbooklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC";

@@ -1,4 +1,9 @@
 <title>Borrow Book</title>
+<?php
+	if(!isset($_SESSION['librarian'])) {
+		header("Location:index.php");
+	}
+?>
 <div class="admincontainer">
 	<div class="borrowform">
 		<h4>Borrow Book</h4>

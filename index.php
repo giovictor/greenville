@@ -10,12 +10,12 @@
 ?>
 	<title>Greenville College Library</title>
 <?php
-	}
+	} 
 ?>
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="greenville.css">
-	<!--<link rel="stylesheet" href="gvcmediaqueries.css">-->
+	<link rel="stylesheet" href="gvcmediaqueries.css">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Ubuntu" rel="stylesheet">
 	<script src="jquery-3.2.0.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>   

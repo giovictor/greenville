@@ -1,3 +1,8 @@
+<?php
+	if(!isset($_SESSION['librarian'])) {
+		header("Location:index.php");
+	}
+?>
 <div class="admincontainer">
 	<?php
 	require "dbconnect.php";

@@ -27,10 +27,9 @@
 				$accession_no = mysqli_real_escape_string($dbconnect,$data[0]);
 				$booktitle = mysqli_real_escape_string($dbconnect,ucwords($data[1]));
 				$author = mysqli_real_escape_string($dbconnect,ucwords($data[2]));
-				$publisher = mysqli_real_escape_string($dbconnect,ucwords($data[3]));
-				$year = mysqli_real_escape_string($dbconnect,$data[4]);
-				$classificationID = mysqli_real_escape_string($dbconnect, $data[5]);
-				$acqdate = date("Y-m-d");
+				$publisher = mysqli_real_escape_string($dbconnect,ucwords($data[4]));
+				$year = mysqli_real_escape_string($dbconnect,$data[5]);
+				$classificationID = mysqli_real_escape_string($dbconnect, $data[6]);
 
 				if(empty($publisher)) {
 					$publisherID = NULL;

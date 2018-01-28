@@ -1,9 +1,9 @@
 <div class="admincontainer">	
 	<?php
-	require "dbconnect.php";
-	if(!isset($_SESSION['librarian'])) {
-		header("Location:index.php");
-	}
+		require "dbconnect.php";
+		if(!isset($_SESSION['librarian'])) {
+			header("Location:index.php");
+		}
 	?>
 	<title>Add Borrower</title>
 	<div class="panel panel-success">
