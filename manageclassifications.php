@@ -165,5 +165,9 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	$("#addmsg3").on("hide.bs.modal", function(){
+		$("#classification").focus();
+	});
 });
 </script>

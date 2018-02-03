@@ -14,7 +14,7 @@ if(isset($_POST['accession_no'])) {
 	$updatebookstatusSQL = "UPDATE book SET status='Reserved' WHERE accession_no='$accession_no'";
 	$updatebookstatus = mysqli_query($dbconnect, $updatebookstatusSQL);
 
-	$bookSQL = "SELECT bookID, COUNT(*) AS noofcopies, book.accession_no, booktitle, callnumber, GROUP_CONCAT(DISTINCT author SEPARATOR',') AS authors, publisher, publishingyear, classification FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON bookauthor.authorID=author.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON book.classificationID=classification.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY acquisitiondate DESC LIMIT 10";
+	$bookSQL = "SELECT bookID, book.accession_no, booktitle, callnumber, GROUP_CONCAT(DISTINCT author SEPARATOR',') AS authors, publisher, publishingyear, classification FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON bookauthor.authorID=author.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON book.classificationID=classification.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY publishingyear DESC LIMIT 10";
 	$bookQuery = mysqli_query($dbconnect, $bookSQL);
 	$book = mysqli_fetch_assoc($bookQuery);
 	$rank = 1;
@@ -39,6 +39,9 @@ if(isset($_POST['accession_no'])) {
 <?php
 	do {
 		$bookID = $book['bookID'];
+		$noofcopiesSQL = "SELECT COUNT(*) AS noofcopies FROM book WHERE bookID='$bookID'";
+		$noofcopiesQuery = mysqli_query($dbconnect, $noofcopiesSQL);
+		$noofcopies = mysqli_fetch_assoc($noofcopiesQuery);
 ?>
 	<tr>
 		<td><p class="rank"><?php echo $rank++;?></p></td>
@@ -54,7 +57,7 @@ if(isset($_POST['accession_no'])) {
 				$availablebookSQL = "SELECT * FROM book WHERE status='On Shelf' AND bookID='$bookID'";
 				$availablebookQuery = mysqli_query($dbconnect, $availablebookSQL);
 				$availablebook = mysqli_num_rows($availablebookQuery);
-				echo $availablebook."/".$book['noofcopies'];
+				echo $availablebook."/".$noofcopies['noofcopies'];
 			?>
 		</td>
 		<?php
