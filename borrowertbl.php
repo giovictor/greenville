@@ -41,6 +41,12 @@
 			$page = $_GET['borrowerpage'];
 		}
 
+		if($page < 1) {
+			$page = 1;
+		} else if($page > $numberofpages) {
+			$page = $numberofpages;
+		}
+
 		$firstresult = ($page - 1) * $borrowersperpages;
 
 		$borrowerSQL = "SELECT * FROM borrower ORDER BY dateregistered DESC LIMIT $firstresult, $borrowersperpages";
@@ -141,21 +147,35 @@
 		</table>
 	</div>
 	<?php
+		$pagination = '';
 		if($numberofpages > 1) {
-	?>
-			<p style='margin-top:20px;'>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-			<ul class="pagination">
-				<?php
-					for($i=1; $i<=$numberofpages; $i++) {
-				?>
-						<li><a href="index.php?page=borrowers&borrowerpage=<?php echo $i;?>"><?php echo $i;?></a></li>
-				<?php
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="?page=borrowers&borrowerpage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href=?page=borrowers&borrowerpage='.$i.'">'.$i.'</a>&nbsp;';
 					}
-				?>
-			</ul>
-	<?php
+				}
+			}
+
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="?page=borrowers&borrowerpage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="?page=borrowers&borrowerpage='.$next.'">Next</a>&nbsp;';	
+			}
 		}
 	?>
+	<div class="pagination"><?php echo $pagination;?></div>
 	<form id="pagination_data">
 		<input type="hidden" name="borrowersperpages" id="borrowersperpages" value="<?php echo $borrowersperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">

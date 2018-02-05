@@ -78,6 +78,12 @@ if(isset($_GET['searchbutton'])) {
 				$page = $_GET['bookpage'];
 			}
 
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			}
+
 			$firstresult = ($page - 1) * $booksperpages;
 
 			if($searchtype=="accession_no") {
@@ -237,18 +243,37 @@ if(isset($_GET['searchbutton'])) {
 
 		<?php
 			if($numberofpages > 1) {
+				$pagination = '';
 		?>
 			<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
 			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-			<ul class="pagination">
-				<?php
-					for($i=1;$i<=$numberofpages;$i++) {
-				?>
-						<li><a href="index.php?selectsearchtype=<?php echo $searchtype;?>&collectionssearch=<?php echo $keyword;?>&searchbutton=Search&classificationID=<?php echo $classificationID;?>&bookpage=<?php echo $i;?>"><?php echo $i;?></a></li>
-				<?php
+			<?php
+				if($page > 1) {
+					$previous = $page - 1;
+					$pagination .= '<a href="index.php?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$previous.'">Previous</a>&nbsp;';
+
+					for($i = $page - 3; $i < $page; $i++) {
+						if($i > 0) {
+							$pagination .= '<a href="index.php?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+						}
 					}
-				?>
-			</ul>
+				}
+
+				$pagination .= ''.$page.'&nbsp;';
+
+				for($i = $page + 1; $i <= $numberofpages; $i++) {
+					$pagination .= '<a href="index.php?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+					if($i >= $page + 3) {
+						break;
+					}
+				}
+
+				if($page != $numberofpages) {
+					$next = $page + 1;
+					$pagination .= '<a href="index.php?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$next.'">Next</a>&nbsp;';	
+				}
+			?>
+			<div class="pagination"><?php echo $pagination;?></div>
 		<?php
 			}	
 		?>

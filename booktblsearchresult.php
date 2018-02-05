@@ -106,6 +106,12 @@
 					$page = $_GET['bookpage'];
 				}
 
+				if($page < 1) {
+					$page = 1;
+				} else if($page > $numberofpages) {
+					$page = $numberofpages;
+				}
+
 				$firstresult = ($page - 1) * $booksperpages;
 
 				if($searchtype=="accession_no") {
@@ -125,6 +131,12 @@
 					$page = 1;
 				} else {
 					$page = $_GET['bookpage'];
+				}
+
+				if($page < 1) {
+					$page = 1;
+				} else if($page > $numberofpages) {
+					$page = $numberofpages;
 				}
 
 				$firstresult = ($page - 1) * $booksperpages;
@@ -199,36 +211,74 @@
 	?>
 	</div>
 	<?php
-		if($numberofpages>1) {
+		if($numberofpages> 1) {
+			$pagination = '';
 			if(isset($_GET['aedsearchtype']) && isset($_GET['mngbooksearch'])) {
 	?>
 				<p style="margin-top:20px;">Showing <?php echo $totalbookresults;?> results</p>
 				<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
-				<ul class="pagination">
-					<?php
-						for($pages=1; $pages<=$numberofpages; $pages++) {
-					?>
-							<li><a href="index.php?aedsearchtype=<?php echo $searchtype;?>&mngbooksearch=<?php echo $keyword;?>&mngbookbutton=Search&bookpage=<?php echo $pages; ?>"><?php echo $pages; ?></a></li>
-					<?php
+				<?php
+					if($page > 1) {
+						$previous = $page - 1;
+						$pagination .= '<a href="index.php?aedsearchtype='.$searchtype.'&mngbooksearch='.$keyword.'&mngbookbutton=Search&bookpage='.$previous.'">Previous</a>&nbsp;';
+		
+						for($i = $page - 3; $i < $page; $i++) {
+							if($i > 0) {
+								$pagination .= '<a href="index.php?aedsearchtype='.$searchtype.'&mngbooksearch='.$keyword.'&mngbookbutton=Search&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+							}
 						}
-					?> 
-				</ul>
+					}
+		
+					$pagination .= ''.$page.'&nbsp;';
+		
+					for($i = $page + 1; $i <= $numberofpages; $i++) {
+						$pagination .= '<a href="index.php?aedsearchtype='.$searchtype.'&mngbooksearch='.$keyword.'&mngbookbutton=Search&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+						if($i >= $page + 3) {
+							break;
+						}
+					}
+		
+					if($page != $numberofpages) {
+						$next = $page + 1;
+						$pagination .= '<a href="index.php?aedsearchtype='.$searchtype.'&mngbooksearch='.$keyword.'&mngbookbutton=Searchs&bookpage='.$next.'">Next</a>&nbsp;';	
+					}
+				?>
 	<?php
 			} else if(isset($_GET['classification'])) {
 	?>
 				<p style="margin-top:20px;">Showing <?php echo $totalbookresults;?> results</p>
 				<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
-				<ul class="pagination">
-					<?php
-						for($pages=1; $pages<=$numberofpages; $pages++) {
-					?>
-							<li><a href="index.php?classification=<?php echo $classification;?>&mngbookbutton=Search&bookpage=<?php echo $pages; ?>"><?php echo $pages; ?></a></li>
-					<?php
+				<?php
+					if($page > 1) {
+						$previous = $page - 1;
+						$pagination .= '<a href="index.php?classification='.$classification.'&mngbookbutton=Search&bookpage='.$previous.'">Previous</a>&nbsp;';
+		
+						for($i = $page - 3; $i < $page; $i++) {
+							if($i > 0) {
+								$pagination .= '<a href="index.php?classification='.$classification.'&mngbookbutton=Search&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+							}
 						}
-					?> 
-				</ul>
+					}
+		
+					$pagination .= ''.$page.'&nbsp;';
+		
+					for($i = $page + 1; $i <= $numberofpages; $i++) {
+						$pagination .= '<a href="index.php?classification='.$classification.'&mngbookbutton=Search&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+						if($i >= $page + 3) {
+							break;
+						}
+					}
+		
+					if($page != $numberofpages) {
+						$next = $page + 1;
+						$pagination .= '<a href="index.php?classification='.$classification.'&mngbookbutton=Search&bookpage='.$next.'">Next</a>&nbsp;';	
+					}
+				?>
 	<?php
 			}
+	?>
+		<div class="pagination"><?php echo $pagination;?></div>
+	<?php
 		}
 	?>
 	<form id="pagination-data">

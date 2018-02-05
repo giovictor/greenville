@@ -23,6 +23,12 @@ include "modals.php";
 		$page = $_GET['bookpage'];
 	}
 
+	if($page < 1) {
+		$page = 1;
+	} else if($page > $numberofpages) {
+		$page = $numberofpages;
+	}
+
 	$firstresult = ($page - 1) * $booksperpages;
 
 	$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID'  AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
@@ -178,15 +184,39 @@ include "modals.php";
 		</table>
 	</div>
 	<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-	<ul class="pagination">
-		<?php
-			for($i=1;$i<=$numberofpages; $i++) {
-		?>
-				<li><a href="index.php?page=collections&classificationID=<?php echo $classificationID;?>&bookpage=<?php echo $i;?>"><?php echo $i;?></a></li>
-		<?php
+	<?php
+		$pagination = '';
+		if($numberofpages > 1) {
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="?page=collections&classificationID='.$classificationID.'&bookpage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href="?page=collections&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+					}
+				}
 			}
-		?>
-	</ul>
+			
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="?page=collections&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="?page=collections&classificationID='.$classificationID.'&bookpage='.$next.'">Next</a>&nbsp;';	
+			}
+	?>
+			<div class="pagination"><?php echo $pagination;?></div>
+	<?php
+		}
+	?>
+	
 	<input type="hidden" name="booksperpages" id="booksperpages" value="<?php echo $booksperpages;?>">
 	<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
 <?php

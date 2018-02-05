@@ -93,18 +93,37 @@
 	</form>-->
 	<?php
 		if($numberofpages > 1) {
+			$pagination = '';
 	?>
 			<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
 			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-			<ul class="pagination">
-				<?php
-					for($i=1;$i<=$numberofpages;$i++) {
-				?>
-						<li><a href="index.php?psearch=<?php echo $keyword;?>&apage=<?php echo $i;?>"><?php echo $i;?></a></li>
-				<?php
-					}
-				?>
-			</ul>
+	<?php
+		if($page > 1) {
+			$previous = $page - 1;
+			$pagination .= '<a href="index.php?psearch='.$keyword.'&ppage='.$previous.'">Previous</a>&nbsp;';
+
+			for($i = $page - 3; $i < $page; $i++) {
+				if($i > 0) {
+					$pagination .= '<a href="index.php?psearch='.$keyword.'&ppage='.$i.'">'.$i.'</a>&nbsp;';
+				}
+			}
+		}
+		
+		$pagination .= ''.$page.'&nbsp;';
+
+		for($i = $page + 1; $i <= $numberofpages; $i++) {
+			$pagination .= '<a href="index.php?psearch='.$keyword.'&ppage='.$i.'">'.$i.'</a>&nbsp;';
+			if($i >= $page + 3) {
+				break;
+			}
+		}
+
+		if($page != $numberofpages) {
+			$next = $page + 1;
+			$pagination .= '<a href="index.php?psearch='.$keyword.'&ppage='.$next.'">Next</a>&nbsp;';	
+		}
+	?>
+		<div class="pagination"><?php echo $pagination;?></div>
 	<?php
 		}
 	?>

@@ -67,6 +67,12 @@
 			$page = $_GET['reservepage'];
 		}
 
+		if($page < 1) {
+			$page = 1;
+		} else if($page > $numberofpages) {
+			$page = $numberofpages;
+		}
+		
 		$firstresult = ($page - 1) * $reserveperpages;
 
 		$reservationsSQL = "SELECT reservationID,borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
@@ -112,22 +118,40 @@
 			?>
 		</table>
 	</div>
+	<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 	<?php
+		$pagination = '';
 		if($numberofpages > 1) {
-	?>
-			<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-			<ul class="pagination">
-				<?php
-					for($i=1;$i<=$numberofpages;$i++) {
-				?>
-						<li><a href="index.php?page=vrs&reservepage=<?php echo $i;?>"><?php echo $i;?></a></li>
-				<?php
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="?page=vrs&reservepage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href=?page=vrs&reservepage='.$i.'">'.$i.'</a>&nbsp;';
 					}
-				?>
-			</ul>
+				}
+			}
+
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="?page=vrs&reservepage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="?page=vrs&reservepage='.$next.'">Next</a>&nbsp;';	
+			}
+	?>
+			<div class="pagination"><?php echo $pagination;?></div>
 	<?php
 		}
 	?>
+	
 	<form id="pagination_data">
 		<input type="hidden" name="reserveperpages" id="reserveperpages" value="<?php echo $reserveperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">

@@ -62,6 +62,12 @@
 			$page = $_GET['booklogspage'];
 		}
 
+		if($page < 1) {
+			$page = 1;
+		} else if($page > $numberofpages) {
+			$page = $numberofpages;
+		}
+
 		$firstresult = ($page - 1) * $booklogsperpages;
 		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
 		$booklogsQuery = mysqli_query($dbconnect, $booklogsSQL);
@@ -152,22 +158,40 @@
 				?>
 		</table>
 	</div>
+	<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 	<?php
+		$pagination = '';
 		if($numberofpages > 1) {
-	?>
-			<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-			<ul class="pagination">
-				<?php
-					for($i=1;$i<=$numberofpages;$i++) {
-				?>
-						<li><a href="index.php?page=bklogs&booklogspage=<?php echo $i;?>"><?php echo $i;?></a></li>
-				<?php
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="?page=bklogs&booklogspage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href=?page=bklogs&booklogspage='.$i.'">'.$i.'</a>&nbsp;';
 					}
-				?>
-			</ul>
+				}
+			}
+
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="?page=bklogs&booklogspage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="?page=bklogs&booklogspage='.$next.'">Next</a>&nbsp;';	
+			}
+	?>
+			<div class="pagination"><?php echo $pagination;?></div>	
 	<?php
 		}
 	?>
+	
 	<form id="pagination_data">
 		<input type="hidden" name="booklogsperpages" id="booklogsperpages" value="<?php echo $booklogsperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">

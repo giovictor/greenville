@@ -104,6 +104,12 @@
 			$page = $_GET['reservepage'];
 		}
 
+		if($page < 1) {
+			$page = 1;
+		} else if($page > $numberofpages) {
+			$page = $numberofpages;
+		}
+
 		$firstresult = ($page - 1) * $reserveperpages;
 
 		if(!empty($reservedate) && empty($expdate) && empty($borrower) && empty($book)) {
@@ -183,18 +189,37 @@
 	
 	<?php
 		if($numberofpages > 1) {
+			$pagination = '';
 	?>
 			<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
 			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-			<ul class="pagination">
-				<?php
-					for($i=1;$i<=$numberofpages;$i++) {
-				?>
-						<li><a href="index.php?reservedate=<?php echo $reservedate;?>&expdate=<?php echo $expdate;?>&borrower=<?php echo $borrower;?>&book=<?php echo $book;?>&reservesearchbutton=Search&reservepage=<?php echo $i;?>"><?php echo $i;?></a></li>
-				<?php
+	<?php
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="index.php?reservedate='.$reservedate.'&expdate='.$expdate.'&borrower='.$borrower.'&book='.$book.'&reservesearchbutton=Search&reservepage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href=index.php?reservedate='.$reservedate.'&expdate='.$expdate.'&borrower='.$borrower.'&book='.$book.'&reservesearchbutton=Search&reservepage='.$i.'">'.$i.'</a>&nbsp;';
 					}
-				?>
-			</ul>
+				}
+			}
+
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="index.php?reservedate='.$reservedate.'&expdate='.$expdate.'&borrower='.$borrower.'&book='.$book.'&reservesearchbutton=Search&reservepage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="index.php?reservedate='.$reservedate.'&expdate='.$expdate.'&borrower='.$borrower.'&book='.$book.'&reservesearchbutton=Search&reservepage='.$next.'">Next</a>&nbsp;';	
+			}
+	?>
+			<div class="pagination"><?php echo $pagination;?></div>
 	<?php
 		}
 	?>

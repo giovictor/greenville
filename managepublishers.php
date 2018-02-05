@@ -93,22 +93,37 @@
 		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
 		<input type="hidden" name="query" value="<?php echo $publisherSQL;?>">
 	</form>-->
+	<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
 	<?php
+		$pagination = '';
 		if($numberofpages > 1) {
-	?>
-			<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
-			<ul class="pagination">
-				<?php
-					for($i=1;$i<=$numberofpages;$i++) {
-				?>
-						<li><a href="index.php?page=publishers&ppage=<?php echo $i;?>"><?php echo $i;?></a></li>
-				<?php
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="?page=publishers&ppage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href="?page=publishers&ppage='.$i.'">'.$i.'</a>&nbsp;';
 					}
-				?>
-			</ul>
-	<?php
+				}
+			}
+			
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="?page=publishers&ppage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="?page=publishers&ppage='.$next.'">Next</a>&nbsp;';	
+			}
 		}
 	?>
+	<div class="pagination"><?php echo $pagination;?></div>
 	<form id="pagination_data">
 		<input type="hidden" name="publishersperpages" id="publishersperpages" value="<?php echo $publishersperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">

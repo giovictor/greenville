@@ -99,6 +99,13 @@
 			$page = $_GET['booklogspage'];
 		}
 
+
+		if($page < 1) {
+			$page = 1;
+		} else if($page > $numberofpages) {
+			$page = $numberofpages;
+		}
+		
 		$firstresult = ($page - 1) * $booklogsperpages;
 
 		if(!empty($dateborrowed) && empty($datereturned) && empty($book) && empty($borrower)) {
@@ -222,18 +229,37 @@
 	</div>
 	<?php
 		if($numberofpages > 1) {
+			$pagination = '';
 	?>
 			<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
 			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-			<ul class="pagination">
-				<?php
-					for($i=1;$i<=$numberofpages;$i++) {
-				?>
-						<li><a href="index.php?dateborrowed=<?php echo $dateborrowed;?>&datereturned=<?php echo $datereturned;?>&borrower=<?php echo $borrower;?>&book=<?php echo $book;?>&booklogssearchbutton=Search&booklogspage=<?php echo $i;?>"><?php echo $i;?></a></li>
-				<?php
+	<?php
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="index.php?dateborrowed='.$dateborrowed.'&datereturned='.$datereturned.'&borrower='.$borrower.'&book='.$book.'&booklogssearchbutton=Search&booklogspage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href=index.php?dateborrowed='.$dateborrowed.'&datereturned='.$datereturned.'&borrower='.$borrower.'&book='.$book.'&booklogssearchbutton=Search&booklogspage='.$i.'">'.$i.'</a>&nbsp;';
 					}
-				?>
-			</ul>
+				}
+			}
+
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href=index.php?dateborrowed='.$dateborrowed.'&datereturned='.$datereturned.'&borrower='.$borrower.'&book='.$book.'&booklogssearchbutton=Search&booklogspage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="index.php?dateborrowed='.$dateborrowed.'&datereturned='.$datereturned.'&borrower='.$borrower.'&book='.$book.'&booklogssearchbutton=Search&booklogspage='.$next.'">Next</a>&nbsp;';	
+			}
+	?>
+			<div class="pagination"><?php echo $pagination;?></div>
 	<?php
 		}
 	?>

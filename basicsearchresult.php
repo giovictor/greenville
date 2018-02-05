@@ -92,6 +92,12 @@ if(isset($_GET['basicsearch'])) {
 			$page = $_GET['bookpage'];
 		}
 
+		if($page < 1) {
+			$page = 1;
+		} else if($page > $numberofpages) {
+			$page = $numberofpages;
+		}
+
 		$firstresult = ($page - 1) * $booksperpages;
 		
 		if($searchtype=="any") {
@@ -263,20 +269,40 @@ if(isset($_GET['basicsearch'])) {
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
 		<?php
 			if($numberofpages > 1) {
+				$pagination = '';
 		?>
 			<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
 			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-			<ul class="pagination">
-				<?php
-					for($i=1; $i<=$numberofpages; $i++) {
-				?>
-						<li><a href="index.php?basicsearch=<?php echo $keyword;?>&basicsearchbutton=Search&selectsearchtype=<?php echo $searchtype;?>&bookpage=<?php echo $i;?>"><?php echo $i;?></a></li>
-				<?php
+		<?php
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="index.php?basicsearch='.$keyword.'&basicsearchbutton=Search&selectsearchtype='.$searchtype.'&bookpage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href="index.php?basicsearch='.$keyword.'&basicsearchbutton=Search&selectsearchtype='.$searchtype.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
 					}
-				?>
-			</ul>
-<?php
+				}
 			}
+
+			//CURRENT PAGE
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="index.php?basicsearch='.$keyword.'&basicsearchbutton=Search&selectsearchtype='.$searchtype.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="index.php?basicsearch='.$keyword.'&basicsearchbutton=Search&selectsearchtype='.$searchtype.'&bookpage='.$next.'">Next</a>&nbsp;';	
+			}
+?>
+			<div class="pagination"><?php echo $pagination;?></div>
+<?php
+		}
 	}
 }
 ?>

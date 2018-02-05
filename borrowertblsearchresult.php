@@ -61,6 +61,12 @@
 				$page = $_GET['borrowerpage'];
 			}
 
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			}
+
 			$firstresult = ($page - 1) * $borrowersperpages;
 
 			if($_GET['aedsearchtype']=="idnumber") {
@@ -154,18 +160,37 @@
 	</div>
 	<?php
 		if($numberofpages > 1) {
+			$pagination = '';
 	?>
 			<p style='margin-top:20px;'>Showing <?php echo $rows;?> results</p>
 			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-			<ul class="pagination">
-				<?php
-					for($i=1; $i<=$numberofpages; $i++) {
-				?>
-						<li><a href="index.php?aedsearchtype=<?php echo $searchtype;?>&mngborrowersearch=<?php echo $keyword;?>&mngborrowerbutton=Search&borrowerpage=<?php echo $i;?>"><?php echo $i;?></a></li>
-				<?php
-					}
-				?>
-			</ul>
+	<?php
+		if($page > 1) {
+			$previous = $page - 1;
+			$pagination .= '<a href="index.php?aedsearchtype='.$searchtype.'&mngborrowersearch='.$keyword.'&mngborrowerbutton=Search&borrowerpage='.$previous.'">Previous</a>&nbsp;';
+
+			for($i = $page - 3; $i < $page; $i++) {
+				if($i > 0) {
+					$pagination .= '<a href=index.php?aedsearchtype='.$searchtype.'&mngborrowersearch='.$keyword.'&mngborrowerbutton=Search&borrowerpage='.$i.'">'.$i.'</a>&nbsp;';
+				}
+			}
+		}
+
+		$pagination .= ''.$page.'&nbsp;';
+
+		for($i = $page + 1; $i <= $numberofpages; $i++) {
+			$pagination .= '<a href="index.php?aedsearchtype='.$searchtype.'&mngborrowersearch='.$keyword.'&mngborrowerbutton=Search&borrowerpage='.$i.'">'.$i.'</a>&nbsp;';
+			if($i >= $page + 3) {
+				break;
+			}
+		}
+
+		if($page != $numberofpages) {
+			$next = $page + 1;
+			$pagination .= '<a href="index.php?aedsearchtype='.$searchtype.'&mngborrowersearch='.$keyword.'&mngborrowerbutton=Search&borrowerpage='.$next.'">Next</a>&nbsp;';	
+		}
+	?>
+		<div class="pagination"><?php echo $pagination;?></div>
 	<?php
 		}
 	?>

@@ -1,9 +1,12 @@
 /*================================CUSTOMIZED==================================*/
-.pagination li a {
+.pagination {
+	text-align:center;
+}
+.pagination a {
 	color:#1CA843;
 	font-weight:bold;
 }
-.pagination li a:hover {
+.pagination a:hover {
 	color:#1CA843;
 	text-decoration:underline;
 }

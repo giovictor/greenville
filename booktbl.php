@@ -65,14 +65,21 @@
 		$totalbookresults = mysqli_num_rows($totalbookQuery);
 
 		$numberofpages = ceil($totalbookresults/$booksperpages);
-
+						
 		if(!isset($_GET['bookpage'])) {
 			$page = 1;
 		} else {
 			$page = $_GET['bookpage'];
 		}
 
+		if($page < 1) {
+			$page = 1;
+		} else if($page > $numberofpages) {
+			$page = $numberofpages;
+		}
+
 		$firstresult = ($page - 1) * $booksperpages;
+		
 
 		$bookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC LIMIT $firstresult, $booksperpages";
 		$bookQuery = mysqli_query($dbconnect, $bookSQL);
@@ -122,22 +129,37 @@
 		?>
 		</table>
 	</div>
+	<p style='margin-top:20px;'>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 	<?php
+		$pagination = '';
 		if($numberofpages > 1) {
-	?>
-		<p style='margin-top:20px;'>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
-		<ul class="pagination">
-			<?php
-				for($pages=1; $pages<=$numberofpages; $pages++) {
-			?>
-					<li><a href="?page=books&bookpage=<?php echo $pages;?>"><?php echo $pages; ?></a></li>
-			<?php
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="?page=books&bookpage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href="?page=books&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+					}
 				}
-			?> 
-		</ul>
-	<?php
+			}
+
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="?page=books&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="?page=books&bookpage='.$next.'">Next</a>&nbsp;';	
+			}
 		}
 	?>
+	<div class="pagination"><?php echo $pagination;?></div>
 	<form id="pagination-data">
 		<input type="hidden" name="booksperpages" id="booksperpages" value="<?php echo $booksperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
