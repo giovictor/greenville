@@ -993,11 +993,11 @@ input[id=aedsearchbutton] {
 }
 
 .datapdf th {
-	font-size:1em;
+	font-size:0.8em;
 }
 
 .datapdf td {
-	font-size:0.8em;
+	font-size:0.7em;
 }
 
 #receiptheader, #receiptbody {

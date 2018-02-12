@@ -87,8 +87,8 @@
 	require "dbconnect.php";
 		if(isset($_GET['mngbookbutton'])) {
 			if(isset($_GET['mngbooksearch']) && isset($_GET['aedsearchtype'])) {
-				$keyword = $_GET['mngbooksearch'];
-				$searchtype = $_GET['aedsearchtype'];
+				$keyword = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['mngbooksearch']));
+				$searchtype = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['aedsearchtype']));
 				if($searchtype=="accession_no") {
 					$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
 				} else {
@@ -158,12 +158,12 @@
 		</form>
 	</div>
 	<div class="table-responsive" id="bookdisplay">
-		<!--<div class="reportbtn">
+		<div class="reportbtn">
 			<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
-					<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
-					<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
+				<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+				<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
 			</form>
-		</div>-->
+		</div>
 		<table class='table table-hover table-bordered table-striped' id='booktable'>
 				<tr>
 					<th>Title</th>

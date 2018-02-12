@@ -40,6 +40,12 @@
 		$publisher = mysqli_fetch_assoc($publisherQuery);
 
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfpublishers.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalpublisherSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="publishers">
 		<table class="table table-hover table-bordered" id="ptable">
 			<tr>
@@ -87,10 +93,6 @@
 		?>
 		</table>
 	</div>
-	<!--<form method="POST" action="pdfpublishers.php" target="_blank" class="form-inline">
-		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-		<input type="hidden" name="query" value="<?php echo $publisherSQL;?>">
-	</form>-->
 	<?php
 		if($numberofpages > 1) {
 			$pagination = '';

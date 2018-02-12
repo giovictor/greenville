@@ -64,14 +64,16 @@
 		if(!isset($_GET['reservepage'])) {
 			$page = 1;
 		} else {
-			$page = $_GET['reservepage'];
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else {
+				$page = $_GET['reservepage'];
+			}
 		}
 
-		if($page < 1) {
-			$page = 1;
-		} else if($page > $numberofpages) {
-			$page = $numberofpages;
-		}
+		
 		
 		$firstresult = ($page - 1) * $reserveperpages;
 
@@ -79,7 +81,12 @@
 		$reservationsQuery = mysqli_query($dbconnect, $reservationsSQL);
 		$reservations = mysqli_fetch_assoc($reservationsQuery);
 	?>
-	
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfreservations.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalreservationsSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="reservations">
 		<table class="table table-hover">
 			<tr>
@@ -118,10 +125,12 @@
 			?>
 		</table>
 	</div>
-	<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 	<?php
 		$pagination = '';
 		if($numberofpages > 1) {
+	?>
+			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
+	<?php
 			if($page > 1) {
 				$previous = $page - 1;
 				$pagination .= '<a href="?page=vrs&reservepage='.$previous.'">Previous</a>&nbsp;';

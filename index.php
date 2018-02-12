@@ -207,7 +207,7 @@
 	<div class="wrapper">
 		<div id="mainpages">
 			<?php
-				if(!isset($_GET['page']) && !isset($_GET['basicsearch']) && !isset($_GET['collectionssearch']) && !isset($_GET['homesearch']) && !isset($_GET['mngbooksearch']) && !isset($_GET['classification']) && !isset($_GET['mngborrowersearch']) && !isset($_GET['asearch']) && !isset($_GET['psearch']) && !isset($_GET['csearch']) && !isset($_GET['reservedate']) && !isset($_GET['expdate']) && !isset($_GET['dateborrowed']) && !isset($_GET['duedate']) && !isset($_GET['borrower']) && !isset($_GET['book']) && !isset($_GET['datereturned']) && !isset($_GET['logintime']) && !isset($_GET['logouttime']) && !isset($_GET['logindate']) && !isset($_GET['logoutdate']) && !isset($_GET['archivedcsearch']) && !isset($_GET['archivedasearch']) && !isset($_GET['archivedpsearch']) && !isset($_GET['archivedborrowersearch']) && !isset($_GET['archivedbooksearch']) && !isset($_GET['archivedbookclassificationselect']) && !isset($_GET['archivedreservedate']) && !isset($_GET['archivedexpdate']) && !isset($_GET['archivedborrower']) && !isset($_GET['archivedbook']) && !isset($_GET['archiveddateborrowed']) && !isset($_GET['archivedatereturned']) && !isset($_GET['archivedlogindate']) && !isset($_GET['archivedlogintime']) && !isset($_GET['archivedlogoutdate']) && !isset($_GET['archivedlogouttime'])) {
+				if(!isset($_GET['page']) && !isset($_GET['basicsearch']) && !isset($_GET['collectionssearch']) && !isset($_GET['homesearch']) && !isset($_GET['mngbooksearch']) && !isset($_GET['classification']) && !isset($_GET['mngborrowersearch']) && !isset($_GET['asearch']) && !isset($_GET['psearch']) && !isset($_GET['csearch']) && !isset($_GET['reservedate']) && !isset($_GET['expdate']) && !isset($_GET['dateborrowed']) && !isset($_GET['duedate']) && !isset($_GET['borrower']) && !isset($_GET['book']) && !isset($_GET['datereturned']) && !isset($_GET['logintime']) && !isset($_GET['logouttime']) && !isset($_GET['logindate']) && !isset($_GET['logoutdate']) && !isset($_GET['archivedcsearch']) && !isset($_GET['archivedasearch']) && !isset($_GET['archivedpsearch']) && !isset($_GET['archivedborrowersearch']) && !isset($_GET['archivedbooksearch']) && !isset($_GET['archivedbookclassification']) && !isset($_GET['archivedreservedate']) && !isset($_GET['archivedexpdate']) && !isset($_GET['archivedborrower']) && !isset($_GET['archivedbook']) && !isset($_GET['archiveddateborrowed']) && !isset($_GET['archivedatereturned']) && !isset($_GET['archivedlogindate']) && !isset($_GET['archivedlogintime']) && !isset($_GET['archivedlogoutdate']) && !isset($_GET['archivedlogouttime'])) {
 					if(isset($_SESSION['borrower']) || empty($_SESSION)) {
 						include "homepageslider.php";					
 						include "mainsidebar.php";
@@ -284,7 +284,7 @@
 				 	include "archivedpublisherssearchresults.php";
 				 } else if(isset($_GET['archivedborrowersearch'])) {
 				 	include "archivedborrowerssearchresults.php";
-				 }  else if(isset($_GET['archivedbooksearch']) || isset($_GET['archivedbookclassificationselect'])) {
+				 }  else if(isset($_GET['archivedbooksearch']) || isset($_GET['archivedbookclassification'])) {
 				 	include "archivedbookssearchresults.php";
 				 } else if(isset($_GET['archivedreservedate']) && isset($_GET['archivedexpdate']) && isset($_GET['archivedborrower']) && isset($_GET['archivedbook'])) {
 				 	include "archivedreservationssearchresults.php";

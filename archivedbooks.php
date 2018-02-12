@@ -6,28 +6,25 @@
 		</div>
 		<div class="panel-body">
 			<form method="GET" class="form-inline" id="archivedbooksearchform">
-					<div class="form-group">
-						Filter by keyword: 
-						<select name="archivedbooksearchtype" class="aedsearchtype form-control">
-							<option value="All">Any Field</option>
-							<option value="Title">Title</option>
-							<option value="Author">Author</option>
-							<option value="Publisher">Publisher</option>
-							<option value="Year">Year</option>
-							<option value="Call Number">Call Number</option>
-							<option value="ISBN">ISBN</option>
-							<option value="Accession Number">Accession Number</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<input class="form-control archivedbooksearchbox" type="text" name="archivedbooksearch" placeholder="Search by keyword">
-					</div>
-					<input class="btn btn-success btn-sm form-control button" id="archivedbooksearchbutton" type="submit" name="archivedbookbutton" value="Search">
+				<div class="form-group">
+					Filter by keyword: 
+					<select name="archivedbooksearchtype" class="aedsearchtype form-control">
+						<option value="booktitle">Title</option>
+						<option value="author">Author</option>
+						<option value="publisher">Publisher</option>
+						<option value="publishingyear">Year</option>
+						<option value="accession_no">Accession Number</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<input class="form-control archivedbooksearchbox" type="text" name="archivedbooksearch" placeholder="Search by keyword">
+				</div>
+				<input class="btn btn-success btn-sm form-control button" id="archivedbooksearchbutton" type="submit" name="archivedbookbutton" value="Search">
 			</form>
 			<form style="margin-top:10px;" method="GET" class="form-inline" id="archivedbooktablesearchform">
 				Filter by classification:
 				<div class="form-group">
-					<select name="archivedbookclassificationselect" id="archivedbookclassification" class="form-control">
+					<select name="archivedbookclassification" id="archivedbookclassification" class="form-control">
 						<?php
 							require "dbconnect.php";
 							$classificationSQL = "SELECT * FROM classification WHERE status=1";
@@ -45,53 +42,70 @@
 			</form>
 		</div>
 	</div>
-	<div class="booktblfilter">
-		<form class="form-inline">
-			<span>Group by:</span>
-			<select class="form-control" id="bookgroupby" style="width:165px;">
-				<option value="bookID">Title</option>
-				<option value="accession_no">Accession Number</option>
-			</select>
-		</form>
-	</div>
 	<?php 
 	if(!isset($_SESSION['librarian'])) {
 		header("Location:index.php");
 	}
 	require "dbconnect.php";
-		$archivedbookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, bookcondition FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status='Archived' GROUP BY bookID ORDER BY accession_no DESC";
+		$booksperpages = 10;
+		$totalarchivedbookSQL = "SELECT book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, book.status, bookcondition FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status='Archived' GROUP BY book.accession_no ORDER BY accession_no DESC";
+		$totalarchivedbookQuery = mysqli_query($dbconnect, $totalarchivedbookSQL);
+		$totalarchivedbooks = mysqli_num_rows($totalarchivedbookQuery);
+
+		$numberofpages = ceil($totalarchivedbooks/$booksperpages);
+
+		if(!isset($_GET['bookpage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['bookpage'];
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else if(!is_numeric($page)) {
+				$page = 1;
+			} else {
+				$page = $_GET['bookpage'];
+			}
+		}
+
+		$firstresult = ($page - 1) * $booksperpages;
+
+		$archivedbookSQL = "SELECT book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, book.status, bookcondition FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status='Archived' GROUP BY book.accession_no ORDER BY accession_no DESC LIMIT $firstresult, $booksperpages";
 		$archivedbookQuery = mysqli_query($dbconnect, $archivedbookSQL);
 		$archivedbook = mysqli_fetch_assoc($archivedbookQuery);
-		$rows = mysqli_num_rows($archivedbookQuery);
+		
 	?>
 	<div id='bookdisplay'>
 		<table class='table table-hover table-bordered table-striped' id='booktable'>
 			<tr>
+				<th>Accession Number</th>
 				<th>Title</th>
-				<th>Authors</th>
+				<th>Author</th>
 				<th>Publication Details</th>
-				<th>Copies</th>
+				<th>Classification</th>
 				<th>Remarks</th>
 				<th> </th>
 				
 			</tr>
 		<?php
-			if($rows==0) {
+			if($totalarchivedbooks==0) {
 				echo "<tr><td colspan='9'><center><h4>There were no archived books.</h4></center></td></tr>";
-			} else if($rows>=1) {
+			} else if($totalarchivedbooks>=1) {
 				do {
 		?>
 				<tr>
+					<td><?php echo $archivedbook['accession_no'];?></td>
 					<td><?php echo $archivedbook['booktitle'];?></td>
 					<td><?php echo $archivedbook['authors'];?></td>
 					<td><?php echo $archivedbook['publisher']." c".$archivedbook['publishingyear'];?></td>
-					<td><?php echo $archivedbook['copies'];?></td>
+					<td><?php echo $archivedbook['classification'];?></td>
 					<td><?php echo $archivedbook['bookcondition'];?></td>
 					<td>
-						<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbook['bookID'];?>" data-toggle="modal" data-target="#restorebook">
+						<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#restorebook">
 							<span class="glyphicon glyphicon-refresh"> </span>
 						</button>
-						<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['bookID'];?>" data-toggle="modal" data-target="#permanentdeletebook">
+						<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#permanentdeletebook">
 							<span class="glyphicon glyphicon-trash"> </span>
 						</button>
 					</td>
@@ -101,11 +115,46 @@
 			}
 		?>
 	</table>
-	<form id="printpdf" target="_blank" action="pdfarchivedbookbytitle.php" method="POST" class="form-inline">
+	<!--<form id="printpdf" target="_blank" action="pdfarchivedbookbytitle.php" method="POST" class="form-inline">
 		<input class="btn btn-success btn-sm" id="button" type="submit" name="createpdf" value="Print PDF">
 		<input type="hidden" name="query" value="<?php echo $archivedbookSQL;?>">
-	</form>
+	</form>-->
 	</div>
+	<p style='margin-top:20px;'>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
+	<?php
+		$pagination = '';
+		if($numberofpages > 1) {
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="?page=archvsbooks&bookpage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href="?page=archvsbooks&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+					}
+				}
+			}
+
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="?page=archvsbooks&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="?page=archvsbooks&bookpage='.$next.'">Next</a>&nbsp;';	
+			}
+		}
+	?>
+	<div class="pagination"><?php echo $pagination;?></div>
+	<form id="pagination-data">
+		<input type="hidden" name="booksperpages" id="booksperpages" value="<?php echo $booksperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+	</form>
 </div>
 <script>
 $(document).ready(function(){
@@ -117,40 +166,24 @@ $(document).ready(function(){
 		}
 	});
 
-	$("#bookgroupby").change(function(){
-		var option = $(this).val();
-		$.ajax({
-			url:"archivedbooktblfilter.php",
-			method:"POST",
-			data:{option:option},
-			success:function(data) {
-				$("#bookdisplay").html(data);
-			}
-		});
-	});
-
 	$(document).on("click",".restorebutton",function(){
-		var bookid = $(this).data("id");
-		$(".confirmrestorebook").data("id",bookid);
+		var accession_no = $(this).data("id");
+		$(".confirmrestorebook").data("id",accession_no);
 	});
 
 	$(".confirmrestorebook").click(function(){
-		var bookid = $(this).data("id");
-		var option = $("#bookgroupby").val();
+		var accession_no = $(this).data("id");
+		var booksperpages = $("#booksperpages").val();
+		var firstresult = $("#firstresult").val();
 		$.ajax({
 			url:"restorebook.php",
 			method:"POST",
-			data:{bookid:bookid, option:option},
+			data:{accession_no:accession_no, booksperpages:booksperpages, firstresult:firstresult},
 			success:function(data) {
 				$("#restorebook").modal("hide");
 				$("#bookdisplay").html(data);
 			}
 		});
-	});
-
-
-	$("#permanentdeletebook").on("hide.bs.modal", function(){
-		$(this).find("#password").val("").end();
 	});
 });
 </script>

@@ -40,6 +40,12 @@
 		$classification = mysqli_fetch_assoc($classificationQuery);
 
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfclassifications.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalclassificationSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="classifications">
 		<table class="table table-hover table-bordered" id="ctable">
 			<tr>
@@ -86,10 +92,6 @@
 		?>
 		</table>
 	</div>
-	<!--<form method="POST" action="pdfclassifications.php" target="_blank" class="form-inline">
-		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-		<input type="hidden" name="query" value="<?php echo $classificationSQL;?>">
-	</form>-->
 	<?php
 		if($numberofpages > 1) {
 			$pagination = '';

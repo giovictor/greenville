@@ -2,13 +2,29 @@
 require "dbconnect.php";
 include "modals.php";
 if(isset($_GET['searchbutton'])) {
-	$keyword = $_GET['collectionssearch'];
-	$searchtype = $_GET['selectsearchtype'];
-	$classificationID = $_GET['classificationID'];
+	$keyword = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['collectionssearch']));
+	$searchtype = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['selectsearchtype']));
+	$classificationID = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['classificationID']));
 	
 	$sql = "SELECT * FROM classification WHERE classificationID='$classificationID'";
 	$query = mysqli_query($dbconnect, $sql);
 	$classification = mysqli_fetch_assoc($query); 
+
+	$maxIDSQL = "SELECT MAX(classificationID) AS maxID FROM classification";
+	$maxIDQuery = mysqli_query($dbconnect, $maxIDSQL);
+	$maxID = mysqli_fetch_assoc($maxIDQuery);
+
+	$minIDSQL = "SELECT MIN(classificationID) AS minID FROM classification";
+	$minIDQuery = mysqli_query($dbconnect, $minIDSQL);
+	$minID = mysqli_fetch_assoc($minIDQuery);
+
+	if(!is_numeric($classificationID)) {
+		header("Location:index.php");
+	} else if($classificationID < $minID['minID']) {
+		header("Location:index.php");
+	} else if($classificationID > $maxID['maxID']) {
+		header("Location:index.php");
+	}
 ?>
 <div class="collectionsearch">
 	<h2><?php echo strtoupper($classification['classification']);?></h2>
@@ -76,13 +92,17 @@ if(isset($_GET['searchbutton'])) {
 				$page = 1;
 			} else {
 				$page = $_GET['bookpage'];
+				if($page < 1) {
+					$page = 1;
+				} else if($page > $numberofpages) {
+					$page = $numberofpages;
+				} else if(!is_numeric($page)) {
+					$page = 1;
+				} else {
+					$page = $_GET['bookpage'];
+				}
 			}
 
-			if($page < 1) {
-				$page = 1;
-			} else if($page > $numberofpages) {
-				$page = $numberofpages;
-			}
 
 			$firstresult = ($page - 1) * $booksperpages;
 

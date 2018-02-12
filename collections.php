@@ -2,11 +2,30 @@
 require "dbconnect.php";
 include "modals.php";
 	if(isset($_GET['classificationID'])) {
-		$classification = $_GET['classificationID'];
-			$sql = "SELECT * FROM classification WHERE classificationID='$classification'";
-			$query = mysqli_query($dbconnect, $sql);
-			$classification = mysqli_fetch_assoc($query); 
-			$classificationID = $classification['classificationID'];
+		$classification = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['classificationID']));
+		$sql = "SELECT * FROM classification WHERE classificationID='$classification'";
+		$query = mysqli_query($dbconnect, $sql);
+		$classification = mysqli_fetch_assoc($query); 
+		$classificationID = $classification['classificationID'];
+		
+		$maxIDSQL = "SELECT MAX(classificationID) AS maxID FROM classification";
+		$maxIDQuery = mysqli_query($dbconnect, $maxIDSQL);
+		$maxID = mysqli_fetch_assoc($maxIDQuery);
+		$max = $maxID['maxID'];
+
+		$minIDSQL = "SELECT MIN(classificationID) AS minID FROM classification";
+		$minIDQuery = mysqli_query($dbconnect, $minIDSQL);
+		$minID = mysqli_fetch_assoc($minIDQuery);
+		$min = $minID['minID'];
+
+
+		if(!is_numeric($classificationID)) {
+			header("Location:index.php");
+		} else if($classificationID < $minID['minID']) {
+			header("Location:index.php?page=collections&classificationID=$min");
+		} else if($classificationID > $maxID['maxID']) {
+			header("Location:index.php?page=collections&classificationID=$max");
+		}
 
 ?>
 <title><?php echo $classification['classification'];?></title>
@@ -21,13 +40,18 @@ include "modals.php";
 		$page = 1;
 	} else {
 		$page = $_GET['bookpage'];
+		if($page < 1) {
+			$page = 1;
+		} else if($page > $numberofpages) {
+			$page = $numberofpages;
+		} else if(!is_numeric($page)) {
+			$page = 1;
+		} else {
+			$page = $_GET['bookpage'];
+		}
 	}
 
-	if($page < 1) {
-		$page = 1;
-	} else if($page > $numberofpages) {
-		$page = $numberofpages;
-	}
+
 
 	$firstresult = ($page - 1) * $booksperpages;
 

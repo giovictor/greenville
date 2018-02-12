@@ -1,59 +1,38 @@
 <?php
-set_time_limit(0);
-require "dompdf/autoload.inc.php";
-use Dompdf\Dompdf;
+	set_time_limit(0);
+	ob_start();
+	$content = ob_get_clean();
+	//$content = utf8_encode($content);
+	require "dbconnect.php";
 
 if(isset($_POST['query'])) {
-	$pdf = new Dompdf();
-	ob_start();
-	require "dbconnect.php";
-	$bookSQL = $_POST['query'];
-	$bookQuery = mysqli_query($dbconnect, $bookSQL);
-	$book = mysqli_fetch_assoc($bookQuery);
-?>
-	<title>Book List</title>
-	<link rel='stylesheet' href='bootstrap/css/bootstrap.min.css'>
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Ubuntu" rel="stylesheet">    
-	<link rel='stylesheet' href='greenville.css'>
-	<div id="header">
-		<div id="logoandschool">
-			<img id="gvclogopdf" src="pics/gvclogo.png">
-			<h2>Greenville College Library</h2>
-		</div>
-			<p>112 Belfast Street Corner San Salvador, Greenpark Village, Manggahan, Pasig City</p>
-			<p>682-37-12 | 681-35-54</p>
-			<h3>Book Report (By Title)</h3>
-			Generated on: <p><?php echo date("F d, Y"." | "."l");?></p>
-	</div>
-	<div class="datapdf">
-		<table>
-				<tr>
-					<th>Title</th>
-					<th>Author</th>
-					<th>Publication Details</th>
-					<th>Classification</th>
-					<th>Copies</th>
-				</tr>
-	<?php
+	$content .= "<table>
+					<tr>
+						<th>Title</th>
+						<th>Author</th>
+						<th>Publisher</th>
+						<th>Year</th>
+						<th>Copies</th>
+					</tr>";
+	$query = $_POST['query'];
+	$query_run = mysqli_query($dbconnect, $query);
+	$data = mysqli_fetch_assoc($query_run);
+
 	do {
-	?>			
-				<tr>
-					<td><?php echo $book['booktitle'];?></td>
-					<td><?php echo $book['authors'];?></td>
-					<td><?php echo $book['publisher']." c".$book['publishingyear'];?></td>
-					<td><?php echo $book['classification'];?></td>
-					<td><?php echo $book['copies'];?></td>
-				</tr>
-	<?php
-	} while($book = mysqli_fetch_assoc($bookQuery));
-	?>
-		</table>
-	</div>
-<?php
-	$data = ob_get_clean();
-	$pdf->loadHtml($data);
-	$pdf->setPaper("A4","portrait");
-	$pdf->render();
-	$pdf->stream("gvcbookdata",array("Attachment"=>0));
-}	
+		$content .= "<tr>
+						<td>".$data['booktitle']."</td>
+						<td>".$data['authors']."</td>
+						<td>".$data['publisher']."</td>
+						<td>".$data['publishingyear']."</td>
+						<td>".$data['copies']."</td>
+					</tr>";
+	} while($data = mysqli_fetch_assoc($query_run));
+	$content .= "</table>";
+	include "mpdf/mpdf.php";
+	$pdf = new mPDF();
+	//$pdf->allow_charset_conversion = true;
+	//$pdf->charset_in = "UTF_8";
+	$pdf->WriteHTML($content);
+	$pdf->Output('gvcbookbytitle','I');
+}
 ?>

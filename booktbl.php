@@ -86,12 +86,12 @@
 		$book = mysqli_fetch_assoc($bookQuery);
 	?>
 	<div class="table-responsive" id='bookdisplay'>
-		<!--<div class="reportbtn">
+		<div class="reportbtn">
 			<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
-					<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
-					<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
+				<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+				<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
 			</form>
-		</div>-->
+		</div>
 		<table class='table table-hover table-bordered table-striped' id='booktable'>
 			<tr>
 				<th>Title</th>

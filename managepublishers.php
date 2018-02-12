@@ -46,6 +46,12 @@
 		$publisher = mysqli_fetch_assoc($publisherQuery);
 
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfpublishers.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalpublisherSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="publishers">
 		<table class="table table-hover table-bordered" id="ptable">
 			<tr>
@@ -89,10 +95,6 @@
 		?>
 		</table>
 	</div>
-	<!--<form method="POST" action="pdfpublishers.php" target="_blank" class="form-inline">
-		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-		<input type="hidden" name="query" value="<?php echo $publisherSQL;?>">
-	</form>-->
 	<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
 	<?php
 		$pagination = '';
@@ -121,9 +123,12 @@
 				$next = $page + 1;
 				$pagination .= '<a href="?page=publishers&ppage='.$next.'">Next</a>&nbsp;';	
 			}
+	?>
+			<div class="pagination"><?php echo $pagination;?></div>
+	<?php
 		}
 	?>
-	<div class="pagination"><?php echo $pagination;?></div>
+
 	<form id="pagination_data">
 		<input type="hidden" name="publishersperpages" id="publishersperpages" value="<?php echo $publishersperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">

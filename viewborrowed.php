@@ -61,14 +61,16 @@
 		if(!isset($_GET['borrowedpage'])) {
 			$page = 1;
 		} else {
-			$page = $_GET['borrowedpage'];
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else {
+				$page = $_GET['borrowedpage'];
+			}
 		}
 
-		if($page < 1) {
-			$page = 1;
-		} else if($page > $numberofpages) {
-			$page = $numberofpages;
-		}
+	
 
 		$firstresult = ($page - 1) * $borrowedperpages;
 
@@ -177,10 +179,12 @@
 			?>
 		</table>
 	</div>
-	<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 	<?php
 		$pagination = '';
 		if($numberofpages > 1) {
+	?>
+			<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
+	<?php
 			if($page > 1) {
 				$previous = $page - 1;
 				$pagination .= '<a href="?page=vbr&borrowedpage='.$previous.'">Previous</a>&nbsp;';

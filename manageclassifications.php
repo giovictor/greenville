@@ -44,6 +44,12 @@
 		$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
 		$classification = mysqli_fetch_assoc($classificationQuery);
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfclassifications.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalclassificationSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="classifications">
 		<table class="table table-hover table-bordered" id="ctable">
 			<tr>
@@ -86,10 +92,6 @@
 		?>
 		</table>
 	</div>
-	<!--<form method="POST" action="pdfclassifications.php" target="_blank" class="form-inline">
-		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-		<input type="hidden" name="query" value="<?php echo $classificationSQL;?>">
-	</form>-->
 	<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
 	<?php
 		$pagination = '';
@@ -118,9 +120,12 @@
 				$next = $page + 1;
 				$pagination .= '<a href="?page=classifications&cpage='.$next.'">Next</a>&nbsp;';	
 			}
+	?>
+			<div class="pagination"><?php echo $pagination;?></div>
+	<?php
 		}
 	?>
-	<div class="pagination"><?php echo $pagination;?></div>
+	
 	<form id="pagination_data">
 		<input type="hidden" name="classificationperpages" id="classificationperpages" value="<?php echo $classificationperpages; ?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult; ?>">

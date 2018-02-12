@@ -15,27 +15,21 @@ Restore and permanent delete for archived datas
 
 FIX BUG:
 Evaluate receipts data for return ******
-Books REPORTS
 
 REPORTS
-Reservations:
-    - All
-    - Search Results
-Borrowed Books:
-    - All
-    - Search Results
-Book Logs:
-    - All
-    - Search Results
-Classifications:
-    - All
-    - Search Results
-Authors:
-    - All
-    - Search Results
-Publishers:
-    - All
-    - Search Results
+Books
+Reserved Books
+Borrowed Books
+Book Logs
+
+ARCHIVES
+Books (not filtered just list all with remarks)
+Book Logs
+Classifications
+Authors 
+Publishers
+
+
 
 
 

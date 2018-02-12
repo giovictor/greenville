@@ -148,6 +148,12 @@
 		$reservations = mysqli_fetch_assoc($reservationsQuery);
 
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfreservations.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalreservationsSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="reservations">
 		<table class="table table-hover">
 			<tr>

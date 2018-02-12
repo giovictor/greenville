@@ -59,14 +59,15 @@
 		if(!isset($_GET['booklogspage'])) {
 			$page = 1;
 		} else {
-			$page = $_GET['booklogspage'];
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else {
+				$page = $_GET['booklogspage'];
+			}
 		}
 
-		if($page < 1) {
-			$page = 1;
-		} else if($page > $numberofpages) {
-			$page = $numberofpages;
-		}
 
 		$firstresult = ($page - 1) * $booklogsperpages;
 		$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
@@ -158,10 +159,13 @@
 				?>
 		</table>
 	</div>
-	<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
+	
 	<?php
 		$pagination = '';
 		if($numberofpages > 1) {
+	?>
+			<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
+	<?php
 			if($page > 1) {
 				$previous = $page - 1;
 				$pagination .= '<a href="?page=bklogs&booklogspage='.$previous.'">Previous</a>&nbsp;';

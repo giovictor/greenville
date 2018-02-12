@@ -39,6 +39,12 @@
 		$authorQuery = mysqli_query($dbconnect, $authorSQL);
 		$author = mysqli_fetch_assoc($authorQuery);
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfauthors.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalauthorSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="authors">
 		<table class="table table-hover table-bordered" id="atable">
 			<tr>
@@ -86,10 +92,6 @@
 		?>
 		</table>
 	</div>
-	<!--<form method="POST" action="pdfauthors.php" target="_blank" class="form-inline">
-		<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-		<input type="hidden" name="query" value="<?php echo $authorSQL;?>">
-	</form>-->
 	<?php
 		if($numberofpages > 1) {
 			$pagination = '';

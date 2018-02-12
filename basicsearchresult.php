@@ -5,8 +5,8 @@
 require "dbconnect.php";
 
 if(isset($_GET['basicsearch'])) {
-	$keyword = htmlentities($_GET['basicsearch']);
-	$searchtype = $_GET['selectsearchtype'];
+	$keyword = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['basicsearch']));
+	$searchtype = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['selectsearchtype']));
 ?>
 		<title><?php echo $keyword;?> - Search Results</title>
 		<form method="GET" class="form-inline" id="basicsearchform">
@@ -90,13 +90,18 @@ if(isset($_GET['basicsearch'])) {
 			$page = 1;
 		} else {
 			$page = $_GET['bookpage'];
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else if(!is_numeric($page)) {
+				$page = 1;
+			} else {
+				$page = $_GET['bookpage'];
+			}
 		}
 
-		if($page < 1) {
-			$page = 1;
-		} else if($page > $numberofpages) {
-			$page = $numberofpages;
-		}
+		
 
 		$firstresult = ($page - 1) * $booksperpages;
 		

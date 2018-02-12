@@ -3,6 +3,7 @@
 	$classificationSQL = "SELECT * FROM classification WHERE status=1";
 	$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
 	$classification = mysqli_fetch_assoc($classificationQuery);
+
 ?>
 
 <nav class="navbar navbar-default navbar-static-top" id="gvcnavbar">
