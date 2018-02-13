@@ -1,14 +1,23 @@
 <?php
 require "dbconnect.php";
-if(isset($_POST['classificationID'])) {
+if(isset($_POST['classificationID']) && isset($_POST['classificationperpages']) && isset($_POST['firstresult'])) {
 	$classificationID = $_POST['classificationID'];
 	$restoreclassificationSQL = "UPDATE classification SET status=1 WHERE classificationID='$classificationID'";
 	$restoreclassification = mysqli_query($dbconnect, $restoreclassificationSQL);
 
-	$archivedClassificationsSQL = "SELECT * FROM classification WHERE status=0 ORDER BY classificationID DESC";
-	$archivedClassificationsQuery = mysqli_query($dbconnect,$archivedClassificationsSQL);
-	$archivedClassifications = mysqli_fetch_assoc($archivedClassificationsQuery);
-	$rows = mysqli_num_rows($archivedClassificationsQuery);
+	$firstresult = $_POST['firstresult'];
+	$classificationperpages = $_POST['classificationperpages'];
+
+	if(isset($_POST['keyword'])) {
+		$keyword = $_POST['keyword'];
+		$archivedclassificationsSQL = "SELECT * FROM classification WHERE status=0 AND classification LIKE '%$keyword%' ORDER BY classificationID DESC LIMIT $firstresult, $classificationperpages";
+	} else {
+		$archivedclassificationsSQL = "SELECT * FROM classification WHERE status=0 ORDER BY classificationID DESC LIMIT $firstresult, $classificationperpages";
+	}
+	
+	$archivedclassificationsQuery = mysqli_query($dbconnect,$archivedclassificationsSQL);
+	$archivedclassifications = mysqli_fetch_assoc($archivedclassificationsQuery);
+	$rows = mysqli_num_rows($archivedclassificationsQuery);
 ?>
 <table class="table table-hover table-bordered">
 		<tr>
@@ -23,26 +32,22 @@ if(isset($_POST['classificationID'])) {
 				do {
 		?>
 				<tr>
-					<td><?php echo $archivedClassifications['classificationID'];?></td>
-					<td><?php echo $archivedClassifications['classification'];?></td>
+					<td><?php echo $archivedclassifications['classificationID'];?></td>
+					<td><?php echo $archivedclassifications['classification'];?></td>
 					<td>
-						<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedClassifications['classificationID'];?>" data-toggle="modal" data-target="#restoreclassification">
+						<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedclassifications['classificationID'];?>" data-toggle="modal" data-target="#restoreclassification">
 							<span class="glyphicon glyphicon-refresh"> </span>
 						</button>
-						<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedClassifications['classificationID'];?>" data-toggle="modal" data-target="#permanentdeleteclassification">
+						<!--<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedclassifications['classificationID'];?>" data-toggle="modal" data-target="#permanentdeleteclassification">
 							<span class="glyphicon glyphicon-trash"> </span>
-						</button>
+						</button>-->
 					</td>
 				</tr>
 		<?php
-				} while($archivedClassifications = mysqli_fetch_assoc($archivedClassificationsQuery));
+				} while($archivedclassifications = mysqli_fetch_assoc($archivedclassificationsQuery));
 			}
 		?>
 </table>
-<form method="POST" action="pdfarchivedclassifications.php" target="_blank" class="form-inline">
-	<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-	<input type="hidden" name="query" value="<?php echo $archivedClassificationsSQL;?>">
-</form>
 <script>
 $(document).ready(function(){
 	$(document).on("click",".restorebutton", function(){
@@ -50,22 +55,47 @@ $(document).ready(function(){
 		$(".confirmrestoreclassification").data("id", classificationID);
 	});
 
-	$(".confirmrestoreclassification").click(function(){
-		var classificationID = $(this).data("id");
-		$.ajax({
-			url:"restoreclassification.php",
-			method:"POST",
-			data:{classificationID:classificationID},
-			success:function(data) {
-				$("#restoreclassification").modal("hide");
-				$(".classifications").html(data);
-			}
-		});
-	});
+	<?php
+		if(isset($_POST['keyword'])) {
+	?>
+			$(".confirmrestoreclassification").click(function(){
+				var classificationID = $(this).data("id");
+				var classificationperpages = $("#classificationperpages").val();
+				var firstresult = $("#firstresult").val();
+				var keyword = $("#keyword").val();
+				$.ajax({
+					url:"restoreclassification.php",
+					method:"POST",
+					data:{classificationID:classificationID, classificationperpages:classificationperpages, firstresult:firstresult, keyword:keyword},
+					success:function(data) {
+						$("#restoreclassification").modal("hide");
+						$(".classifications").html(data);
+					}
+				});
+			});
 
-	$("#permanentdeleteclassification").on("hide.bs.modal", function(){
-		$(this).find("#password").val("").end();
-	});
+	<?php
+		} else {
+	?>
+			$(".confirmrestoreclassification").click(function(){
+				var classificationID = $(this).data("id");
+				var classificationperpages = $("#classificationperpages").val();
+				var firstresult = $("#firstresult").val();
+				$.ajax({
+					url:"restoreclassification.php",
+					method:"POST",
+					data:{classificationID:classificationID, classificationperpages:classificationperpages, firstresult:firstresult},
+					success:function(data) {
+						$("#restoreclassification").modal("hide");
+						$(".classifications").html(data);
+					}
+				});
+			});
+	<?php
+		}
+	?>
+
+	
 });
 </script>
 <?php

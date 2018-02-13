@@ -49,10 +49,33 @@
 		header("Location:index.php");
 	}
 	require "dbconnect.php";
-		$archivedbooklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=0 ORDER BY booklogID DESC";
+		$totalarchivedbooklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=0 ORDER BY booklogID DESC";
+		$totalarchivedbooklogsQuery = mysqli_query($dbconnect, $totalarchivedbooklogsSQL);
+		$rows = mysqli_num_rows($totalarchivedbooklogsQuery);
+
+		$booklogsperpages = 10;
+		$numberofpages = ceil($rows/$booklogsperpages);
+
+		if(!isset($_GET['booklogspage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['booklogspage'];
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else if(!is_numeric($page)) {
+				$page = 1;
+			} else {
+				$page = $_GET['booklogspage'];
+			}
+		}
+
+
+		$firstresult = ($page - 1) * $booklogsperpages;
+		$archivedbooklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE datereturned IS NOT NULL AND showstatus=0 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
 		$archivedbooklogsQuery = mysqli_query($dbconnect, $archivedbooklogsSQL);
 		$archivedbooklogs = mysqli_fetch_assoc($archivedbooklogsQuery);
-		$rows = mysqli_num_rows($archivedbooklogsQuery);
 
 		$holidaySQL = "SELECT * FROM holiday";
 		$holidayQuery = mysqli_query($dbconnect, $holidaySQL);
@@ -70,6 +93,12 @@
 			}
 		} while($holiday = mysqli_fetch_assoc($holidayQuery));
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfarchivedbooklogs.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalarchivedbooklogsSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="booklogs">
 		<table class="table table-hover table-bordered">
 			<tr>
@@ -132,9 +161,9 @@
 							<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbooklogs['booklogID'];?>" data-toggle="modal" data-target="#restorebooklog">
 								<span class="glyphicon glyphicon-refresh"> </span>
 							</button>
-							<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbooklogs['booklogID'];?>" data-toggle="modal" data-target="#permanentdeletebooklog">
+							<!--<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbooklogs['booklogID'];?>" data-toggle="modal" data-target="#permanentdeletebooklog">
 								<span class="glyphicon glyphicon-trash"> </span>
-							</button>
+							</button>-->
 						</td>
 					</tr>
 				<?php
@@ -142,11 +171,47 @@
 				}
 				?>
 		</table>
-		<form method="POST" action="pdfarchivedbooklogs.php" target="_blank" class="form-inline">
-			<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-			<input type="hidden" name="query" value="<?php echo $archivedbooklogsSQL;?>">
-		</form>
 	</div>
+	<?php
+		$pagination = '';
+		if($numberofpages > 1) {
+	?>
+			<p style="margin-top:20px;">Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
+	<?php
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="?page=archvsbklogs&booklogspage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href="?page=archvsbklogs&booklogspage='.$i.'">'.$i.'</a>&nbsp;';
+					}
+				}
+			}
+
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="?page=archvsbklogs&booklogspage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="?page=archvsbklogs&booklogspage='.$next.'">Next</a>&nbsp;';	
+			}
+	?>
+			<div class="pagination"><?php echo $pagination;?></div>	
+	<?php
+		}
+	?>
+	
+	<form id="pagination_data">
+		<input type="hidden" name="booklogsperpages" id="booklogsperpages" value="<?php echo $booklogsperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+	</form>
 </div>
 <script>
 $(document).ready(function(){
@@ -157,10 +222,12 @@ $(document).ready(function(){
 
 	$(".confirmrestorebooklog").click(function(){
 		var booklogID = $(this).data("id");
+		var booklogsperpages = $("#booklogsperpages").val();
+		var firstresult = $("#firstresult").val();
 		$.ajax({
 			url:"restorebooklog.php",
 			method:"POST",
-			data:{booklogID:booklogID},
+			data:{booklogID:booklogID,booklogsperpages:booklogsperpages, firstresult:firstresult},
 			success:function(data) {
 				$("#restorebooklog").modal("hide");
 				$(".booklogs").html(data);
@@ -182,9 +249,5 @@ $(document).ready(function(){
 		}
 	});
 
-
-	$("#permanentdeletebooklog").on("hide.bs.modal", function(){
-		$(this).find("#password").val("").end();
-	});
 });
 </script>

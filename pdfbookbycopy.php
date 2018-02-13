@@ -1,59 +1,42 @@
 <?php
-set_time_limit(0);
-require "dompdf/autoload.inc.php";
-use Dompdf\Dompdf;
+include "gvcpdf.php";
+require "dbconnect.php";
 
-if(isset($_POST['query'])) {
-	$pdf = new Dompdf();
-	ob_start();
-	require "dbconnect.php";
-	$bookSQL = $_POST['query'];
-	$bookQuery = mysqli_query($dbconnect, $bookSQL);
-	$book = mysqli_fetch_assoc($bookQuery);
-?>
-	<title>Book List</title>
-	<link rel='stylesheet' href='bootstrap/css/bootstrap.min.css'>
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Ubuntu" rel="stylesheet">    
-	<link rel='stylesheet' href='greenville.css'>
-	<div id="header">
-		<div id="logoandschool">
-			<img id="gvclogopdf" src="pics/gvclogo.png">
-			<h2>Greenville College Library</h2>
-		</div>
-			<p>112 Belfast Street Corner San Salvador, Greenpark Village, Manggahan, Pasig City</p>
-			<p>682-37-12 | 681-35-54</p>
-			<h3>Book Report (By Accession Number)</h3>
-			Generated on: <p><?php echo date("F d, Y"." | "."l");?></p>
-	</div>
-	<div class="datapdf">
-		<table>
-				<tr>
-					<th>Accession Number</th>
-					<th>Title</th>
-					<th>Authors</th>
-					<th>Publication Details</th>
-					<th>Classification</th>
-				</tr>
-	<?php
-	do {
-	?>			
-				<tr>
-					<td><?php echo $book['accession_no'];?></td>
-					<td><?php echo $book['booktitle'];?></td>
-					<td><?php echo $book['authors'];?></td>
-					<td><?php echo $book['publisher']." c".$book['publishingyear'];?></td>
-					<td><?php echo $book['classification'];?></td>
-				</tr>
-	<?php
-	} while($book = mysqli_fetch_assoc($bookQuery));
-	?>
-		</table>
-	</div>
-<?php
-	$data = ob_get_clean();
-	$pdf->loadHtml($data);
-	$pdf->setPaper("A4","portrait");
-	$pdf->render();
-	$pdf->stream("gvcbookdata",array("Attachment"=>0));
-}	
+	$pdf = new gvcpdf();
+	$pdf->AliasNbPages();
+	$pdf->AddPage("L","A4");
+	$pdf->SetFont("Times","B",15);
+	$pdf->SetTitle("Books' Report (By Copy)");
+	$pdf->Cell(0,10,"Books' Report (By Copy)",0,1,"C");
+	if(isset($_POST['query'])) {
+		$query = $_POST['query'];
+		$query_run = mysqli_query($dbconnect, $query);
+		$data = mysqli_fetch_assoc($query_run);
+
+		$pdf->SetFont("Times","B",12);
+		$pdf->Cell(25,10,"Acc. No.",1,0,"C");
+		$pdf->Cell(110,10,"Title",1,0,"C");
+		$pdf->Cell(55,10,"Author",1,0,"C");
+		$pdf->Cell(65,10,"Publisher",1,0,"C");
+		$pdf->Cell(25,10,"Year",1,0,"C");
+		$pdf->ln();
+		
+		do {
+			$booktitle = $data['booktitle'];
+			if(strlen($booktitle) > 65) {
+				$booktitle = substr($booktitle, 0, 64)."...";
+			}
+			$pdf->SetFont("Times","",10);
+			$pdf->Cell(25,10,$data['accession_no'],1,0,"C");
+			$pdf->Cell(110,10,$booktitle,1,0,"L");
+			$pdf->Cell(55,10,$data['authors'],1,0,"C");
+			$pdf->Cell(65,10,$data['publisher'],1,0,"C");
+			$pdf->Cell(25,10,$data['publishingyear'],1,0,"C");
+			$pdf->ln();
+		} while($data = mysqli_fetch_assoc($query_run));
+	}
+
+
+	$pdf->Output();
+
 ?>

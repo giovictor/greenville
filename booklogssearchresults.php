@@ -97,13 +97,15 @@
 			$page = 1;
 		} else {
 			$page = $_GET['booklogspage'];
-		}
-
-
-		if($page < 1) {
-			$page = 1;
-		} else if($page > $numberofpages) {
-			$page = $numberofpages;
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else if(!is_numeric($page)) {
+				$page = 1;
+			} else {
+				$page = $_GET['booklogspage'];
+			}
 		}
 		
 		$firstresult = ($page - 1) * $booklogsperpages;
@@ -159,6 +161,12 @@
 			}
 		} while($holiday = mysqli_fetch_assoc($holidayQuery));
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfbooklogs.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalbooklogsSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="booklogs">
 		<table class="table table-hover">
 			<tr>
@@ -240,7 +248,7 @@
 
 				for($i = $page - 3; $i < $page; $i++) {
 					if($i > 0) {
-						$pagination .= '<a href=index.php?dateborrowed='.$dateborrowed.'&datereturned='.$datereturned.'&borrower='.$borrower.'&book='.$book.'&booklogssearchbutton=Search&booklogspage='.$i.'">'.$i.'</a>&nbsp;';
+						$pagination .= '<a href="index.php?dateborrowed='.$dateborrowed.'&datereturned='.$datereturned.'&borrower='.$borrower.'&book='.$book.'&booklogssearchbutton=Search&booklogspage='.$i.'">'.$i.'</a>&nbsp;';
 					}
 				}
 			}
@@ -248,7 +256,7 @@
 			$pagination .= ''.$page.'&nbsp;';
 
 			for($i = $page + 1; $i <= $numberofpages; $i++) {
-				$pagination .= '<a href=index.php?dateborrowed='.$dateborrowed.'&datereturned='.$datereturned.'&borrower='.$borrower.'&book='.$book.'&booklogssearchbutton=Search&booklogspage='.$i.'">'.$i.'</a>&nbsp;';
+				$pagination .= '<a href="index.php?dateborrowed='.$dateborrowed.'&datereturned='.$datereturned.'&borrower='.$borrower.'&book='.$book.'&booklogssearchbutton=Search&booklogspage='.$i.'">'.$i.'</a>&nbsp;';
 				if($i >= $page + 3) {
 					break;
 				}

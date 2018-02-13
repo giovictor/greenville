@@ -60,6 +60,27 @@ if(isset($_POST['bookID']) && isset($_POST['newcopies']) && isset($_POST['booksp
 			$bookQuery = mysqli_query($dbconnect, $bookSQL);
 			$book = mysqli_fetch_assoc($bookQuery);
 ?>
+<?php
+	if($option=="bookID") {
+?>
+		<div class="reportbtn">
+			<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
+				<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+				<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
+			</form>
+		</div>
+<?php
+	} else if($option=="accession_no") {
+?>
+		<div class="reportbtn">
+			<form id="printpdf" target="_blank" action="pdfbookbycopy.php" method="POST" class="form-inline">
+				<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+				<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
+			</form>
+		</div>
+<?php
+	}
+?>
 <table class='table table-hover table-bordered table-striped' id='booktable'>
 		<tr>
 			<th>Title</th>

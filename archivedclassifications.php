@@ -17,11 +17,40 @@
 		header("Location:index.php");
 	}
 	require "dbconnect.php";
-		$archivedClassificationsSQL = "SELECT * FROM classification WHERE status=0 ORDER BY classificationID DESC";
-		$archivedClassificationsQuery = mysqli_query($dbconnect,$archivedClassificationsSQL);
-		$archivedClassifications = mysqli_fetch_assoc($archivedClassificationsQuery);
-		$rows = mysqli_num_rows($archivedClassificationsQuery);
+		$classificationperpages = 10;
+		$totalarchivedclassificationSQL = "SELECT * FROM classification WHERE status=0 ORDER BY classificationID DESC";
+		$totalarchivedvclassificationQuery = mysqli_query($dbconnect, $totalarchivedclassificationSQL);
+		$rows = mysqli_num_rows($totalarchivedvclassificationQuery);
+
+		$numberofpages = ceil($rows/$classificationperpages);
+		if(!isset($_GET['cpage'])) {
+			$page = 1;
+		} else {
+			$page = $_GET['cpage'];
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else if(!is_numeric($page)) {
+				$page = 1;
+			} else {
+				$page = $_GET['cpage'];
+			}
+		}
+
+			$firstresult = ($page - 1) * $classificationperpages;
+		if($rows >= 1) {
+			$archivedclassificationSQL = "SELECT * FROM classification WHERE status=0 ORDER BY classificationID DESC LIMIT $firstresult, $classificationperpages";
+			$archivedclassificationQuery = mysqli_query($dbconnect, $archivedclassificationSQL);
+			$archivedclassification = mysqli_fetch_assoc($archivedclassificationQuery);
+		}
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfarchivedclassifications.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalarchivedclassificationSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="classifications">
 		<table class="table table-hover table-bordered">
 			<tr>
@@ -36,27 +65,63 @@
 					do {
 			?>
 					<tr>
-						<td><?php echo $archivedClassifications['classificationID'];?></td>
-						<td><?php echo $archivedClassifications['classification'];?></td>
+						<td><?php echo $archivedclassification['classificationID'];?></td>
+						<td><?php echo $archivedclassification['classification'];?></td>
 						<td>
-							<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedClassifications['classificationID'];?>" data-toggle="modal" data-target="#restoreclassification">
+							<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedclassification['classificationID'];?>" data-toggle="modal" data-target="#restoreclassification">
 								<span class="glyphicon glyphicon-refresh"> </span>
 							</button>
-							<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedClassifications['classificationID'];?>" data-toggle="modal" data-target="#permanentdeleteclassification">
+							<!--<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedclassification['classificationID'];?>" data-toggle="modal" data-target="#permanentdeleteclassification">
 								<span class="glyphicon glyphicon-trash"> </span>
-							</button>
+							</button>-->
 						</td>
 					</tr>
 			<?php
-					} while($archivedClassifications = mysqli_fetch_assoc($archivedClassificationsQuery));
+					} while($archivedclassification = mysqli_fetch_assoc($archivedclassificationQuery));
 				}
 			?>
 		</table>
-		<form method="POST" action="pdfarchivedclassifications.php" target="_blank" class="form-inline">
-			<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-			<input type="hidden" name="query" value="<?php echo $archivedClassificationsSQL;?>">
-		</form>
 	</div>
+	<form id="pagination-data">
+		<input type="hidden" name="classificationperpages" id="classificationperpages" value="<?php echo $classificationperpages;?>">
+		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
+	</form>
+	
+	<?php
+		$pagination = '';
+		if($numberofpages > 1) {
+	?>
+			<p>Page: <?php echo $page;?> of <?php echo $numberofpages;?></p>
+	<?php
+			if($page > 1) {
+				$previous = $page - 1;
+				$pagination .= '<a href="?page=archvsc&cpage='.$previous.'">Previous</a>&nbsp;';
+
+				for($i = $page - 3; $i < $page; $i++) {
+					if($i > 0) {
+						$pagination .= '<a href="?page=archvsc&cpage='.$i.'">'.$i.'</a>&nbsp;';
+					}
+				}
+			}
+			
+			$pagination .= ''.$page.'&nbsp;';
+
+			for($i = $page + 1; $i <= $numberofpages; $i++) {
+				$pagination .= '<a href="?page=archvsc&cpage='.$i.'">'.$i.'</a>&nbsp;';
+				if($i >= $page + 3) {
+					break;
+				}
+			}
+
+			if($page != $numberofpages) {
+				$next = $page + 1;
+				$pagination .= '<a href="?page=archvsc&cpage='.$next.'">Next</a>&nbsp;';	
+			}
+	?>
+			<div class="pagination"><?php echo $pagination;?></div>
+	<?php
+		}
+	?>
 </div>
 <script>
 $(document).ready(function(){
@@ -75,20 +140,17 @@ $(document).ready(function(){
 
 	$(".confirmrestoreclassification").click(function(){
 		var classificationID = $(this).data("id");
+		var classificationperpages = $("#classificationperpages").val();
+		var firstresult = $("#firstresult").val();
 		$.ajax({
 			url:"restoreclassification.php",
 			method:"POST",
-			data:{classificationID:classificationID},
+			data:{classificationID:classificationID, classificationperpages:classificationperpages, firstresult:firstresult},
 			success:function(data) {
 				$("#restoreclassification").modal("hide");
 				$(".classifications").html(data);
 			}
 		});
-	});
-
-
-	$("#permanentdeleteclassification").on("hide.bs.modal", function(){
-		$(this).find("#password").val("").end();
 	});
 });
 </script>

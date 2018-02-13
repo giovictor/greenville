@@ -1,14 +1,22 @@
 <?php
 require "dbconnect.php";
-if(isset($_POST['authorID'])) {
+if(isset($_POST['authorID']) && isset($_POST['firstresult']) && isset($_POST['authorsperpages'])) {
 	$authorID = $_POST['authorID'];
 	$restoreauthorSQL = "UPDATE author SET status=1 WHERE authorID='$authorID'";
 	$restoreauthor = mysqli_query($dbconnect, $restoreauthorSQL);
 
-	$archivedAuthorsSQL = "SELECT * FROM author WHERE status=0 ORDER BY authorID DESC";
-	$archivedAuthorsQuery = mysqli_query($dbconnect,$archivedAuthorsSQL);
-	$archivedAuthors = mysqli_fetch_assoc($archivedAuthorsQuery);
-	$rows = mysqli_num_rows($archivedAuthorsQuery);
+	$authorsperpages = $_POST['authorsperpages'];
+	$firstresult = $_POST['firstresult'];
+
+	if(isset($_POST['keyword'])) {
+		$keyword = $_POST['keyword'];
+		$archivedauthorSQL = "SELECT * FROM author WHERE status=0 AND author LIKE '%$keyword%' ORDER BY authorID DESC LIMIT $firstresult, $authorsperpages";
+	} else {
+		$archivedauthorSQL = "SELECT * FROM author WHERE status=0 ORDER BY authorID DESC LIMIT $firstresult, $authorsperpages";
+	}
+	$archivedauthorQuery = mysqli_query($dbconnect,$archivedauthorSQL);
+	$archivedauthor = mysqli_fetch_assoc($archivedauthorQuery);
+	$rows = mysqli_num_rows($archivedauthorQuery);
 ?>
 <table class="table table-hover table-bordered">
 		<tr>
@@ -23,26 +31,22 @@ if(isset($_POST['authorID'])) {
 				do {
 		?>
 				<tr>
-					<td><?php echo $archivedAuthors['authorID'];?></td>
-					<td><?php echo $archivedAuthors['author'];?></td>
+					<td><?php echo $archivedauthor['authorID'];?></td>
+					<td><?php echo $archivedauthor['author'];?></td>
 					<td>
-						<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedAuthors['authorID'];?>" data-toggle="modal" data-target="#restoreauthor">
+						<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedauthor['authorID'];?>" data-toggle="modal" data-target="#restoreauthor">
 							<span class="glyphicon glyphicon-refresh"> </span>
 						</button>
-						<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedAuthors['authorID'];?>" data-toggle="modal" data-target="#permanentdeleteauthor">
+						<!--<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedauthor['authorID'];?>" data-toggle="modal" data-target="#permanentdeleteauthor">
 							<span class="glyphicon glyphicon-trash"> </span>
-						</button>
+						</button>-->
 					</td>
 				</tr>
 		<?php
-				} while($archivedAuthors = mysqli_fetch_assoc($archivedAuthorsQuery));
+				} while($archivedauthor = mysqli_fetch_assoc($archivedauthorQuery));
 			}
 		?>
 </table>
-<form method="POST" action="pdfarchivedauthors.php" target="_blank" class="form-inline">
-	<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-	<input type="hidden" name="query" value="<?php echo $archivedAuthorsSQL;?>">
-</form>
 <script>
 $(document).ready(function(){
 	$(document).on("click",".restorebutton",function(){
@@ -50,22 +54,46 @@ $(document).ready(function(){
 		$(".confirmrestoreauthor").data("id",authorID);
 	});
 
-	$(".confirmrestoreauthor").click(function(){
-		var authorID = $(this).data("id");
-		$.ajax({
-			url:"restoreauthor.php",
-			method:"POST",
-			data:{authorID:authorID},
-			success:function(data) {
-				$("#restoreauthor").modal("hide");
-				$(".authors").html(data);
-			}
-		});
-	});
+	<?php
+		if(isset($_POST['keyword'])) {
+	?>
+			$(".confirmrestoreauthor").click(function(){
+				var authorID = $(this).data("id");
+				var authorsperpages = $("#authorsperpages").val();
+				var firstresult = $("#firstresult").val();
+				var keyword = $("#keyword").val();
+				$.ajax({
+					url:"restoreauthor.php",
+					method:"POST",
+					data:{authorID:authorID, authorsperpages:authorsperpages, firstresult:firstresult, keyword:keyword},
+					success:function(data) {
+						$("#restoreauthor").modal("hide");
+						$(".authors").html(data);
+					}
+				});
+			});
+	<?php
+		} else {
+	?>
+			$(".confirmrestoreauthor").click(function(){
+				var authorID = $(this).data("id");
+				var authorsperpages = $("#authorsperpages").val();
+				var firstresult = $("#firstresult").val();
+				$.ajax({
+					url:"restoreauthor.php",
+					method:"POST",
+					data:{authorID:authorID,authorsperpages:authorsperpages, firstresult:firstresult},
+					success:function(data) {
+						$("#restoreauthor").modal("hide");
+						$(".authors").html(data);
+					}
+				});
+			});
+	<?php
+		}
+	?>
 
-	$("#permanentdeleteauthor").on("hide.bs.modal", function(){
-		$(this).find("#password").val("").end();
-	});
+	
 });
 </script>
 <?php

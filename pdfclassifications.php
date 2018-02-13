@@ -5,7 +5,7 @@ require "dbconnect.php";
 	$pdf = new gvcpdf();
 	$pdf->AliasNbPages();
 	$pdf->AddPage();
-	$pdf->SetFont("Arial","B",15);
+	$pdf->SetFont("Times","B",15);
 	$pdf->SetTitle("Classifications' Report");
 	$pdf->Cell(0,10,"Classifications' Report",0,1,"C");
 	$pdf->Cell(0,10,"",0,1,"C");
@@ -14,13 +14,13 @@ require "dbconnect.php";
 		$query_run = mysqli_query($dbconnect, $query);
 		$data = mysqli_fetch_assoc($query_run);
 
-		$pdf->SetFont("Arial","B",12);
+		$pdf->SetFont("Times","B",12);
 		$pdf->Cell(50,10,"Classification ID",1,0,"C");
 		$pdf->Cell(140,10,"Classification",1,0,"C");
 		$pdf->ln();
 		
 		do {
-			$pdf->SetFont("Arial","",10);
+			$pdf->SetFont("Times","",10);
 			$pdf->Cell(50,10,$data['classificationID'],1,0,"C");
 			$pdf->Cell(140,10,$data['classification'],1,0,"C");
 			$pdf->ln();

@@ -1,14 +1,23 @@
 <?php
 require "dbconnect.php";
-if(isset($_POST['publisherID'])) {
+if(isset($_POST['publisherID']) && isset($_POST['publishersperpages']) && isset($_POST['firstresult'])) {
 	$publisherID = $_POST['publisherID'];
 	$restorepublisherSQL = "UPDATE publisher SET status=1 WHERE publisherID='$publisherID'";
 	$restorepublisher = mysqli_query($dbconnect, $restorepublisherSQL);
 
-	$archivedPublishersSQL = "SELECT * FROM publisher WHERE status=0 ORDER BY publisherID DESC";
-	$archivedPublishersQuery = mysqli_query($dbconnect,$archivedPublishersSQL);
-	$archivedPublishers = mysqli_fetch_assoc($archivedPublishersQuery);
-	$rows = mysqli_num_rows($archivedPublishersQuery);
+	$publishersperpages = $_POST['publishersperpages'];
+	$firstresult = $_POST['firstresult'];
+
+	if(isset($_POST['keyword'])) {
+		$keyword = $_POST['keyword'];
+		$archivedpublisherSQL = "SELECT * FROM publisher WHERE status=0 AND publisher LIKE '%$keyword%' ORDER BY publisherID DESC LIMIT $firstresult, $publishersperpages";
+	} else {
+		$archivedpublisherSQL = "SELECT * FROM publisher WHERE status=0 ORDER BY publisherID DESC LIMIT $firstresult, $publishersperpages";
+	}
+
+	$archivedpublisherQuery = mysqli_query($dbconnect, $archivedpublisherSQL);
+	$archivedpublisher = mysqli_fetch_assoc($archivedpublisherQuery);
+	$rows = mysqli_num_rows($archivedpublisherQuery);
 ?>
 <table class="table table-hover table-bordered">
 		<tr>
@@ -23,26 +32,22 @@ if(isset($_POST['publisherID'])) {
 				do {
 		?>
 				<tr>
-					<td><?php echo $archivedPublishers['publisherID'];?></td>
-					<td><?php echo $archivedPublishers['publisher'];?></td>
+					<td><?php echo $archivedpublisher['publisherID'];?></td>
+					<td><?php echo $archivedpublisher['publisher'];?></td>
 					<td>
-						<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedPublishers['publisherID'];?>" data-toggle="modal" data-target="#restorepublisher">
+						<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedpublisher['publisherID'];?>" data-toggle="modal" data-target="#restorepublisher">
 							<span class="glyphicon glyphicon-refresh"> </span>
 						</button>
-						<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedPublishers['publisherID'];?>" data-toggle="modal" data-target="#permanentdeletepublisher">
+						<!--<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedpublisher['publisherID'];?>" data-toggle="modal" data-target="#permanentdeletepublisher">
 							<span class="glyphicon glyphicon-trash"> </span>
-						</button>
+						</button>-->
 					</td>
 				</tr>
 		<?php
-				} while($archivedPublishers = mysqli_fetch_assoc($archivedPublishersQuery));
+				} while($archivedpublisher = mysqli_fetch_assoc($archivedpublisherQuery));
 			}
 		?>
 </table>
-<form method="POST" action="pdfarchivedpublishers.php" target="_blank" class="form-inline">
-	<input type="submit" name="createpdf" class="btn btn-success btn-sm" id="button" value="Print PDF">
-	<input type="hidden" name="query" value="<?php echo $archivedPublishersSQL;?>">
-</form>
 <script>
 $(document).ready(function(){
 	$(document).on("click",".restorebutton",function(){
@@ -50,22 +55,44 @@ $(document).ready(function(){
 		$(".confirmrestorepublisher").data("id",publisherID);
 	});
 
-	$(".confirmrestorepublisher").click(function(){
-		var publisherID = $(this).data("id");
-		$.ajax({
-			url:"restorepublisher.php",
-			method:"POST",
-			data:{publisherID:publisherID},
-			success:function(data) {
-				$("#restorepublisher").modal("hide");
-				$(".publishers").html(data);
-			}
-		});
-	});
-	
-	$("#permanentdeletepublisher").on("hide.bs.modal", function(){
-		$(this).find("#password").val("").end();
-	});
+	<?php
+		if(isset($_POST['keyword'])) {
+	?>	
+				$(".confirmrestorepublisher").click(function(){
+					var publisherID = $(this).data("id");
+					var publishersperpages = $("#publishersperpages").val();
+					var firstresult = $("#firstresult").val();
+					var keyword = $("#keyword").val();
+					$.ajax({
+						url:"restorepublisher.php",
+						method:"POST",
+						data:{publisherID:publisherID, publishersperpages:publishersperpages, firstresult:firstresult, keyword:keyword},
+						success:function(data) {
+							$("#restorepublisher").modal("hide");
+							$(".publishers").html(data);
+						}
+					});
+				});
+	<?php
+		} else {
+	?>
+				$(".confirmrestorepublisher").click(function(){
+					var publisherID = $(this).data("id");
+					var publishersperpages = $("#publishersperpages").val();
+					var firstresult = $("#firstresult").val();
+					$.ajax({
+						url:"restorepublisher.php",
+						method:"POST",
+						data:{publisherID:publisherID, publishersperpages:publishersperpages, firstresult:firstresult},
+						success:function(data) {
+							$("#restorepublisher").modal("hide");
+							$(".publishers").html(data);
+						}
+					});
+				});
+	<?php
+		}
+	?>
 });
 </script>
 <?php

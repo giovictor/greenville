@@ -95,10 +95,12 @@
 		?>
 		</table>
 	</div>
-	<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
 	<?php
 		$pagination = '';
 		if($numberofpages > 1) {
+	?>
+			<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
+	<?php
 			if($page > 1) {
 				$previous = $page - 1;
 				$pagination .= '<a href="?page=publishers&ppage='.$previous.'">Previous</a>&nbsp;';

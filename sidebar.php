@@ -47,7 +47,7 @@
 			<div class="collapse" id="archives">
 				<li><a href="?page=archvsbooks">Archived Books</a></li>
 				<li><a href="?page=archvsbklogs">Archived Book Logs</a></li>
-				<li><a href="?page=archvsc">Archived Classification</a></li>
+				<li><a href="?page=archvsc">Archived Classifications</a></li>
 				<li><a href="?page=archvsa">Archived Authors</a></li>
 				<li><a href="?page=archvsp">Archived Publishers</a></li>
 			</div>

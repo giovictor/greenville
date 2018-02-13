@@ -36,6 +36,15 @@
 			$page = 1;
 		} else {
 			$page = $_GET['cpage'];
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else if(!is_numeric($page)) {
+				$page = 1;
+			} else {
+				$page = $_GET['cpage'];
+			}
 		}
 
 		$firstresult = ($page - 1) * $classificationperpages;

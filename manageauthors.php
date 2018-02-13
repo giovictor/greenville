@@ -37,6 +37,15 @@
 			$page = 1;
 		} else {
 			$page = $_GET['apage'];
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else if(!is_numeric($page)) {
+				$page = 1;
+			} else {
+				$page = $_GET['apage'];
+			}
 		}
 
 		$firstresult = ($page - 1) * $authorsperpages;
@@ -95,10 +104,12 @@
 		?>
 		</table>
 	</div>
-	<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
 	<?php
 		$pagination = '';
 		if($numberofpages > 1) {
+	?>
+			<p>Page: <?php echo $page; ?> of <?php echo $numberofpages;?></p>
+	<?php
 			if($page > 1) {
 				$previous = $page - 1;
 				$pagination .= '<a href="?page=authors&apage='.$previous.'">Previous</a>&nbsp;';

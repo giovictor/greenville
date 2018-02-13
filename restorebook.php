@@ -33,7 +33,6 @@ if(isset($_POST['accession_no']) && isset($_POST['firstresult']) && isset($_POST
 		<th>Title</th>
 		<th>Author</th>
 		<th>Publication Details</th>
-		<th>Classification</th>
 		<th>Remarks</th>
 		<th> </th>
 		
@@ -49,15 +48,14 @@ if(isset($_POST['accession_no']) && isset($_POST['firstresult']) && isset($_POST
 				<td><?php echo $archivedbook['booktitle'];?></td>
 				<td><?php echo $archivedbook['authors'];?></td>
 				<td><?php echo $archivedbook['publisher']." c".$archivedbook['publishingyear'];?></td>
-				<td><?php echo $archivedbook['classification'];?></td>
 				<td><?php echo $archivedbook['bookcondition'];?></td>
 				<td>
 					<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#restorebook">
 						<span class="glyphicon glyphicon-refresh"> </span>
 					</button>
-					<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#permanentdeletebook">
+					<!--<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#permanentdeletebook">
 						<span class="glyphicon glyphicon-trash"> </span>
-					</button>
+					</button>-->
 				</td>
 			</tr>
 	<?php

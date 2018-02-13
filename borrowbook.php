@@ -54,7 +54,7 @@ require "dbconnect.php";
 				$holidaydate[] = $dates->format("Y-m-d");
 			}
 
-			for($i=0; $i<3; $i++) {
+			for($i=0; $i<2; $i++) {
 				$addday = 86400;
 				$nextday = date("D", ($dateborrowedtimestamp + $addday));
 				$nextdaydate = date("Y-m-d",($dateborrowedtimestamp + $addday));

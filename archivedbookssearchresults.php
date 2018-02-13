@@ -153,6 +153,12 @@
 		$archivedbook = mysqli_fetch_assoc($archivedbookQuery);
 		$rows = mysqli_num_rows($archivedbookQuery);
 	?>
+	<div class="reportbtn">
+		<form id="printpdf" target="_blank" action="pdfarchivedbook.php" method="POST" class="form-inline">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+			<input type="hidden" name="query" value="<?php echo $totalarchivedbookSQL;?>">
+		</form>
+	</div>
 	<div id='bookdisplay'>
 		<table class='table table-hover table-bordered table-striped' id='booktable'>
 			<tr>
@@ -160,7 +166,6 @@
 				<th>Title</th>
 				<th>Authors</th>
 				<th>Publication Details</th>
-				<th>Classification</th>
 				<th>Remarks</th>
 				<th> </th>
 				
@@ -176,15 +181,14 @@
 						<td><?php echo $archivedbook['booktitle'];?></td>
 						<td><?php echo $archivedbook['authors'];?></td>
 						<td><?php echo $archivedbook['publisher']." c".$archivedbook['publishingyear'];?></td>
-						<td><?php echo $archivedbook['classification'];?></td>
 						<td><?php echo $archivedbook['bookcondition'];?></td>
 						<td>
 							<button class="btn btn-success btn-sm restorebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#restorebook">
 								<span class="glyphicon glyphicon-refresh"> </span>
 							</button>
-							<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#permanentdeletebook">
+							<!--<button class="btn btn-danger btn-sm permanentdeletebutton" data-id="<?php echo $archivedbook['accession_no'];?>" data-toggle="modal" data-target="#permanentdeletebook">
 								<span class="glyphicon glyphicon-trash"> </span>
-							</button>
+							</button>-->
 						</td>
 					</tr>
 		<?php

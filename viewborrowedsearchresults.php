@@ -161,7 +161,18 @@
 				$holidayarray[] = $dates->format("Y-m-d");
 			}
 		} while($holiday = mysqli_fetch_assoc($holidayQuery));
+
+		$settingsSQL = "SELECT * FROM settings";
+		$settingsQuery = mysqli_query($dbconnect, $settingsSQL);
+		$settings = mysqli_fetch_assoc($settingsQuery);
+
 	?>
+	<div class="reportpdf">
+		<form id="printpdf" target="_blank" action="pdfborrowedbooks.php" method="POST">
+			<input type="hidden" name="query" value="<?php echo $totalborrowedbooksSQL;?>">
+			<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		</form>
+	</div>
 	<div class="borrowedbooks">
 		<table class="table table-hover">
 			<tr>
