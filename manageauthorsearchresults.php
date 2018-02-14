@@ -19,7 +19,7 @@
 	}
 	require "dbconnect.php";
 	if(isset($_GET['asearch'])) {
-		$keyword = $_GET['asearch'];
+		$keyword = mysqli_real_escape_string($dbconnect,htmlspecialchars($_GET['asearch']));
 		$authorsperpages = 10;
 		$totalauthorSQL = "SELECT * FROM author WHERE status=1 AND author LIKE '%$keyword%' ORDER BY authorID DESC";
 		$totalauthorQuery = mysqli_query($dbconnect, $totalauthorSQL);

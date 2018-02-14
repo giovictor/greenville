@@ -3,7 +3,7 @@
 	<h3>New Collections</h3>
 	<?php
 		require "dbconnect.php";
-		$bookSQL = "SELECT bookID, book.accession_no, booktitle, callnumber, GROUP_CONCAT(DISTINCT author SEPARATOR',') AS authors, publisher, publishingyear, classification FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON bookauthor.authorID=author.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON book.classificationID=classification.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY publishingyear DESC LIMIT 10";
+		$bookSQL = "SELECT bookID, book.accession_no, booktitle, callnumber, GROUP_CONCAT(DISTINCT author SEPARATOR',') AS authors, publisher, publishingyear, classification FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON bookauthor.authorID=author.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON book.classificationID=classification.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC LIMIT 10";
 		$bookQuery = mysqli_query($dbconnect, $bookSQL);
 		$book = mysqli_fetch_assoc($bookQuery);
 		$rank = 1;

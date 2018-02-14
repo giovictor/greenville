@@ -84,8 +84,8 @@
 	require "dbconnect.php";
 		if(isset($_GET['archivedbookbutton'])) {
 			if(isset($_GET['archivedbooksearch']) && isset($_GET['archivedbooksearchtype'])) {
-				$archivedbooksearch = $_GET['archivedbooksearch'];
-				$archivedbooksearchtype = $_GET['archivedbooksearchtype'];
+				$archivedbooksearch = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['archivedbooksearch']));
+				$archivedbooksearchtype =  mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['archivedbooksearchtype']));
 				if($archivedbooksearchtype=="accession_no") {
 					$totalarchivedbookSQL = "SELECT book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classificationID, classification.classification, publishingyear, ISBN, book.status, bookcondition FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE accession_no='$archivedbooksearch' AND book.status='Archived' GROUP BY book.accession_no ORDER BY book.accession_no DESC";
 				} else {
@@ -149,9 +149,11 @@
 
 			}
 
-		$archivedbookQuery = mysqli_query($dbconnect, $archivedbookSQL);
-		$archivedbook = mysqli_fetch_assoc($archivedbookQuery);
-		$rows = mysqli_num_rows($archivedbookQuery);
+		if($totalarchivedbooks >= 1) {
+			$archivedbookQuery = mysqli_query($dbconnect, $archivedbookSQL);
+			$archivedbook = mysqli_fetch_assoc($archivedbookQuery);
+		}
+	
 	?>
 	<div class="reportbtn">
 		<form id="printpdf" target="_blank" action="pdfarchivedbook.php" method="POST" class="form-inline">
@@ -171,9 +173,9 @@
 				
 			</tr>
 		<?php
-			if($rows==0) {
+			if($totalarchivedbooks==0) {
 				echo "<tr><td colspan='9'><center><h4>No results found.</h4></center></td></tr>";
-			} else if($rows>=1) {
+			} else if($totalarchivedbooks>=1) {
 				do {
 		?>
 					<tr>

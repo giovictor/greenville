@@ -75,8 +75,10 @@
 				$borrowerSQL = "SELECT * FROM borrower WHERE CONCAT(lastname, firstname, mi) LIKE '%$keyword%' ORDER BY dateregistered DESC LIMIT $firstresult, $borrowersperpages";
 			}
 
-			$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
-			$borrower = mysqli_fetch_assoc($borrowerQuery);
+			if($rows >= 1) {
+				$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
+				$borrower = mysqli_fetch_assoc($borrowerQuery);
+			}
 	?>
 	<div class="reportpdf">
 		<form id="printpdf" target="_blank" action="pdfborrower.php" method="POST">

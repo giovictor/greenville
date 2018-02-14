@@ -13,7 +13,3 @@ Embed about us and google maps section under side bar and search form on homepag
 
 
 
-
-
-
-

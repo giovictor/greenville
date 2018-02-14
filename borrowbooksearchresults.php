@@ -5,13 +5,13 @@ if(isset($_POST['booksearchtype']) && isset($_POST['booksearch'])) {
 	$booksearch = $_POST['booksearch'];
 
 	if($booksearchtype=="booktitle") {
-		$bookSQL = "SELECT * FROM book WHERE booktitle LIKE '%$booksearch%'";
+		$bookSQL = "SELECT * FROM book WHERE booktitle LIKE '%$booksearch%' LIMIT 0,10";
 	} else if($booksearchtype=="accession_no") {
-		$bookSQL = "SELECT * FROM book WHERE accession_no LIKE '%$booksearch%'";
+		$bookSQL = "SELECT * FROM book WHERE accession_no LIKE '%$booksearch%' LIMIT 0,10";
 	} else if($booksearchtype=="barcode") {
-		$bookSQL = "SELECT * FROM book WHERE barcode LIKE '%$booksearch%'";
+		$bookSQL = "SELECT * FROM book WHERE barcode LIKE '%$booksearch%' LIMIT 0,10";
 	} else if($booksearchtype=="callnumber") {
-		$bookSQL = "SELECT * FROM book WHERE callnumber LIKE '%$booksearch%'";
+		$bookSQL = "SELECT * FROM book WHERE callnumber LIKE '%$booksearch%' LIMIT 0,10";
 	} 
 
 	$bookQuery = mysqli_query($dbconnect, $bookSQL);

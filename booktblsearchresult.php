@@ -87,7 +87,7 @@
 	require "dbconnect.php";
 		if(isset($_GET['mngbookbutton'])) {
 			if(isset($_GET['mngbooksearch']) && isset($_GET['aedsearchtype'])) {
-				$keyword = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['mngbooksearch']));
+				$keyword = mysqli_real_escape_string($dbconnect,htmlspecialchars($_GET['mngbooksearch']));
 				$searchtype = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['aedsearchtype']));
 				if($searchtype=="accession_no") {
 					$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
@@ -120,7 +120,7 @@
 					$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
 				}
 			} else if(isset($_GET['classification'])) {
-				$classification = $_GET['classification'];
+				$classification = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['classification']));
 				$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classificationID, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classification' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
 				$booksperpages = 10;
 				$totalbookQuery = mysqli_query($dbconnect, $totalbookSQL);
@@ -144,9 +144,10 @@
 				$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classificationID, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classification' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
 			}
 
-			$bookQuery = mysqli_query($dbconnect, $bookSQL);
-			$book = mysqli_fetch_assoc($bookQuery);
-			$rows = mysqli_num_rows($bookQuery);
+			if($totalbookresults >= 1) {
+				$bookQuery = mysqli_query($dbconnect, $bookSQL);
+				$book = mysqli_fetch_assoc($bookQuery);
+			}
 	?>
 	<div class="booktblfilter">
 		<form class="form-inline">
@@ -174,9 +175,9 @@
 					
 				</tr>
 		<?php
-			if($rows==0) {
+			if($totalbookresults==0) {
 				echo "<tr><td colspan='7'><center><h4>No results found. Try searching again.</h4></center></td></tr>";
-			} else if($rows>=1) {
+			} else if($totalbookresults>=1) {
 				do {
 		?>	
 				<tr>

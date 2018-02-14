@@ -2,7 +2,7 @@
 require "dbconnect.php";
 include "modals.php";
 	if(isset($_GET['classificationID'])) {
-		$classification = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['classificationID']));
+		$classification = mysqli_real_escape_string($dbconnect,htmlspecialchars($_GET['classificationID']));
 		$sql = "SELECT * FROM classification WHERE classificationID='$classification'";
 		$query = mysqli_query($dbconnect, $sql);
 		$classification = mysqli_fetch_assoc($query); 
@@ -56,8 +56,10 @@ include "modals.php";
 	$firstresult = ($page - 1) * $booksperpages;
 
 	$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher, publishingyear, classification.classificationID, classification.classification, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classificationID'  AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
-	$bookQuery = mysqli_query($dbconnect, $bookSQL);
-	$book = mysqli_fetch_assoc($bookQuery);
+	if($rows >= 1) {
+		$bookQuery = mysqli_query($dbconnect, $bookSQL);
+		$book = mysqli_fetch_assoc($bookQuery);
+	}
 ?>
 <div class="table-responsive" id="bookscollection">
 	<table class="table table-hover" id="collectionstable">
@@ -76,11 +78,7 @@ include "modals.php";
 		</tr>
 			<?php
 				if($rows==0) {
-					echo "<tr>
-							<td colspan='6'>
-								<center><h4>No books in this classification is available.</h4></center>
-							</td>
-						</tr>";
+					echo "<tr><td colspan='6'><center><h4>No books in this classification is available.</h4></center></td></tr>";
 				} else if($rows>=1) {
 					do {
 			?>

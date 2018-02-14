@@ -17,7 +17,7 @@
 	}
 	require "dbconnect.php";
 		if(isset($_GET['archivedpsearch'])) {
-			$archivedpsearch = $_GET['archivedpsearch'];
+			$archivedpsearch = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['archivedpsearch']));
 			$publishersperpages = 10;
 			$totalarchivedpublisherSQL = "SELECT * FROM publisher WHERE status=0 AND publisher LIKE '%$archivedpsearch%' ORDER BY publisherID DESC";
 			$totalarchivedpublisherQuery = mysqli_query($dbconnect, $totalarchivedpublisherSQL);
@@ -34,8 +34,11 @@
 			$firstresult = ($page - 1) * $publishersperpages;
 
 			$archivedpublisherSQL = "SELECT * FROM publisher WHERE status=0 AND publisher LIKE '%$archivedpsearch%' ORDER BY publisherID DESC LIMIT $firstresult, $publishersperpages";
-			$archivedpublisherQuery = mysqli_query($dbconnect, $archivedpublisherSQL);
-			$archivedpublisher = mysqli_fetch_assoc($archivedpublisherQuery);
+			
+			if($rows >= 1) {
+				$archivedpublisherQuery = mysqli_query($dbconnect, $archivedpublisherSQL);
+				$archivedpublisher = mysqli_fetch_assoc($archivedpublisherQuery);
+			}
 	?>
 	<div class="reportpdf">
 		<form id="printpdf" target="_blank" action="pdfarchivedpublishers.php" method="POST">

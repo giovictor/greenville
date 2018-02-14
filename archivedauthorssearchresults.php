@@ -20,7 +20,7 @@
 	}
 	require "dbconnect.php";
 		if(isset($_GET['archivedasearch'])) {
-			$archivedasearch = $_GET['archivedasearch'];
+			$archivedasearch = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['archivedasearch']));
 			$authorsperpages = 10;
 			$totalarchivedauthorSQL = "SELECT * FROM author WHERE status=0 AND author LIKE '%$archivedasearch%' ORDER BY authorID DESC";
 			$totalarchivedauthorQuery = mysqli_query($dbconnect, $totalarchivedauthorSQL);
@@ -37,8 +37,10 @@
 			$firstresult = ($page - 1) * $authorsperpages;
 
 			$archivedauthorSQL = "SELECT * FROM author WHERE status=0 AND author LIKE '%$archivedasearch%' ORDER BY authorID DESC LIMIT $firstresult, $authorsperpages";
-			$archivedauthorQuery = mysqli_query($dbconnect, $archivedauthorSQL);
-			$archivedauthor = mysqli_fetch_assoc($archivedauthorQuery);
+			if($rows >= 1) {
+				$archivedauthorQuery = mysqli_query($dbconnect, $archivedauthorSQL);
+				$archivedauthor = mysqli_fetch_assoc($archivedauthorQuery);
+			}
 	?>
 	<div class="reportpdf">
 		<form id="printpdf" target="_blank" action="pdfarchivedauthors.php" method="POST">

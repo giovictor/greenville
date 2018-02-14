@@ -50,10 +50,10 @@
 	}
 	require "dbconnect.php";
 		if(isset($_GET['archivedbooklogssearchbutton'])) {
-			$archiveddateborrowed = $_GET['archiveddateborrowed']; 
-			$archiveddatereturned = $_GET['archiveddatereturned']; 
-			$archivedborrower = $_GET['archivedborrower'];
-			$archivedbook = $_GET['archivedbook'];
+			$archiveddateborrowed = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['archiveddateborrowed'])); 
+			$archiveddatereturned = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['archiveddatereturned'])); 
+			$archivedborrower = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['archivedborrower'])); 
+			$archivedbook = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['archivedbook'])); 
 			if(!empty($archiveddateborrowed) && empty($archiveddatereturned) && empty($archivedbook) && empty($archivedborrower)) {
 				$totalarchivedbooklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$archiveddateborrowed' AND datereturned IS NOT NULL AND showstatus=0 ORDER BY booklogID DESC";
 			} else if(!empty($archiveddatereturned) && empty($archiveddateborrowed) && empty($archivedbook) && empty($archivedborrower)) {
@@ -141,9 +141,10 @@
 				$archivedbooklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$archiveddateborrowed' AND datereturned='$archiveddatereturned' AND booktitle LIKE '%$archivedbook%' AND CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$archivedborrower%' AND datereturned IS NOT NULL AND showstatus=0 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
 			}	
 
-
-			$archivedbooklogsQuery = mysqli_query($dbconnect, $archivedbooklogsSQL);
-			$archivedbooklogs = mysqli_fetch_assoc($archivedbooklogsQuery);
+			if($rows >= 1) { 
+				$archivedbooklogsQuery = mysqli_query($dbconnect, $archivedbooklogsSQL);
+				$archivedbooklogs = mysqli_fetch_assoc($archivedbooklogsQuery);
+			}
 
 			$holidaySQL = "SELECT * FROM holiday";
 			$holidayQuery = mysqli_query($dbconnect, $holidaySQL);

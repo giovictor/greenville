@@ -55,10 +55,10 @@
 	}
 	require "dbconnect.php";
 	if(isset($_GET['reservesearchbutton'])) {
-		$reservedate = $_GET['reservedate'];
-		$expdate = $_GET['expdate'];
-		$borrower = $_GET['borrower'];
-		$book = $_GET['book'];
+		$reservedate = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['reservedate']));
+		$expdate = 	mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['expdate']));
+		$borrower = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['borrower']));
+		$book = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['book']));
 
 		if(!empty($reservedate) && empty($expdate) && empty($borrower) && empty($book)) {
 			$totalreservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND showstatus=1 ORDER BY reservationID DESC";
@@ -144,8 +144,10 @@
 			$reservationsSQL = "SELECT reservationID, borrower.IDNumber, lastname, firstname, mi, book.accession_no, booktitle, reservationdate, expdate, showstatus FROM reservation JOIN book ON book.accession_no=reservation.accession_no JOIN borrower ON borrower.IDNumber=reservation.IDNumber WHERE reservationdate='$reservedate' AND expdate='$expdate' AND CONCAT(borrower.IDNumber, lastname, firstname, mi) LIKE '%$borrower%' AND booktitle LIKE '%$book%' AND showstatus=1 ORDER BY reservationID DESC LIMIT $firstresult, $reserveperpages";
 		} 
 
-		$reservationsQuery = mysqli_query($dbconnect, $reservationsSQL);
-		$reservations = mysqli_fetch_assoc($reservationsQuery);
+		if($rows >= 1) {
+			$reservationsQuery = mysqli_query($dbconnect, $reservationsSQL);
+			$reservations = mysqli_fetch_assoc($reservationsQuery);
+		}
 
 	?>
 	<div class="reportpdf">

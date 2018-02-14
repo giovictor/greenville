@@ -10,14 +10,23 @@
 </head>
 <body>
 	<?php
-		$str = "qwertyuiopasdfghjklzxcvbnm";
-		$strlen = strlen($str);
-		$strlen;
-		if($strlen > 15) {
-			$str1 = substr($str, 0, 14);
-			$str1 .= "\n".substr($str, 15, $strlen);
-		}
-		echo $str1;
+		require "dbconnect.php";
+		$sql = "SELECT book.accession_no, bookID, booktitle, author.author, publisher.publisher, publishingyear FROM book LEFT JOIN bookauthor ON bookauthor.accession_no=book.accession_no LEFT JOIN author ON bookauthor.authorID=author.authorID LEFT JOIN publisher ON book.publisherID=publisher.publisherID WHERE book.accession_no IN  (3855, 4798, 6420, 7297, 7339, 7340, 7341, 7342, 7343, 7345, 7346)";
+		$query = mysqli_query($dbconnect, $sql);
+		$book = mysqli_fetch_assoc($query);
+
+		do {
+			$accession_no = $book['accession_no'];
+			$titlecode = strtoupper(md5(str_replace(' ','',$book['booktitle'])));
+			$publishercode = strtoupper(str_replace("'","\"",substr($book['publisher'], 0, 3)));
+			$authorcode = strtoupper(str_replace("'","\"",substr($book['author'], 0, 3)));
+			$yearcode = $book['publishingyear'];
+			$bookID = $titlecode.$authorcode.$publishercode.$yearcode;
+
+			$updatebookID = "UPDATE book SET bookID='$bookID' WHERE accession_no='$accession_no'";
+			$update = mysqli_query($dbconnect, $updatebookID);
+		  
+		} while($book = mysqli_fetch_assoc($query));
 	?>
 	<script src="jquery-3.2.0.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>  

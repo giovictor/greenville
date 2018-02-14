@@ -20,7 +20,7 @@
 	}
 	require "dbconnect.php";
 		if(isset($_GET['archivedcsearch'])) {
-			$archivedcsearch = $_GET['archivedcsearch'];
+			$archivedcsearch = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['archivedcsearch']));;
 			$classificationperpages = 10;
 			$totalarchivedclassificationSQL = "SELECT * FROM classification WHERE status=0 AND classification LIKE '%$archivedcsearch%' ORDER BY classificationID DESC";
 			$totalarchivedvclassificationQuery = mysqli_query($dbconnect, $totalarchivedclassificationSQL);
@@ -45,8 +45,11 @@
 			$firstresult = ($page - 1) * $classificationperpages;
 
 			$archivedclassificationSQL = "SELECT * FROM classification WHERE status=0 AND classification LIKE '%$archivedcsearch%' ORDER BY classificationID DESC LIMIT $firstresult, $classificationperpages";
-			$archivedclassificationQuery = mysqli_query($dbconnect, $archivedclassificationSQL);
-			$archivedclassification = mysqli_fetch_assoc($archivedclassificationQuery);
+			
+			if($rows >= 1) {
+				$archivedclassificationQuery = mysqli_query($dbconnect, $archivedclassificationSQL);
+				$archivedclassification = mysqli_fetch_assoc($archivedclassificationQuery);
+			}
 	?>
 	<div class="reportpdf">
 		<form id="printpdf" target="_blank" action="pdfarchivedclassifications.php" method="POST">

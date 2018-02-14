@@ -20,7 +20,7 @@
 	require "dbconnect.php";
 
 	if(isset($_GET['csearch'])) {
-		$keyword = $_GET['csearch'];
+		$keyword = mysqli_real_escape_string($dbconnect,htmlspecialchars($_GET['csearch']));
 		$classificationperpages = 10;
 		$totalclassificationSQL = "SELECT * FROM classification WHERE status=1 AND classification LIKE '%$keyword%' ORDER BY classificationID DESC";
 		$totalclassificationQuery = mysqli_query($dbconnect, $totalclassificationSQL);
@@ -36,9 +36,10 @@
 		$firstresult = ($page - 1) * $classificationperpages;
 
 		$classificationSQL = "SELECT * FROM classification WHERE status=1 AND classification LIKE '%$keyword%' ORDER BY classificationID DESC LIMIT $firstresult, $classificationperpages";
-		$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
-		$classification = mysqli_fetch_assoc($classificationQuery);
-
+		if($rows >= 1) {
+			$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
+			$classification = mysqli_fetch_assoc($classificationQuery);
+		}
 	?>
 	<div class="reportpdf">
 		<form id="printpdf" target="_blank" action="pdfclassifications.php" method="POST">

@@ -52,10 +52,11 @@
 	}
 
 	if(isset($_GET['booklogssearchbutton'])) {	
-		$dateborrowed = $_GET['dateborrowed']; 
-		$datereturned = $_GET['datereturned']; 
-		$borrower = $_GET['borrower'];
-		$book = $_GET['book'];
+		$dateborrowed = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['dateborrowed']));
+		$datereturned = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['datereturned']));
+		$borrower = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['borrower']));;
+		$book = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['book']));;
+
 		if(!empty($dateborrowed) && empty($datereturned) && empty($book) && empty($borrower)) {
 			$totalbooklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC";
 		} else if(!empty($datereturned) && empty($dateborrowed) && empty($book) && empty($borrower)) {
@@ -142,8 +143,10 @@
 			$booklogsSQL = "SELECT booklogID, showstatus, borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, datereturned, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND datereturned='$datereturned' AND booktitle LIKE '%$book%' AND CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$borrower%' AND datereturned IS NOT NULL AND showstatus=1 ORDER BY booklogID DESC LIMIT $firstresult, $booklogsperpages";
 		}
 		 
-		$booklogsQuery = mysqli_query($dbconnect, $booklogsSQL);
-		$booklogs = mysqli_fetch_assoc($booklogsQuery);
+		if($rows >= 1) {
+			$booklogsQuery = mysqli_query($dbconnect, $booklogsSQL);
+			$booklogs = mysqli_fetch_assoc($booklogsQuery);
+		}
 
 		$holidaySQL = "SELECT * FROM holiday";
 		$holidayQuery = mysqli_query($dbconnect, $holidaySQL);

@@ -53,10 +53,11 @@
 	require "dbconnect.php";
 
 	if(isset($_GET['borrowedbookssearchbutton'])) {
-		$dateborrowed = $_GET['dateborrowed']; 
-		$duedate = $_GET['duedate']; 
-		$borrowerget = $_GET['borrower'];
-		$book = $_GET['book'];
+		$dateborrowed = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['dateborrowed'])); 
+		$duedate = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['duedate'])); 
+		$borrower = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['borrower']));
+		$book = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['book']));
+		
 		if(!empty($dateborrowed) && empty($duedate) && empty($book) && empty($borrower)) {
 			$totalborrowedbooksSQL = "SELECT borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND datereturned IS NULL ORDER BY booklogID DESC";
 		} else if(!empty($duedate) && empty($dateborrowed) && empty($book) && empty($borrower)) {
@@ -141,8 +142,10 @@
 			$borrowedbooksSQL = "SELECT borrower.IDNumber, lastname, firstname,mi, book.accession_no, booktitle, dateborrowed, duedate, penalty FROM booklog JOIN book ON book.accession_no=booklog.accession_no JOIN borrower ON borrower.IDNumber=booklog.IDNumber WHERE dateborrowed='$dateborrowed' AND duedate='$duedate' AND booktitle LIKE '%$book%' AND CONCAT(borrower.IDNumber, borrower.lastname, borrower.firstname, borrower.mi) LIKE '%$borrower%' AND datereturned IS NULL ORDER BY booklogID DESC LIMIT $firstresult, $borrowedperpages";
 		}
 
-		$borrowedbooksQuery = mysqli_query($dbconnect, $borrowedbooksSQL);
-		$borrowedbooks = mysqli_fetch_assoc($borrowedbooksQuery);
+		if($rows >= 1) {
+			$borrowedbooksQuery = mysqli_query($dbconnect, $borrowedbooksSQL);
+			$borrowedbooks = mysqli_fetch_assoc($borrowedbooksQuery);
+		}
 
 		$currentdate = date("Y-m-d");
 

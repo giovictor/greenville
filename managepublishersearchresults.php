@@ -19,7 +19,7 @@
 	}
 	require "dbconnect.php";
 	if(isset($_GET['psearch'])) {
-		$keyword = $_GET['psearch'];
+		$keyword = mysqli_real_escape_string($dbconnect,htmlspecialchars($_GET['psearch']));
 		$publishersperpages = 10;
 		$totalpublisherSQL = "SELECT * FROM publisher WHERE status=1 AND publisher LIKE '%$keyword%' ORDER BY publisherID DESC";
 		$totalpublisherQuery = mysqli_query($dbconnect, $totalpublisherSQL);
@@ -36,8 +36,11 @@
 		$firstresult = ($page - 1) * $publishersperpages;
 
 		$publisherSQL = "SELECT * FROM publisher WHERE status=1 AND publisher LIKE '%$keyword%' ORDER BY publisherID DESC LIMIT $firstresult, $publishersperpages";
-		$publisherQuery = mysqli_query($dbconnect, $publisherSQL);
-		$publisher = mysqli_fetch_assoc($publisherQuery);
+		
+		if($rows >= 1) {
+			$publisherQuery = mysqli_query($dbconnect, $publisherSQL);
+			$publisher = mysqli_fetch_assoc($publisherQuery);
+		}
 
 	?>
 	<div class="reportpdf">

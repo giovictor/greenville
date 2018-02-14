@@ -21,9 +21,9 @@ if(isset($_GET['searchbutton'])) {
 	if(!is_numeric($classificationID)) {
 		header("Location:index.php");
 	} else if($classificationID < $minID['minID']) {
-		header("Location:index.php");
+		header("Location:index.php?page=collections&classificationID=$min");
 	} else if($classificationID > $maxID['maxID']) {
-		header("Location:index.php");
+		header("Location:index.php?page=collections&classificationID=$max");
 	}
 ?>
 <div class="collectionsearch">
@@ -129,7 +129,7 @@ if(isset($_GET['searchbutton'])) {
 	</tr>
 	<?php
 			if($rows==0) {
-				echo "<tr><td colspan='6'>No results found.</td></tr>";
+				echo "<tr><td colspan='6'><center><h4>No results found.</h4></center></td></tr>";
 			} else if($rows>=1) {
 				$searchresultsQuery = mysqli_query($dbconnect, $searchresultsSQL);
 				$searchresults = mysqli_fetch_assoc($searchresultsQuery);
