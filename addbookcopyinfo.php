@@ -34,6 +34,13 @@ if(isset($_POST['bookID']) && isset($_POST['booksperpages']) && isset($_POST['fi
 	?>
 			<input type="hidden" name="classification" id="classification" value="<?php echo $classification;?>">
 	<?php
+		} else if(isset($_POST['startyear']) && isset($_POST['endyear'])) {
+			$startyear = $_POST['startyear'];
+			$endyear = $_POST['endyear'];
+	?>
+			<input type="hidden" name="startyear" id="startyear" value="<?php echo $startyear;?>">
+			<input type="hidden" name="endyear" id="endyear" value="<?php echo $endyear;?>"
+	<?php
 		}
 	?>
 </form>
@@ -97,6 +104,45 @@ $(document).ready(function(){
 					url:"addbookcopies.php",
 					method:"POST",
 					data:{bookID:bookID, newcopies:newcopies, classification:classification, booksperpages:booksperpages, firstresult:firstresult},
+					beforeSend:function() {
+						$("#addcopybutton").html("Adding books...");
+						$("#addcopybutton").attr("disabled", true);
+					},
+					success:function(data) {
+						if(data=="Invalid") {
+							$("#addcopybutton").html("Add copies");
+							$("#addbookcopyalert").html("<h4>Please input a numeric value.</h4>");
+							$("#addcopybutton").attr("disabled", false);
+						} else {
+							$("#addcopybutton").html("Add copies");
+							$("#addcopybutton").attr("disabled", false);
+							$("#addbookcopy").modal("hide");
+							$("#bookdisplay").html(data);
+						}
+					}
+				});
+			}
+		});
+	<?php
+		} else if(isset($_POST['startyear']) && isset($_POST['endyear'])) {
+	?>
+			$("#addcopyform").submit(function(e){
+			e.preventDefault();
+			var newcopies = $("#newcopies").val();
+			var bookID = $("#bookID").val();
+			var booksperpages = $("#booksperpages").val();
+			var firstresult = $("#firstresult").val();
+			var startyear = $("#startyear").val();
+			var endyear = $("#endyear").val();
+			if(newcopies=="") {
+				$("#addbookcopyalert").html("<h4>Please input the number of copies.</h4>");
+			} else if(newcopies==0) {
+				
+			} else {
+				$.ajax({
+					url:"addbookcopies.php",
+					method:"POST",
+					data:{bookID:bookID, newcopies:newcopies, startyear:startyear, endyear:endyear, booksperpages:booksperpages, firstresult:firstresult},
 					beforeSend:function() {
 						$("#addcopybutton").html("Adding books...");
 						$("#addcopybutton").attr("disabled", true);

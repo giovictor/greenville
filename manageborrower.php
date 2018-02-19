@@ -38,11 +38,16 @@
 						<td>Course:</td> 
 						<td>
 							<select name="course" class="form-control" style="width:400px;">
-								<option value="pa">AB Public Administration</option>
-								<option value="english">AB English</option>
-								<option value="psych">BS Psychology</option>
-								<option value="elemeduc">BEED</option>
-								<option value="secondaryeduc">BSED</option>
+								<option value="AB Public Administration">AB Public Administration</option>
+								<option value="AB English">AB English</option>
+								<option value="BS Psychology">BS Psychology</option>
+								<option value="BEED">BEED</option>
+								<option value="BSED">BSED</option>
+								<option value="MAed">MAed</option>
+								<option value="MPA">MPA</option>
+								<option value="DPA">DPA</option>
+								<option value="MBA">MBA</option>
+								<option value="EdD">EdD</option>
 							</select>
 						</td>
 					</tr>

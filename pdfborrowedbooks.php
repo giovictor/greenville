@@ -2,9 +2,9 @@
 include "gvcpdf.php";
 require "dbconnect.php";
 
-	$pdf = new gvcpdf();
+	$pdf = new gvcpdf("L","mm", array(215.9,279.4));
 	$pdf->AliasNbPages();
-	$pdf->AddPage("L","A4");
+	$pdf->AddPage();
 	$pdf->SetFont("Times","B",15);
 	$pdf->SetTitle("Borrowed Books' Report");
 	$pdf->Cell(0,10,"Borrowed Books' Report",0,1,"C");
@@ -18,7 +18,7 @@ require "dbconnect.php";
 		$pdf->Cell(35,10,"ID No.",1,0,"C");
 		$pdf->Cell(45,10,"Borrower",1,0,"C");
 		$pdf->Cell(20,10,"Acc. No.",1,0,"C");
-		$pdf->Cell(65,10,"Title",1,0,"C");
+		$pdf->Cell(50,10,"Title",1,0,"C");
 		$pdf->Cell(30,10,"Date Borrowed",1,0,"C");
 		$pdf->Cell(30,10,"Due Date",1,0,"C");
 		$pdf->Cell(30,10,"Days Overdue",1,0,"C");
@@ -50,14 +50,14 @@ require "dbconnect.php";
 			$currentdate = date("Y-m-d");
 			$duedate = $data['duedate'];
 			$booktitle = $data['booktitle'];
-			if(strlen($booktitle) > 35) {
-				$booktitle = substr($booktitle, 0, 34)."...";
+			if(strlen($booktitle) > 25) {
+				$booktitle = substr($booktitle, 0, 24)."...";
 			}
 			$pdf->SetFont("Times","",10);
 			$pdf->Cell(35,10,$data['IDNumber'],1,0,"C");
 			$pdf->Cell(45,10,$data['lastname'].", ".$data['firstname']." ".$data['mi'],1,0,"C");
 			$pdf->Cell(20,10,$data['accession_no'],1,0,"C");
-			$pdf->Cell(65,10,$booktitle,1,0,"L");
+			$pdf->Cell(50,10,$booktitle,1,0,"L");
 			$pdf->Cell(30,10,$data['dateborrowed'],1,0,"C");
 			$pdf->Cell(30,10,$duedate,1,0,"C");
 
@@ -71,7 +71,7 @@ require "dbconnect.php";
 				$betweendays = new DatePeriod($duedatetime, new DateInterval("P1D"), $currentdatetime);
 				foreach($betweendays AS $days) {
 					$day = $days->format("D");
-					if($day=="Sat" || $day=="Sun") {
+					if($day=="Sun") {
 						$daysoverdue--;
 					} else if(in_array($days->format("Y-m-d"), $holidayarray)) {
 						$daysoverdue--;
@@ -91,7 +91,7 @@ require "dbconnect.php";
 				$betweendays = new DatePeriod($duedatetime, new DateInterval("P1D"), $currentdatetime);
 				foreach($betweendays AS $days) {
 					$day = $days->format("D");
-					if($day=="Sat" || $day=="Sun") {
+					if($day=="Sun") {
 						$daysoverdue--;
 					} else if(in_array($days->format("Y-m-d"), $holidayarray)) {
 						$daysoverdue--;

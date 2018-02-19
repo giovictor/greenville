@@ -216,7 +216,7 @@
 								$betweendays = new DatePeriod($duedatetime, new DateInterval("P1D"), $currentdatetime);
 								foreach($betweendays AS $days) {
 									$day = $days->format("D");
-									if($day=="Sat" || $day=="Sun") {
+									if($day=="Sun") {
 										$daysoverdue--;
 									} else if(in_array($days->format("Y-m-d"), $holidayarray)) {
 										$daysoverdue--;
@@ -239,7 +239,7 @@
 								$betweendays = new DatePeriod($duedatetime, new DateInterval("P1D"), $currentdatetime);
 								foreach($betweendays AS $days) {
 									$day = $days->format("D");
-									if($day=="Sat" || $day=="Sun") {
+									if($day=="Sun") {
 										$daysoverdue--;
 									} else if(in_array($days->format("Y-m-d"), $holidayarray)) {
 										$daysoverdue--;

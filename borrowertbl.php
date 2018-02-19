@@ -50,8 +50,11 @@
 		$firstresult = ($page - 1) * $borrowersperpages;
 
 		$borrowerSQL = "SELECT * FROM borrower ORDER BY dateregistered DESC LIMIT $firstresult, $borrowersperpages";
-		$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
-		$borrower = mysqli_fetch_assoc($borrowerQuery);
+
+		if($rows>=1) {
+			$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
+			$borrower = mysqli_fetch_assoc($borrowerQuery);
+		}
 
 	?>
 	<div class="reportpdf">
@@ -73,8 +76,11 @@
 						<th>Status</th>
 						<th> </th>
 					</tr>
-		<?php		
-			do {
+		<?php	
+			if($rows==0) {
+				echo "<tr><td colspan='9'><center><h4>There were no registered borrowers.</h4></center></td></tr>";
+			} else if($rows>=1) {				
+				do {
 		?>
 					<tr>
 						<td>
@@ -143,6 +149,7 @@
 					</tr>
 		<?php
 				} while($borrower = mysqli_fetch_assoc($borrowerQuery));
+			}
 		?>
 		</table>
 	</div>

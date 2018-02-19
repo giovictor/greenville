@@ -59,7 +59,7 @@ require "dbconnect.php";
 				$nextday = date("D", ($dateborrowedtimestamp + $addday));
 				$nextdaydate = date("Y-m-d",($dateborrowedtimestamp + $addday));
 
-				if($nextday=="Sat" || $nextday=="Sun") {
+				if($nextday=="Sun") {
 					$i--;
 				} else if(in_array($nextdaydate, $holidaydate)) {
 					$i--;

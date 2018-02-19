@@ -44,43 +44,38 @@ if(isset($_POST['bookID']) && isset($_POST['newcopies']) && isset($_POST['booksp
 		}
 
 		if(isset($_POST['keyword']) && isset($_POST['searchtype'])) {
-			$keyword = $_POST['keyword'];
-			$searchtype = $_POST['searchtype'];
-			if($searchtype=="accession_no") {
-				$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price  FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
-			} else {
-				$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price  FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
-			}
-		} else if(isset($_POST['classification'])){
-			$classification = $_POST['classification'];
-			$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classificationID, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price  FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classification' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
+		$keyword = $_POST['keyword'];
+		$searchtype = $_POST['searchtype'];
+		if($searchtype=="accession_no") {
+			$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
+			$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
 		} else {
-			$bookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price  FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC LIMIT $firstresult, $booksperpages";
+			$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
+			$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
 		}
+	} else if(isset($_POST['classification'])) {
+		$classification = $_POST['classification'];
+		$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classificationID, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classification' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
+		$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classificationID, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE classification.classificationID='$classification' AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
+	} else if(isset($_POST['startyear']) && isset($_POST['endyear'])) {
+		$startyear = $_POST['startyear'];
+		$endyear = $_POST['endyear'];
+		$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classificationID, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE publishingyear BETWEEN $startyear AND $endyear AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
+		$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classificationID, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE publishingyear BETWEEN $startyear AND $endyear AND book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
+	} else {
+		$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR',') AS authors, publisher, publishingyear, classification, callnumber, ISBN, pages, price, COUNT(DISTINCT book.accession_no) AS copies FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC";
+		$bookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR',') AS authors, publisher, publishingyear, classification, callnumber, ISBN, pages, price, COUNT(DISTINCT book.accession_no) AS copies FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY book.accession_no DESC LIMIT $firstresult, $booksperpages";
+	}
 			$bookQuery = mysqli_query($dbconnect, $bookSQL);
 			$book = mysqli_fetch_assoc($bookQuery);
 ?>
-<?php
-	if($option=="bookID") {
-?>
-		<div class="reportbtn">
-			<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
-				<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
-				<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
-			</form>
-		</div>
-<?php
-	} else if($option=="accession_no") {
-?>
-		<div class="reportbtn">
-			<form id="printpdf" target="_blank" action="pdfbookbycopy.php" method="POST" class="form-inline">
-				<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
-				<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
-			</form>
-		</div>
-<?php
-	}
-?>
+
+<div class="reportbtn">
+	<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
+		<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
+		<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
+	</form>
+</div>
 <table class='table table-hover table-bordered table-striped' id='booktable'>
 		<tr>
 			<th>Title</th>
@@ -206,7 +201,48 @@ $(document).ready(function(){
 			});
 		});
 	<?php
-	} else {
+		} else if(isset($_POST['startyear']) && isset($_POST['endyear'])) {
+	?>
+		$("#confirmdelete").click(function(){
+			var bookid = $(this).data("id");
+			var option = $("#bookgroupby").val();
+			var booksperpages = $("#booksperpages").val();
+			var firstresult = $("#firstresult").val();
+			var startyear = $("#startyear").val();
+			var endyear = $("#endyear").val();
+			$.ajax({
+				url:"deletebook.php",
+				method:"POST",
+				data:{bookid:bookid, option:option, booksperpages:booksperpages, firstresult:firstresult, startyear:startyear, endyear:endyear},
+				beforeSend:function() {
+					$("#confirmdelete").html("Deleting Book...");
+				},
+				success:function(data) {
+					$("#deleteconfirm").modal("hide");
+					$("#confirmdelete").html("Confirm");
+					$("#bookdisplay").html(data);
+				}
+			});
+		});
+
+		$(".addbookcopy").click(function(){
+			var bookID = $(this).attr("id");
+			var booksperpages = $("#booksperpages").val();
+			var firstresult = $("#firstresult").val();
+			var startyear = $("#startyear").val();
+			var endyear = $("#endyear").val();
+			$.ajax({
+				url:"addbookcopyinfo.php",
+				method:"POST",
+				data:{bookID:bookID, booksperpages:booksperpages, firstresult:firstresult,  startyear:startyear, endyear:endyear},
+				success:function(data) {
+					$("#addcopybookdata").html(data);
+					$("#addbookcopy").modal("show");
+				}
+			});
+		});
+	<?php
+		} else {
 	?>
 		$("#confirmdelete").click(function(){
 			var bookid = $(this).data("id");

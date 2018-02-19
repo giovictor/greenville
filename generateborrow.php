@@ -37,7 +37,7 @@ if(isset($_POST['idnumber'])) {
 
 		$day = date("D");
 		$date = date("Y-m-d");
-		if($day=="Sat" || $day=="Sun") {
+		if($day=="Sun") {
 			echo "Weekends";
 		} else if(in_array($date, $holidayarray)) {
 			echo "Weekends";

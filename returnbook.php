@@ -62,7 +62,7 @@ require "dbconnect.php";
 
 			foreach($betweendates AS $dates) {
 				$date = $dates->format("D");
-				if($date=="Fri" || $date=="Sat") {
+				if($date=="Sat") {
 					$daysoverdue--;
 				} else if(in_array($dates->format("Y-m-d"), $holidayarray)) {
 					$daysoverdue--;
@@ -123,7 +123,7 @@ require "dbconnect.php";
 
 							foreach($betweendates AS $dates) {
 								$date = $dates->format("D");
-								if($date=="Fri" || $date=="Sat") {
+								if($date=="Sat") {
 									$daysoverdue--;
 								} else if(in_array($dates->format("Y-m-d"), $holidayarray)) {
 									$daysoverdue--;
@@ -136,7 +136,7 @@ require "dbconnect.php";
 					?>
 				</td>
 				<td>
-					<?php
+				<?php
 					if(strtotime($currentdate) > strtotime($booklogduedate)) {
 							$duedatetime = new Datetime($booklogduedate);
 							$currentdatetime = new Datetime($currentdate);
@@ -147,7 +147,7 @@ require "dbconnect.php";
 
 							foreach($betweendates AS $dates) {
 								$date = $dates->format("D");
-								if($date=="Fri" || $date=="Sat") {
+								if($date=="Sat") {
 									$daysoverdue--;
 								} else if(in_array($dates->format("Y-m-d"), $holidayarray)) {
 									$daysoverdue--;

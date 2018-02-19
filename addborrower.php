@@ -11,19 +11,6 @@ if(!empty($_POST)) {
 	$acctype = $_POST['accounttype'];
 
 
-	//COURSE 
-	if($course=='pa') {
-		$course="AB Public Administration";
-	} else if ($course=='english') {
-		$course="AB English";
-	} else if ($course=='psych') {
-		$course="BS Psychology";
-	} else if ($course=='elemeduc') {
-		$course="BEED";
-	} else if ($course=='secondaryeduc') {
-		$course="BSED";
-	} 
-
 	//ACCOUNT TYPE 
 	if($acctype=='Student') {
 		$acctype="Student";

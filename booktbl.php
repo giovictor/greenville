@@ -28,6 +28,14 @@
 					<input class="btn btn-success btn-sm form-control" id="aedsearchbutton" type="submit" name="mngbookbutton" value="Search">
 			</form>
 			<form style="margin-top:10px;" method="GET" class="form-inline" id="booktablesearchform">
+				<div class="form-group">
+					Filter by year range: 
+					<input class="form-control aedsearchbox startyear" type="text" name="startyear" placeholder="Start Year">
+					<input class="form-control aedsearchbox endyear" type="text" name="endyear" placeholder="End Year">
+				</div>
+				<input class="btn btn-success btn-sm form-control" id="aedsearchbutton" type="submit" name="mngbookbutton" value="Search">
+			</form>
+			<form style="margin-top:10px;" method="GET" class="form-inline" id="booktablesearchform">
 				Filter by classification:
 				<div class="form-group">
 					<select name="classification" id="classification" class="form-control">
@@ -52,8 +60,8 @@
 		<form class="form-inline">
 			<span>Group by:</span>
 			<select class="form-control" id="bookgroupby" style="width:165px;">
-				<option value="bookID">Title</option>
 				<option value="accession_no">Accession Number</option>
+				<option value="bookID">Title</option>
 			</select>
 		</form>
 	</div>
@@ -70,40 +78,45 @@
 			$page = 1;
 		} else {
 			$page = $_GET['bookpage'];
+			if($page < 1) {
+				$page = 1;
+			} else if($page > $numberofpages) {
+				$page = $numberofpages;
+			} else if(!is_numeric($page)) {
+				$page = 1;
+			} else {
+				$page = $_GET['bookpage'];
+			}
 		}
 
-		if($page < 1) {
-			$page = 1;
-		} else if($page > $numberofpages) {
-			$page = $numberofpages;
-		}
 
 		$firstresult = ($page - 1) * $booksperpages;
 		
 
-		$bookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC LIMIT $firstresult, $booksperpages";
+		$bookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY book.accession_no ORDER BY accession_no DESC LIMIT $firstresult, $booksperpages";
 		$bookQuery = mysqli_query($dbconnect, $bookSQL);
 		$book = mysqli_fetch_assoc($bookQuery);
 	?>
 	<div class="table-responsive" id='bookdisplay'>
 		<div class="reportbtn">
-			<form id="printpdf" target="_blank" action="pdfbookbytitle.php" method="POST" class="form-inline">
+			<form id="printpdf" target="_blank" action="pdfbookbycopy.php" method="POST" class="form-inline">
 				<button class="btn btn-default btn-sm">Print PDF <i class="fa fa-file-pdf-o"></i></button>
 				<input type="hidden" name="query" value="<?php echo $totalbookSQL;?>">
 			</form>
 		</div>
 		<table class='table table-hover table-bordered table-striped' id='booktable'>
 			<tr>
+				<th>Accession No.</th>
 				<th>Title</th>
 				<th>Authors</th>
 				<th>Publication Details</th>
-				<th>Copies</th>
 				<th> </th>
 			</tr>
 		<?php
 			do {
 		?>
 				<tr>
+					<td><?php echo $book['accession_no'];?></td>
 					<td>
 						<button class="btn btn-link btn-sm viewbookinfo" style="color:#1CA843;" id="<?php echo $book['accession_no'];?>">
 							<b><?php echo $book['booktitle'];?></b>
@@ -111,15 +124,11 @@
 					</td>
 					<td><?php echo $book['authors'];?></td>
 					<td><?php echo $book['publisher']." c".$book['publishingyear'];?></td>
-					<td><?php echo $book['copies'];?></td>
 					<td>
-						<button class="btn btn-primary btn-sm addbookcopy" id="<?php echo $book['bookID'];?>" data-toggle="modal" data-target="#addbookcopy" title="Add copies of book.">
-							<span class="glyphicon glyphicon-plus"></span>
-						</button>
-						<a href="?page=updatebook&bookID=<?php echo $book['bookID'];?>" class="btn btn-success btn-sm" title="Edit book.">
+						<a href="?page=updatebook&bookID=<?php echo $book['accession_no'];?>" class="btn btn-success btn-sm" title="Edit book.">
 							<span class="glyphicon glyphicon-pencil"></span>
 						</a>
-						<button data-id="<?php echo $book['bookID'];?>" class="btn btn-danger btn-sm" id="deletebook" data-toggle="modal" data-target="#deleteconfirm" title="Delete book.">
+						<button data-id="<?php echo $book['accession_no'];?>" class="btn btn-danger btn-sm" id="deletebook" data-toggle="modal" data-target="#deleteconfirm" title="Delete book.">
 							<span class="glyphicon glyphicon-trash"></span>
 						</button>
 					</td>
@@ -168,10 +177,13 @@
 		$(document).ready(function(){
 			$("#booktablesearchform").submit(function(e) {
 				var keyword = $(".aedsearchbox").val();
-				if(keyword=="") {
+				var startyear = $(".startyear").val();
+				var endyear = $(".endyear").val();
+
+				if(keyword=="" || startyear=="" || endyear=="") {
 					$("#emptysearch").modal("show");
 					e.preventDefault();
-				}
+				} 
 			});
 
 			$(document).on("click", "#deletebook", function(){

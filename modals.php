@@ -361,7 +361,7 @@
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body">
-				<p>Borrowing of books is not allowed during <b>weekends</b> or <b>holidays</b>.</p>
+				<p>Borrowing of books is not allowed during <b>Sundays</b> or <b>holidays</b>.</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-success btn-md button" data-dismiss="modal">Close</button>
@@ -377,7 +377,7 @@
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body">
-				<p>Returning of books is not allowed during <b>weekends</b> or <b>holidays</b>.</p>
+				<p>Returning of books is not allowed during <b>Sundays</b> or <b>holidays</b>.</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-success btn-md button" data-dismiss="modal">Close</button>
@@ -393,7 +393,7 @@
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body">
-				<p>Reserving of books is not allowed during <b>weekends</b> or <b>holidays</b>.</p>
+				<p>Reserving of books is not allowed during <b>Sundays</b> or <b>holidays</b>.</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-success btn-md button" data-dismiss="modal">Close</button>

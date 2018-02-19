@@ -40,7 +40,7 @@ if(isset($_POST['idnumber'])) {
 
 		$day = date("D");
 		$date = date("Y-m-d");
-		if($day=="Sat" || $day=="Sun") {
+		if($day=="Sun") {
 			echo "Weekends";
 		} else if(in_array($date, $holidayarray)) {
 			echo "Weekends";
@@ -91,7 +91,7 @@ if(isset($_POST['idnumber'])) {
 
 							foreach($betweendates AS $dates) {
 								$date = $dates->format("D");
-								if($date=="Fri" || $date=="Sat") {
+								if($date=="Sat") {
 									$daysoverdue--;
 								} else if(in_array($dates->format("Y-m-d"), $holidayarray)) {
 									$daysoverdue--;
@@ -115,7 +115,7 @@ if(isset($_POST['idnumber'])) {
 
 							foreach($betweendates AS $dates) {
 								$date = $dates->format("D");
-								if($date=="Fri" || $date=="Sat") {
+								if($date=="Sat") {
 									$daysoverdue--;
 								} else if(in_array($dates->format("Y-m-d"), $holidayarray)) {
 									$daysoverdue--;

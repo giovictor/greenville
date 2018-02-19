@@ -2,7 +2,7 @@
 include "gvcpdf.php";
 require "dbconnect.php";
 
-	$pdf = new gvcpdf();
+	$pdf = new gvcpdf("P","mm", array(215.9,279.4));
 	$pdf->AliasNbPages();
 	$pdf->AddPage();
 	$pdf->SetFont("Times","B",15);

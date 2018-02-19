@@ -48,7 +48,7 @@ if(isset($_GET['idNum'])) {
 						<td>Course:</td> 
 						<td>
 							<select name="course" class="form-control" style="width:400px;">
-								<option value="AB Public Administration""
+								<option value="AB Public Administration"
 									<?php
 										if($borrower['course']=="AB Public Administration") {
 											echo 'selected="selected"';
@@ -90,6 +90,51 @@ if(isset($_GET['idNum'])) {
 									 ?>
 
 								>BSED</option>
+								<option value="MAed"
+									<?php
+										if($borrower['course']=="MAed") {
+											echo 'selected="selected"';
+										}
+
+									 ?>
+
+								>MAed</option>
+								<option value="MPA"
+									<?php
+										if($borrower['course']=="MPA") {
+											echo 'selected="selected"';
+										}
+
+									 ?>
+
+								>MPA</option>
+								<option value="DPA"
+									<?php
+										if($borrower['course']=="DPA") {
+											echo 'selected="selected"';
+										}
+
+									 ?>
+
+								>DPA</option>
+								<option value="MBA"
+									<?php
+										if($borrower['course']=="MBA") {
+											echo 'selected="selected"';
+										}
+
+									 ?>
+
+								>MBA</option>
+								<option value="EdD"
+									<?php
+										if($borrower['course']=="EdD") {
+											echo 'selected="selected"';
+										}
+
+									 ?>
+
+								>EdD</option>
 							</select>
 						</td>
 					</tr>
@@ -120,7 +165,7 @@ if(isset($_GET['idNum'])) {
 						<td><input id="editbutton" class="btn btn-success btn-md button" type="submit" value="Edit Borrower" name="editbutton"></td>
 					</tr>
 					</table>
-					<input type="hidden" name="getidnumber" id="getidnumber" value="<?php echo $getidnumber;?>">
+					<input type="hidden" name="idnumber" id="idnumber" value="<?php echo $getidnumber;?>">
 				</form>
 			</div>
 		</div>

@@ -51,8 +51,6 @@
 				<li><a href="?page=archvsa">Archived Authors</a></li>
 				<li><a href="?page=archvsp">Archived Publishers</a></li>
 			</div>
-		<li>
-			<a href="?page=genbc"><span class="glyphicon glyphicon-barcode"></span> Generate Barcodes</a></li>
 		</li>
 		<li>
 			<a href="?page=librarysettings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>

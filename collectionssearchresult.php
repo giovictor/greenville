@@ -225,7 +225,7 @@ if(isset($_GET['searchbutton'])) {
 					?>
 							<button type="button" id="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#notallowborrow">Reserve</button>
 					<?php
-							} else if($day=="Sat" || $day=="Sun") {
+							} else if($day=="Sun") {
 					?>
 							<button type="button" id="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#weekends3">Reserve</button>
 					<?php

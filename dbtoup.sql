@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 05, 2018 at 06:20 PM
+-- Generation Time: Feb 15, 2018 at 10:42 AM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -3012,7 +3012,7 @@ CREATE TABLE `book` (
   `classificationID` int(11) DEFAULT NULL,
   `publisherID` int(11) DEFAULT NULL,
   `publishingyear` int(11) DEFAULT NULL,
-  `bookID` varchar(100) NOT NULL,
+  `bookID` varchar(200) NOT NULL,
   `barcode` varchar(30) NOT NULL,
   `status` varchar(20) NOT NULL DEFAULT 'On Shelf',
   `bookcondition` varchar(50) NOT NULL DEFAULT 'On Shelf',
@@ -3029,12 +3029,12 @@ CREATE TABLE `book` (
 --
 
 INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
-(1, 'Best Evidence : Disguise And Deception In The Assasination Of JFKennedy', 4, 6, 1980, 'E7A485439141CD1CA4BEE9CB2DD14671LIFMAC1980', '12424350', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(2, 'The Might Of Nations (world Politics In Our Time)', 10, 34, 1961, '3AF9F28CEADB479A9F48A0FA31F0C6ECSTORAN1961', '24624695', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(3, 'Fires In The Night (the Sacrifices And Significance Of The Austrian Resistance, 1938-1945)', 10, 90, 1989, 'BB1038BB70F6F821F29F8C21D0E57BABMOLWES1989', '37613153', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(4, 'You Are Not The Target ', 9, 366, 1973, '22F8E67105806C0F696D82A1E6CCA1EAARCWIL1973', '45590987', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(5, 'Americans In Transition : Life Changes As Reasons For Adult Learning', 4, 812, 1980, '0FD9F935CE4871EC8574A019BAB0C371ASLEXX1980', '51570528', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7, 'The Culture Of Western Europe (the 19th And 20th Centuries)', 10, 90, 1988, '4FBBB47E0B5552E595685D52EC4D8F1BMOSWES1988', '74450511', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(1, 'Best Evidence : Disguise And Deception In The Assasination Of JFKennedy', 4, 6, 1980, 'E7A485439141CD1CA4BEE9CB2DD14671LIFMAC1980', '12424350', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 1, NULL),
+(2, 'The Might Of Nations (world Politics In Our Time)', 10, 34, 1961, '3AF9F28CEADB479A9F48A0FA31F0C6ECSTORAN1961', '24624695', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 1, NULL),
+(3, 'Fires In The Night (the Sacrifices And Significance Of The Austrian Resistance, 1938-1945)', 10, 90, 1989, 'BB1038BB70F6F821F29F8C21D0E57BABMOLWES1989', '37613153', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 1, NULL),
+(4, 'You Are Not The Target ', 9, 366, 1973, '22F8E67105806C0F696D82A1E6CCA1EAARCWIL1973', '45590987', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 1, NULL),
+(5, 'Americans In Transition : Life Changes As Reasons For Adult Learning', 4, 812, 1980, '0FD9F935CE4871EC8574A019BAB0C371ASLEXX1980', '51570528', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 1, NULL),
+(7, 'The Culture Of Western Europe (the 19th And 20th Centuries)', 10, 90, 1988, '4FBBB47E0B5552E595685D52EC4D8F1BMOSWES1988', '74450511', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 1, NULL),
 (8, 'American Conservative Opinion Leaders', 4, 90, 1990, '16DE77F6709A677B86C0DC6134780302ROZWES1990', '84918091', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (9, 'The Challenge Of Democracy (government In America)', 10, 8, 1989, '9E603B59472526B00EE45A1DDBF09F41JANHOU1989', '93519715', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (10, 'The Challenge Of Democracy (government In America)', 10, 8, 1989, '9E603B59472526B00EE45A1DDBF09F41JANHOU1989', '101848212', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -3612,7 +3612,7 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (970, 'Pascal (Program Development With Ten Instruction Pascal Subset (TIPS) And Standard Pascal', 12, 991, 1982, '69FACE2B30FAD15D2F812BC908F9D484KENPRE1982', '9703559164', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (971, 'Operating System Concepts', 12, 1006, 1984, '0C53F1FCB485F64CCB09DAF6D9EE4102PETADD1984', '9713173260', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (972, 'Digital Computer Circuits And Concepts ', 7, 1146, 1977, 'F8FF8E69EAE7F8B98FA2FEC781815CF3DEERES1977', '9725290662', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(973, 'Computer Oriented Circuit Design ', 7, 13, 19984, 'CF32FA9402EC0EA7A1A996833B7B6EE9KUOPRE19984', '9735778428', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(973, 'Computer Oriented Circuit Design ', 7, 13, 1984, 'CF32FA9402EC0EA7A1A996833B7B6EE9KUOPRE1984', '9735778428', 'On Shelf', 'On Shelf', '', '', '', '0.00', 0, NULL),
 (975, 'System Design And Documentation (An Introduction To The HIPO Method)', 12, 998, 1976, 'C29AEA843C81C95B4203C5CF335A7646KATVAN1976', '9754257340', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (976, 'Digital Computer Circuits & Concepts ', 7, 1147, 1977, 'F155E15D640365055EFA880CB2F33D8DREERES1977', '9764617114', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (977, '16-BIT Microprocessors', 12, 1032, 1981, 'C4785E00D60256C4739DE978183DE4EDTITHOW1981', '9771522480', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -5527,7 +5527,7 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (3852, 'Financial Accounting ', 7, 1, 1998, '7B4974E61379D38F7C9FB7623BFA67E4MEIMCG1998', '38527633023', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (3853, 'Holt Introductory Algebra 2 ', 6, 120, 1993, 'DB5A86C9550B63A0A25E377527AC763CJACHOL1993', '38532081088', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (3854, 'Forbes (Great Minds Of Business) ', 7, 500, 1997, '049563CCEBFC61F258A794A6733691E1FORJOH1997', '38543932628', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(3855, 'Word Perfect 6.1 For Windows', 7, 485, 1996, '', '38555748801', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(3855, 'Word Perfect 6.1 For Windows', 7, 485, 1996, '89556009FC3A253AA1EBCB2FB12B0811O\"LMCG1996', '38555748801', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (3856, 'We The People ( A Concise Introduction To American Politics)', 10, 1, 1998, '7A28C856706CCA61DEB13F6AD644786CPATMCG1998', '38564132629', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (3857, 'Essential Microsoft Works (Tutorials For Teachers) V.2.0 And 3.0', 12, 731, 1994, '797517296EE4BA9915EC4ECC542BEFEDBERBRO1994', '38579405082', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (3858, 'Fundamentals Of Ophthalmology (a Programmed Text)', 7, 1191, 1987, '2204DE6427DCB8E94707F828D276F20AREIAME1987', '38585923948', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -5655,7 +5655,7 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (4045, 'Management', 7, 489, 1988, 'FE4DBCAB9B910577E5035E97AC068DAEALBSOU1988', '40451334448', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (4046, 'Management', 7, 489, 1988, 'FE4DBCAB9B910577E5035E97AC068DAEALBSOU1988', '40466418468', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (4047, 'Management', 7, 489, 1988, 'FE4DBCAB9B910577E5035E97AC068DAEALBSOU1988', '40476009297', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(4049, 'The Management Of Operations', 7, 500, 19887, '5B3D6CD778BD5C8A78EB3F4E21B2F3CAMERJOH19887', '40499524570', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(4049, 'The Management Of Operations', 7, 500, 1987, '5B3D6CD778BD5C8A78EB3F4E21B2F3CAMERJOH1987', '40499524570', 'On Shelf', 'On Shelf', '', '', '', '0.00', 0, NULL),
 (4050, 'The Management Of Operations', 7, 500, 1987, '5B3D6CD778BD5C8A78EB3F4E21B2F3CAMERJOH1987', '40501440932', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (4054, 'Learning (Behavior And Cognition)', 2, 695, 1990, '02A11F0813D82C885DC87EC841919DECLIEWAD1990', '40545902439', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (4055, 'Management Information Systems (A Users Perspective)', 7, 515, 1987, 'B24089C65D6CD7466B0AC1003493CB5CHICWES1987', '40559236049', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -5907,7 +5907,7 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (4791, 'Management ', 7, 463, 1987, 'FE4DBCAB9B910577E5035E97AC068DAESTOPRE1987', '47915902502', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (4793, 'Information Systems For Management ( A Book Of Readings)', 7, 490, 1991, '11D7384DC0CB916507BF270DDC86E62DWATRIC1991', '47937464438', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (4797, 'Operations Research Handbook-Standard Algorithms', 12, 999, 1977, 'DB9D79A78A661F4F8FA414BA83637070EISUNI1977', '47979007526', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(4798, 'Introduction To The Digital Computer', 12, 993, 1972, '', '47986869208', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(4798, 'Introduction To The Digital Computer', 12, 993, 1972, 'C314D8AE0B8701454070203BF853505FO\"MHOL1972', '47986869208', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (4799, 'Analog And Digital Computer Technology', 12, 1, 1960, '2978A5D7D0702E30EB89D2DE6B1CD8F7SCOMCG1960', '47993512846', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (4802, 'Fox Pro (Release Notes And Installation Instruction)', 12, 1008, 1989, '183CF394A4E5E2D0296849DC8FC6D2A6***FOX1989', '48027113826', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (4803, 'Fox Pro (Filter)', 12, 1008, 1989, '8D20039FCE0427362FA1D9396532ADD6***FOX1989', '48037036358', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -6051,9 +6051,9 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (5015, 'Psychology (An Introduction)', 2, 739, 1989, 'B7C6C95A1B68B829CBE1D3CD49ADD1B1LAHWM.1989', '50159252641', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5016, 'Psychology', 2, 722, 1988, '1D5B12153A4D4FD24EC9174051003A27LINWOR1988', '50164493581', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5017, 'Basic Psychology', 2, 727, 1968, '84B867ADB80A1A7194D38420311588C1KNDAPP1968', '50179450321', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(5018, 'Introduction To Accounting : An Integrated Approach', 7, 25, 1997, '928D80EB868978CF1BC27900402305D2AINIRW1997', '50187084940', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(5020, 'The School /Work Nexus: Transition Of Youth From School To Work', 4, NULL, 1980, 'C86EE921FB851F7C125864DF3A4828C3GIN***1980', '50207430749', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
+(5018, 'Introduction To Accounting : An Integrated Approach', 7, 25, 1997, '928D80EB868978CF1BC27900402305D2AINIRW1997', '50187084940', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
 INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
+(5020, 'The School /Work Nexus: Transition Of Youth From School To Work', 4, NULL, 1980, 'C86EE921FB851F7C125864DF3A4828C3GIN***1980', '50207430749', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5021, 'Housing The Urban Poor: The Tondo Experience', 4, NULL, 1983, '49537ABED24CD14FBF74CA95AAF109CC******1983', '50214234880', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5022, 'Financial Accounting', 7, 1, 1989, '7B4974E61379D38F7C9FB7623BFA67E4MEIMCG1989', '50224498612', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5023, 'Financial Accounting', 7, 1, 1989, '7B4974E61379D38F7C9FB7623BFA67E4MEIMCG1989', '50234650653', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -6330,9 +6330,9 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (5366, 'Visualized Basic Mechanical Drawing ', 7, 28, 1981, '2AACDD8F93B17E71CE05E0DC7CB1F634WALGLE1981', '53664404584', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5367, 'Life Science ', 6, 13, 1991, '637F2DDDBAC65725470441D8DBABB877WRIPRE1991', '53675124360', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5368, 'Life Science ', 6, 13, 1991, '637F2DDDBAC65725470441D8DBABB877WRIPRE1991', '53683678456', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(5373, 'Assignments In Exposition', 9, 444, 1950, '40B79E2EE7B1DAE4D2C237924AE47AAFRORHAR1950', '53732031540', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(5374, 'College Degrees By Mail 1997', 4, 825, 1996, 'B7725E429BFC894F392397364A6D67B0BEATEN1996', '53746197770', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
+(5373, 'Assignments In Exposition', 9, 444, 1950, '40B79E2EE7B1DAE4D2C237924AE47AAFRORHAR1950', '53732031540', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
 INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
+(5374, 'College Degrees By Mail 1997', 4, 825, 1996, 'B7725E429BFC894F392397364A6D67B0BEATEN1996', '53746197770', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5375, 'Bear\'s Guide To Earning College Degrees Nontraditionally ', 4, 818, 1997, '38D7ECB4FF613FE705DDFF747574BA69BEAC&B1997', '53755932298', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5376, 'Reference Asia (Asia\'s Who\'s Who Of Men & Women Pf Achievement)', 1, 1065, 1997, '5A0FD5AEBBD88A39A73418C21F8F6609***RIF1997', '53769793585', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5377, 'DOS, Word Perfect, And Lotus Essentials (a 3-in-1 Guide To The Most Popular PC Program)', 12, 984, 1992, '28645AACB16DF58719E38F710B0A3617BULMIK1992', '53776800049', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -6611,9 +6611,9 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (5757, 'Desktop Publishing With Pagemaker 4.0', 12, 1, 1990, '8D29D314515135766B0DD9CE8CBE563DEIAMCG1990', '57576235784', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5758, 'Desktop Publishing With Pagemaker 4.0', 12, 1, 1990, '8D29D314515135766B0DD9CE8CBE563DEIAMCG1990', '57581152440', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5759, 'Engineering Graphics Fundamentals', 7, 1, 1995, '8430B3B3176800C564AAC75B22C381EBEIDMCG1995', '57593036375', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(5760, 'Engineering Graphics Fundamentals ', 7, 1, 1995, '8430B3B3176800C564AAC75B22C381EBEIDMCG1995', '57603253127', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(5761, 'Understanding Psychology', 2, 662, 1996, '658FE53B61C0565340017F0212874389FELMCG1996', '57614047777', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
+(5760, 'Engineering Graphics Fundamentals ', 7, 1, 1995, '8430B3B3176800C564AAC75B22C381EBEIDMCG1995', '57603253127', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
 INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
+(5761, 'Understanding Psychology', 2, 662, 1996, '658FE53B61C0565340017F0212874389FELMCG1996', '57614047777', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5762, 'Understanding Psychology', 2, 662, 1996, '658FE53B61C0565340017F0212874389FELMCG1996', '57623713113', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5763, 'Understanding Psychology', 2, 662, 1996, '658FE53B61C0565340017F0212874389FELMCG1996', '57631410151', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (5764, 'Computer Graphics (Tools For Visualization)', 12, 1013, 1993, '91D2960BEDAA7882BE9371FAA53BF257FIRWM.1993', '57644632780', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -6895,9 +6895,9 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (6387, 'Transfer And Business Taxation', 4, 239, 2010, '331E697C51DD2AD24796F570A048BF70ADUC &2010', '63877785683', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6388, 'Introduction To Psychology', 2, 663, 2003, '8463D564512561EECBC3D1C4A4122BBCSMITHO2003', '63882208673', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6390, 'NSTP Resource-logbook ', 4, 239, 2008, '2EBCCF21647E7F1E2EAF5A479453D5E1LIUC &2008', '63908460923', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(6391, 'Introduction To Art Appreciation : A Textbook In Humanities…', 8, 63, 2008, '3E1325F4D05CC369B5E992F7381E053DARIC&E2008', '63915202981', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(6392, 'Kulay Rosas Ang Pintig Ng Puso : Mga Maikling Kwento', 11, 236, 2009, '0EBD3E3099457C336B43D01A62851E77TORC&E2009', '63921863855', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
+(6391, 'Introduction To Art Appreciation : A Textbook In Humanities…', 8, 63, 2008, '3E1325F4D05CC369B5E992F7381E053DARIC&E2008', '63915202981', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
 INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
+(6392, 'Kulay Rosas Ang Pintig Ng Puso : Mga Maikling Kwento', 11, 236, 2009, '0EBD3E3099457C336B43D01A62851E77TORC&E2009', '63921863855', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6393, 'Palihan : Hikayat Sa Panitikan At Malikhaing Pagsulat', 11, 236, 2008, '502C5185493ED3374CC5D2829F81B67EEVAC&E2008', '63936015122', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6394, 'Mga Panitikan Ng Pilipinas', 11, 236, 2007, '121544D455CFD173181A7941F4F013FBSANC&E2007', '63948347487', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6395, 'Beginning Algebra', 6, 566, 2006, 'D196C934BDCF8C520E1C740CB62F78ADLIAPEA2006', '63956212980', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -6920,7 +6920,7 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (6417, 'Introduction To Computers ', 12, 567, 2006, '046D664050F1D27A1E0DE86EF806C998NORMCG2006', '64171631900', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6418, 'The Good Earth', 6, 567, 2010, '417C7A685FFBD3CF8822ACADC71AECBDMCCMCG2010', '64188579887', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6419, 'Interactive Writing In Business Corresponce And Technical Reports', 5, 236, 2009, '303DC86392E162D7E8F63069D2900108CASC&E2009', '64192219004', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(6420, 'Computing Essentials : Making IT Work For You', 12, 567, 2011, '', '64204265315', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(6420, 'Computing Essentials : Making IT Work For You', 12, 567, 2011, 'F51B08BB41B6CB90F934BEF54F3797E1O\"LMCG2011', '64204265315', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6421, 'Income Taxation', 4, 239, 2009, '6BE87DFD227E85C7BD60AE1953B0F4FEADUC &2009', '64218306336', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6422, 'Study And Communication Skills ', 5, 238, 2008, 'A739DF7FE2800DDFB07A69957CA36121GUIC& 2008', '64222885103', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6423, 'Essentials Of The 1987 Constitution', 4, 239, 2005, '718206A9A764945DE4C034AE95EAC7BFSISC &2005', '64237086902', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -7173,10 +7173,10 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (6810, 'He Opened The Door Of Japan ', 10, 279, 1939, 'C9A4E5CFE3F3EA084FDF4191B85273A7CROHAR1939', '68106334735', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6811, 'The Philippines ( Priorities And Prospects For Development)', 10, 340, 1976, 'ACA681D83889970211A71F5E8E0B6BA4***INT1976', '68112465469', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6812, 'The Story Of Australia ', 10, 314, 1960, '6F7E6336890F9C2CB2B6B5FE698B3962A. A. 1960', '68128877274', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(6815, 'The Quartet Of The Tiger Moon (scenes From The People-power Apocalypse)', 10, 342, 1986, 'CABDF67040A9683280CF73294A68A7FCMANNIC1986', '68153300236', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(6816, 'Law And Psychiatry (cold War Or Entente Cordiale?)', 7, 1163, 1962, '0888780692DAC3E877EC42DB030BCEC9GLUSOC1962', '68161024600', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(6817, 'Psychotherapy And Existentialism (selected Papers On Logo Therapy)', 7, 1152, 1967, '680495B79268212252E1DF209D2A66E5FRATOU1967', '68172981613', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
+(6815, 'The Quartet Of The Tiger Moon (scenes From The People-power Apocalypse)', 10, 342, 1986, 'CABDF67040A9683280CF73294A68A7FCMANNIC1986', '68153300236', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
 INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
+(6816, 'Law And Psychiatry (cold War Or Entente Cordiale?)', 7, 1163, 1962, '0888780692DAC3E877EC42DB030BCEC9GLUSOC1962', '68161024600', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(6817, 'Psychotherapy And Existentialism (selected Papers On Logo Therapy)', 7, 1152, 1967, '680495B79268212252E1DF209D2A66E5FRATOU1967', '68172981613', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6818, 'Social Pathology', 7, 1162, 1946, 'ADF42824ED5D4C2AB81D02C0803C46CDGILD. 1946', '68189766694', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6819, 'Evaluate Yourself Business', 7, 564, 2004, 'ADDBEF531978DCCA889B8FA9691E87C5SINSTE2004', '68196397462', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (6820, 'Steps In Composition', 5, 13, 1990, '259BFDF64BBBA19FDA76E0118F5F2CD4TROPRE1990', '68201864519', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -7453,10 +7453,10 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (7144, 'Intro. To The Humanities Visual And Performing Arts', 2, 38, 2010, '5795C075BB1B82870E392CB25B95750BMARMIN2010', '71441273661', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7145, 'Minding The Arts : Arts Appreciation For Colllege', 8, 38, 2008, '070095C0D550F9D8209CFB5449A8CE90RAMMIN2008', '71453761777', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7146, 'Art Appreciation : Introduction To The Humanities', 8, 38, 2010, '01FE03E95058BBA780DA084797BABFF2TABMIN2010', '71466746687', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7147, 'General Biology', 6, 453, 2011, '84926BFC01F1EB6C0B10A6D6928B8DB7SOLCEN2011', '71472899461', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7148, 'The World Of Biology', 6, 453, 2012, '9A7FCCBBFABD2BB0E54E9522DFE6F5BDPOSCEN2012', '71484402297', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7149, 'Problems In Inorganic Chemistry', 6, 615, 2011, 'ACA8C3C7A1E1C78B0F89FE41079E5429IQBDIS2011', '71499304727', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
+(7147, 'General Biology', 6, 453, 2011, '84926BFC01F1EB6C0B10A6D6928B8DB7SOLCEN2011', '71472899461', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
 INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
+(7148, 'The World Of Biology', 6, 453, 2012, '9A7FCCBBFABD2BB0E54E9522DFE6F5BDPOSCEN2012', '71484402297', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7149, 'Problems In Inorganic Chemistry', 6, 615, 2011, 'ACA8C3C7A1E1C78B0F89FE41079E5429IQBDIS2011', '71499304727', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7150, 'Inorganic Pharmaceutical Chemistry', 6, 624, 2010, 'B60F4E8E792A5DE91E58496F4D3634DDKUMANM2010', '71505646914', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7151, 'Advanced Inorganic Chemistry', 6, 624, 2010, 'ED4996F848FD96CA4A7C5244F064C880RASANM2010', '71519774200', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7152, 'Textbook Of Bio-organic Chemistry', 6, 617, 2011, '17327946C8A3928BD6203306F0911D28IQBDIS2011', '71529796361', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -7583,7 +7583,7 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (7294, 'Handbook In Business Technology ', 7, 12, 2010, 'F2C98C7041334ABCCF4EDA7B1946CB1BABENBS2010', '72942565106', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7295, 'Field Study 5: Learning Assessment Strategies', 4, 570, 2010, '01F2D75C6B7F79C2214ABEC199E896F8LUCLOR2010', '72959257186', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7296, 'Globalization Of Higher Education', 4, 844, 2011, 'CC58AC8033D993EC55B4443DBEBAA0DDBAWAPH2011', '72969018998', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7297, 'History Of Literature Oriental Classics', 9, 459, 2010, '', '72972968873', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7297, 'History Of Literature Oriental Classics', 9, 459, 2010, '0E749A41CF39C493FCFA0B1C4174038BD\"SCYB2010', '72972968873', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7298, 'The Energetic Brain: Understanding And Managing ADHD', 4, 821, 2012, 'C27B41CC7EA5139087AE9B0A602C4F44REYJOS2012', '72986160645', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7299, 'Comparative Public Budgeting', 4, 828, 2011, '04379DD7E914ACB513AAF1AD3D2BADC6MENJON2011', '72996161943', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7300, 'Meaning In Action', 4, 822, 2011, '9E85BF3684FD632211C6134488F2DEA5WAGM.E2011', '73008468017', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -7622,14 +7622,14 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (7336, 'History Of The Sovereign Filipino', 10, 355, 2011, '408CCD47E81C62129F227F8959E91425PARHIS2011', '73369013438', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7337, 'Laboratory Manual And Workbook In General Inorganic Chemistry', 6, 161, 2003, '5D1B99B843DDE1B424C62CC9E4522E69DE GRE2003', '73373074685', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7338, 'Analytical Inorganic Chemistry', 6, 613, 2010, '22A730A91DBD0664A190A131F39F5596RAMPAC2010', '73381397804', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7339, 'Little Red Book Of Synonyms', 5, 1143, 2012, '', '73396921500', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7340, 'Little Red Book Of Antonyms', 5, 1143, 2012, '', '73408470496', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7341, 'Little Red Book Of Proverbs', 5, 1143, 2011, '', '73412488309', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7342, 'Little Red Book Of Idioms & Phrases', 5, 1143, 2011, '', '73427759283', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7343, 'Little Red Book Of Effective Speaking Skills', 5, 1143, 2011, '', '73432999365', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7339, 'Little Red Book Of Synonyms', 5, 1143, 2012, '69B05BB86118A2A5E178133A6D57E23FO\"BRUP2012', '73396921500', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7340, 'Little Red Book Of Antonyms', 5, 1143, 2012, 'CDCC645BFFCD8084B5D0FE74C7EF2A42O\"BRUP2012', '73408470496', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7341, 'Little Red Book Of Proverbs', 5, 1143, 2011, '4063FB0E7EE63476CCFA62F4CEF41F07O\"BRUP2011', '73412488309', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7342, 'Little Red Book Of Idioms & Phrases', 5, 1143, 2011, 'CBD229EB70F601F3FE8E6C4A8214F93DO\"BRUP2011', '73427759283', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7343, 'Little Red Book Of Effective Speaking Skills', 5, 1143, 2011, '30902FB5560A0705280CBCAB265F48ADO\"BRUP2011', '73432999365', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7344, 'Basic Mathematics ', 6, 577, 2011, '9A7838ECC28C5F05C3E6A13A2A1CFC19***RUP2011', '73449217747', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7345, 'Little Red Book Of Grammar Made Easy', 5, 1143, 2011, '', '73451703364', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7346, 'Little Red Book Of Prepositions', 5, 1143, 2011, '', '73466114513', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7345, 'Little Red Book Of Grammar Made Easy', 5, 1143, 2011, '48C7C52CC6868D49AA6A467610958C99O\"BRUP2011', '73451703364', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7346, 'Little Red Book Of Prepositions', 5, 1143, 2011, '6016788590CCF994EAE03B4F9C9CAACFO\"BRUP2011', '73466114513', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7347, 'Earth Talk', 6, 622, 2009, '51C819481E617EC0E3FA5FE926FC2B4F***A P2009', '73473972361', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7348, 'Panitikan Ng Pilipinas', 11, 245, 2009, '3CFDE0C673DED7BAD727D87AB372FC82AGUGRA2009', '73481937903', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7349, 'Handbook In Civic Welfare Service', 4, 867, 2012, '6F66B556A13AC6B3CB351AC6FCB00418VIRGRA2012', '73498394264', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -7731,11 +7731,11 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (7455, 'Developmental Reading : A Workbook ', 5, 44, 2013, '9F24259326525C3969BC485EE002B212SINMUT2013', '74551515455', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7456, 'Art In A Capsule : Introduction To Painting , Sculpture, Architecture And Film', 8, 44, 2011, '783674F1F85D6F5C20DF8DFE79A3201CADAMUT2011', '74562550658', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7457, 'Art Appreciation : Looking Beyond A Textbook In Humanities', 8, 44, 2009, 'C9AF069EFAB5A7E7CA9D0455FC48BF1CPASMUT2009', '74576743248', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7458, 'A Wortext In Writing In The Discipline Enhancing Basic Research', 5, 44, 2013, '149C9964AFE2AE4CA31FE95FE79CF861ANTMUT2013', '74588532306', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7458, 'A Wortext In Writing In The Discipline Enhancing Basic Research', 5, 44, 2013, '149C9964AFE2AE4CA31FE95FE79CF861ANTMUT2013', '74588532306', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
+INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
 (7459, 'Panitikan Ng Pilipinas: Historikal At Antolohikal Na Pagtalakay', 11, 44, 2009, '734FD44E3A5EB51A579EBE5129454B4AVILMUT2009', '74598028225', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7460, 'Managerial Accounting : Creating Value In A Dynamic Business Environment', 7, 1, 2010, '1D481892443C5AC7944C49F8312E5260HILMCG2010', '74604244074', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7461, 'New Venture Creation: Entrepreneurship For The 21st Century', 7, 567, 2007, 'FDDF4FA4A5D80F3DA77F241179C0443BTIMMCG2007', '74611627110', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
-INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
+(7461, 'New Venture Creation: Entrepreneurship For The 21st Century', 7, 567, 2007, 'FDDF4FA4A5D80F3DA77F241179C0443BTIMMCG2007', '74611627110', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7462, 'Business Ethics: Decision-making For Personal Integrity & Social Responsibility', 7, 567, 2008, 'A318B20AA6700F7399D305F80A14EF97HARMCG2008', '74626724774', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7463, 'Strategic Management And Business Policy', 7, 48, 2010, '023D91E1630F983F321996D02DDA40B7WHEPRE2010', '74635336465', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7468, 'Thesis Witing With Confidence', 5, 236, 2011, 'DB5FFBA2FF23DAD7E5D2F71DE2D90643BAGC&E2011', '74686175250', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -7996,11 +7996,11 @@ INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherI
 (7850, 'Learning Modules In Chemistry ', 6, 154, 2014, '8326D0F1F0B09173667E16D5B81E4565REGJIM2014', '78507492505', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7851, 'Plane Geometry With Basic Trigonometry (a Simplified Approach)', 6, 160, 2016, '49048671EC99B416276B12E1E97AAF69ENGUNL2016', '78517996320', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7852, 'Analytic Geometry (work Text)', 6, 628, 2015, '7BBC00ABAA378D374199FC13E29329A7TOLBOO2015', '78525822143', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7853, 'Analytical Geometry ', 6, 38, 2015, 'CFD2EE33354716AE595C0673A1F05EC5SIRMIN2015', '78532956658', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
+(7853, 'Analytical Geometry ', 6, 38, 2015, 'CFD2EE33354716AE595C0673A1F05EC5SIRMIN2015', '78532956658', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
+INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
 (7854, 'Nature And Culture (Environmental Issues In Asia)', 6, 629, 2014, '953B881EAB9E73CEF20B7FD27490A38D***ACA2014', '78542450059', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7855, 'Introduction To World Geography (with Geo-Politics)', 4, 161, 2016, 'CFB3928ADFD535FC69C85771A14ED9CFM.AGRE2016', '78555541379', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
-(7856, 'Educational Reform And Innovative In The Asia-Pacific: Advances In Research', 5, 1145, 2013, 'B692C4CE32A6A6F90CD6C0C5A49CCE5C***DE 2013', '78567070903', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL);
-INSERT INTO `book` (`accession_no`, `booktitle`, `classificationID`, `publisherID`, `publishingyear`, `bookID`, `barcode`, `status`, `bookcondition`, `callnumber`, `ISBN`, `pages`, `price`, `borrowcounter`, `acquisitiondate`) VALUES
+(7856, 'Educational Reform And Innovative In The Asia-Pacific: Advances In Research', 5, 1145, 2013, 'B692C4CE32A6A6F90CD6C0C5A49CCE5C***DE 2013', '78567070903', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7857, 'Web Development And Designs Foundations With HTML 5 ', 7, 566, 2016, '4119FC1BD6767FA5B1DA09F3A3AD786FMORPEA2016', '78573565099', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7858, 'The Philippines A Natural History', 4, 191, 2016, '69D5A055718DEBA0780F9FCA06547364REEATE2016', '78587785442', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
 (7859, 'Group Dynamics (Enhanced Edition)', 4, 610, 2014, '4043B5BBF692E4AD92C8216EB8C7681DFORCEN2014', '78595857769', 'On Shelf', 'On Shelf', NULL, NULL, NULL, NULL, 0, NULL),
@@ -13154,190 +13154,6 @@ INSERT INTO `classification` (`classificationID`, `classification`, `status`) VA
 -- --------------------------------------------------------
 
 --
--- Table structure for table `duplicate_tables`
---
-
-CREATE TABLE `duplicate_tables` (
-  `id` int(11) NOT NULL,
-  `accession_no` int(11) NOT NULL,
-  `booktitle` varchar(1000) NOT NULL,
-  `filename` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `duplicate_tables`
---
-
-INSERT INTO `duplicate_tables` (`id`, `accession_no`, `booktitle`, `filename`) VALUES
-(1, 3835, 'Earth Science ', 'gvc biology csv nat.csv'),
-(2, 5094, 'In Preparation For College Chemistry ', 'gvc chemistry csv nat.csv'),
-(3, 4462, 'Organic Chemistry ', 'gvc chemistry csv nat.csv'),
-(4, 7266, '12 Maikling Katha ', 'gvc filipiniana csv.csv'),
-(5, 7785, 'Jose Rizal: A College Textbook On Jose Rizal\'s Life And Writings', 'gvc filipiniana csv.csv'),
-(6, 3634, 'Filipino Sa Iba\'t Ibang Disiplina', 'gvc filipiniana csv.csv'),
-(7, 3680, 'Laur Sa Paa Ng Bundok ', 'gvc filipiniana csv.csv'),
-(8, 7098, 'Pagbasa At Pagsulat Tungo Sa Pananaliksik', 'gvc filipiniana csv.csv'),
-(9, 539, 'East-South Relations In The World Economy', 'gvc history csv.csv'),
-(10, 1763, 'The Chilean Political Process', 'gvc history csv.csv'),
-(11, 97, 'A Study Of Theses And Dissertations Conducted In Metro Manila Graduate Schools', 'gvc history csv.csv'),
-(12, 7261, 'Bright Leaf ', 'gvc literature csv.csv'),
-(13, 7784, 'Dr. Jose P. Rizal (Life, Works, And Writings)', 'gvc literature csv.csv'),
-(14, 303, 'The Human Commitment : An Anthology Of Contemporary Short Fiction', 'gvc literature csv.csv'),
-(15, 1480, 'The Art Of The Novel', 'gvc literature csv.csv'),
-(16, 1569, 'Literary Criticism: A Short History', 'gvc literature csv.csv'),
-(17, 1987, 'Exploration In Literature', 'gvc literature csv.csv'),
-(18, 1999, 'Better Compositions', 'gvc literature csv.csv'),
-(19, 3640, 'Developing Skills In Writing Academic Research And Business Correspondence', 'gvc literature csv.csv'),
-(20, 4462, 'The Scott, Foresman Handbook For Writers ', 'gvc literature csv.csv'),
-(21, 5449, 'Adventures In Reading', 'gvc literature csv.csv'),
-(22, 7036, 'Chips In World Literature ', 'gvc literature csv.csv'),
-(23, 5093, 'Quantitative Analysis ', 'gvc management csv tech.csv'),
-(24, 479, 'The Personnel Job In A Changing World ', 'gvc management csv tech.csv'),
-(25, 907, 'Computer Security ( A Management Audit Approach) ', 'gvc management csv tech.csv'),
-(26, 3096, 'MARKETING (concepts & Strategies)', 'gvc management csv tech.csv'),
-(27, 4039, 'Introduction To Management Science ', 'gvc management csv tech.csv'),
-(28, 420, 'Human Relations In Administration (text And Cases)', 'gvc management csv tech.csv'),
-(29, 2140, 'Organizational Behavior (human Behavior Book)', 'gvc management csv tech.csv'),
-(30, 273, 'The Goal ( A Process Of Ongoing Improvement)', 'gvc management csv tech.csv'),
-(31, 5006, 'Management Information Systems', 'gvc management csv tech.csv'),
-(32, 5091, 'Gregg Shorthand (College Book 2)', 'gvc management csv tech.csv'),
-(33, 5092, 'Dictation For Transcription', 'gvc management csv tech.csv'),
-(34, 5087, 'Gregg Shorthand ( For The Administrative Assistant)', 'gvc management csv tech.csv'),
-(35, 957, 'Gregg Shorthand For Colleges', 'gvc management csv tech.csv'),
-(36, 5097, 'Basic Business Finance: Text', 'gvc management csv tech.csv'),
-(37, 4471, 'Sales Force Management', 'gvc management csv tech.csv'),
-(38, 5074, 'Enable 2.1 (Advanced Topics)', 'gvc management csv tech.csv'),
-(39, 5784, 'Skills For Managerial Approach (Theory, Experience And Practice)', 'gvc management csv tech.csv'),
-(40, 6393, 'Administrative Professional: Theories & Procedures', 'gvc management csv tech.csv'),
-(41, 4962, 'An Outline Of Mathematics For General Chemistry', 'gvc math csv sci.csv'),
-(42, 3589, 'Algebra (first Course) ', 'gvc math csv sci.csv'),
-(43, 3628, 'Mathematics For Electronics (instructor’s Manual ) ', 'gvc math csv sci.csv'),
-(44, 182, 'Personal Awareness A Psychology Of Adjustment ', 'gvc philosophy csv.csv'),
-(45, 907, 'Adolescence And Youth (Psychological Development In A Changing World)  ', 'gvc philosophy csv.csv'),
-(46, 7257, 'Teacher’s Manual : Psychology ( A New Perspective)  ', 'gvc philosophy csv.csv'),
-(47, 7259, 'Holding Time (How To Eliminate Conflict, Temper Tantrums, And Sibling Rivalry, And Raise Happy, Loving, Successful Children) ', 'gvc philosophy csv.csv'),
-(48, 6932, 'Developmental Characteristics Of Young Children ', 'gvc philosophy csv.csv'),
-(49, 7353, 'Theories Of Personality', 'gvc philosophy csv.csv'),
-(50, 5065, 'Basic Psychology', 'gvc philosophy csv.csv'),
-(51, 3879, 'The Measurement And Appraisal Of Adult Intelligence', 'gvc philosophy csv.csv'),
-(52, 5074, 'Knowledge And Society (A Philosophical Approach To Modern Civilization)', 'gvc philosophy csv.csv'),
-(53, 5063, 'Psychology Today (An Introduction)', 'gvc philosophy csv.csv'),
-(54, 5068, 'Introduction To Psychology', 'gvc philosophy csv.csv'),
-(55, 6264, 'Ethics The Philosophy Of Life', 'gvc philosophy csv.csv'),
-(56, 163, 'Psychology', 'gvc philosophy csv.csv'),
-(57, 5067, 'Psychology', 'gvc philosophy csv.csv'),
-(58, 169, 'Psychology \'73-\'74 Text', 'gvc philosophy csv.csv'),
-(59, 2836, 'Introduction To Psychology(A Textbook In General Psychology)', 'gvc philosophy csv.csv'),
-(60, 3649, 'Psychology: An Introduction', 'gvc philosophy csv.csv'),
-(61, 231, 'Child Development And Personality', 'gvc philosophy csv.csv'),
-(62, 856, 'Essentials Of Psychological Testing', 'gvc philosophy csv.csv'),
-(63, 5078, 'Psychology ( An Inttroduction)', 'gvc philosophy csv.csv'),
-(64, 254, 'Of Humans: Introductory Psychology By Kongor', 'gvc philosophy csv.csv'),
-(65, 5017, 'Psychology', 'gvc philosophy csv.csv'),
-(66, 3651, 'Logic (The Basics Of Correct Reasoning)', 'gvc philosophy csv.csv'),
-(67, 2661, 'Ground And Norm Of Morality', 'gvc philosophy csv.csv'),
-(68, 858, 'The Prophet', 'gvc religion csv.csv'),
-(69, 894, 'Daedalus & Thespis', 'gvc religion csv.csv'),
-(70, 6759, 'Good News For Modern Man: The New Testament ', 'gvc religion csv.csv'),
-(71, 7237, 'The Signature Of God (Astonishing Biblical Discoveries)', 'gvc religion csv.csv'),
-(72, 4670, 'Public Administration (The Business Of Government)', 'gvc social sciences csv.csv'),
-(73, 3223, 'Social Philosophy', 'gvc social sciences csv.csv'),
-(74, 7224, 'Developing Community Capacities For Poor Budgeting And Local Government Accountability For Poverty Reduction( Localized Anti-Poverty Program II)', 'gvc social sciences csv.csv'),
-(75, 2451, 'The Philippines And The World ( Selected Essays And Speeches On Foreign Policy', 'gvc social sciences csv.csv'),
-(76, 7266, 'State-Owned Enterprises In A Mixed Economy (micro Versus Macro Economic Objectives)', 'gvc social sciences csv.csv'),
-(77, 7021, '1987 Phil. Constitution', 'gvc social sciences csv.csv'),
-(78, 7470, 'Academic Instruction For Students With Moderate And Severe Intellectual Disabilities', 'gvc social sciences csv.csv'),
-(79, 1186, 'Ang Profeta', 'gvc social sciences csv.csv'),
-(80, 6022, 'Criminal Justice', 'gvc social sciences csv.csv'),
-(81, 6024, 'Criminal Justice', 'gvc social sciences csv.csv'),
-(82, 194, 'Current Perspectives In Social Psychology', 'gvc social sciences csv.csv'),
-(83, 5025, 'Dimensions In Communication : Readings', 'gvc social sciences csv.csv'),
-(84, 5026, 'Dimensions In Communication : Readings', 'gvc social sciences csv.csv'),
-(85, 2941, 'Explorations In Social Theory And Philippine Ethnography', 'gvc social sciences csv.csv'),
-(86, 378, 'Family Planning Management / Casebook ', 'gvc social sciences csv.csv'),
-(87, 380, 'Family Planning Management / Casebook ', 'gvc social sciences csv.csv'),
-(88, 381, 'Family Planning Management / Casebook ', 'gvc social sciences csv.csv'),
-(89, 5024, 'Groups In Context : A New Perspective On Group Dynamics', 'gvc social sciences csv.csv'),
-(90, 5023, 'Human Behavor In Organizations : A Multi-disciplinary Approach', 'gvc social sciences csv.csv'),
-(91, 323, 'Intership In Teacher Education', 'gvc social sciences csv.csv'),
-(92, 4063, 'Introduction To Organizational Behavior', 'gvc social sciences csv.csv'),
-(93, 7022, 'Phillipine Gov\'t And Constitution', 'gvc social sciences csv.csv'),
-(94, 2520, 'Philosophy Of Education Concerns: Purposes, Content And Methods Of Educ.', 'gvc social sciences csv.csv'),
-(95, 342, 'Pitfalls & Planning In Student Teaching', 'gvc social sciences csv.csv'),
-(96, 340, 'Principles And Methods In Secondary Education', 'gvc social sciences csv.csv'),
-(97, 215, 'Psychology & Population', 'gvc social sciences csv.csv'),
-(98, 542, 'Qualitative Methodology', 'gvc social sciences csv.csv'),
-(99, 134, 'Readings In Asian Management', 'gvc social sciences csv.csv'),
-(100, 125, 'Rural Social Systems: A Textbook In Rural Sociology & Anthropology', 'gvc social sciences csv.csv'),
-(101, 343, 'Some Promising Practices In Improving The Education Of Teachers', 'gvc social sciences csv.csv'),
-(102, 6373, 'Taxations For Filipinos', 'gvc social sciences csv.csv'),
-(103, 111, 'The Community: An Introduction To Social System', 'gvc social sciences csv.csv'),
-(104, 5028, 'The Social Experience : Study Guide With Classic Readings', 'gvc social sciences csv.csv'),
-(105, 6843, 'Classroom Management : Preparing SPED Teachers', 'gvc social sciences csv.csv'),
-(106, 5772, 'DOS 5.0', 'z gvc computer 1.csv'),
-(107, 7019, 'Comprehensive DOS 5.0/6.0/6.2 With Wndows 3.1', 'z gvc computer 1.csv'),
-(108, 7020, 'Comprehensive DOS 5.0/6.0/6.2 With Wndows 3.1', 'z gvc computer 1.csv'),
-(109, 2047, 'Organize ( Users Manual)', 'z gvc computer 1.csv'),
-(110, 2031, 'Understanding And Using Applications Software ( DOS, Word Perfect 42 VP Planner Plus,dBase III Plus (Includes Student Version Of Wordperfect 4.2, VP Planner Plus And Dbase III Plus)', 'z gvc computer 1.csv'),
-(111, 7033, 'Microcomputer Disk Operating System', 'z gvc computer 1.csv'),
-(112, 7032, 'Microcomputer Disk Operating System', 'z gvc computer 1.csv'),
-(113, 6034, 'Living With Computers', 'z gvc computer 1.csv'),
-(114, 7016, 'Essential Computer Concepts', 'z gvc computer 1.csv'),
-(115, 6039, 'Computers (Tools For An Information Age)', 'z gvc computer 1.csv'),
-(116, 4820, 'Turbo Pascal (version 5.5)', 'z gvc computer 1.csv'),
-(117, 4829, 'Turbo Pascal (version 5.5)', 'z gvc computer 1.csv'),
-(118, 909, 'Clipper DBase III Plus Foxbase', 'z gvc computer 1.csv'),
-(119, 3916, 'Turbo Assembler (Reference Guide) V 1.0', 'z gvc computer 1.csv'),
-(120, 7007, 'Using Microcomputers ( A Complete Introduction)', 'z gvc computer 1.csv'),
-(121, 7023, 'Computers And End User Software', 'z gvc computer 1.csv'),
-(122, 7006, 'The World Of Computers And Data Processing ', 'z gvc computer 1.csv'),
-(123, 7025, 'The World Of Computers And Data Processing ', 'z gvc computer 1.csv'),
-(124, 1088, 'DBase III Plus Handbook', 'z gvc computer 1.csv'),
-(125, 7035, 'Understanding Neural Networks: Computer Explorations', 'z gvc computer 1.csv'),
-(126, 7029, 'Microcomputer System(Hardware, Assembly Lang And Pascal)', 'z gvc computer 1.csv'),
-(127, 7018, 'Pascal Plus Data Structures', 'z gvc computer 1.csv'),
-(128, 2430, 'Great Books Of The Western World ( Freud)', 'z gvc genref 1.csv'),
-(129, 29, 'Mass Communication Review Sourcebook', 'z gvc genref 1.csv'),
-(130, 3562, 'The Philippines', 'z gvc genref 1.csv'),
-(131, 3876, 'The New Webster\'s International Encyclopedia (Ra-Sp)', 'z gvc genref 1.csv'),
-(132, 3505, 'Footprints Of Assurance ', 'z gvc genref 1.csv'),
-(133, 3508, 'Sentence Making (A Writing Workbook In English As A Second Language)', 'z gvc language csv.csv'),
-(134, 3509, 'The St. Martin’s Handbook', 'z gvc language csv.csv'),
-(135, 1990, 'Phonetics ', 'z gvc language csv.csv'),
-(136, 3153, 'New Vitalized English For College Freshmen (book II)', 'z gvc language csv.csv'),
-(137, 5506, 'Latin Grammar ( For School And Colleges)', 'z gvc language csv.csv'),
-(138, 7761, 'English Plus ( An Intensive Grammar Review)', 'z gvc language csv.csv'),
-(139, 7775, 'Mother Tongue: For Teaching And Learning ', 'z gvc language csv.csv'),
-(140, 7665, 'Reading & Writing Skills ', 'z gvc language csv.csv'),
-(141, 7663, 'Guidebook For Thesis /Dissertation Writing & Research Mentoring', 'z gvc language csv.csv'),
-(142, 6758, 'Principles And Methods Of Teaching ', 'z gvc language csv.csv'),
-(143, 3391, 'The Confident Writer', 'z gvc language csv.csv'),
-(144, 7266, 'Windows CCTF (contemporary Concerns In Education, Trends And Viewpoints, Traveling Is Forever)', 'z gvc language csv.csv'),
-(145, 5123, 'Handbook Of Public Administration ', 'z gvc language csv.csv'),
-(146, 7001, 'GRAMMAR FIRST : A Communicative Way In Learning Grammar', 'z gvc language csv.csv'),
-(147, 7012, 'An Intercultural Approach To English Language Teaching', 'z gvc language csv.csv'),
-(148, 6950, 'Advanced  Composition', 'z gvc language csv.csv'),
-(149, 7175, 'Invitation To Public Speaking', 'z gvc language csv.csv'),
-(150, 7002, 'Enchancing Reading And Writing ', 'z gvc language csv.csv'),
-(151, 6989, 'Essentials Of English', 'z gvc language csv.csv'),
-(152, 7011, 'English 1: Introduction To College English', 'z gvc language csv.csv'),
-(153, 7008, 'Language Research : Principles & Application', 'z gvc language csv.csv'),
-(154, 6988, 'Competence In College English ', 'z gvc language csv.csv'),
-(155, 7003, 'Fundamentals Of Public Speaking ', 'z gvc language csv.csv'),
-(156, 7014, 'Introduction To Linguistics', 'z gvc language csv.csv'),
-(157, 3309, 'Electric Circuit Analysis ', 'gvc engineering csv tech ---.csv'),
-(158, 7017, 'Digital Fundamentals  ', 'gvc engineering csv tech ---.csv'),
-(159, 3831, 'Spread Sheet Analysis For Engineers And Scientist ', 'gvc engineering csv tech ---.csv'),
-(160, 6776, 'Revolution From The Heart', 'z gvc medical sci csv.csv'),
-(161, 5875, 'Understanding Health ', 'z gvc medical sci csv.csv'),
-(162, 6488, 'Nutrition  (concepts And Controversies)', 'z gvc medical sci csv.csv'),
-(163, 5351, 'Series 1: Basic Technical Drawing Problems ', 'z gvc tech csv.csv'),
-(164, 5686, 'The Entrepreneur', 'z gvc tech csv.csv'),
-(165, 7225, 'Personal Computer Manual ', 'z gvc tech csv.csv');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `holiday`
 --
 
@@ -14714,12 +14530,6 @@ ALTER TABLE `classification`
   ADD PRIMARY KEY (`classificationID`);
 
 --
--- Indexes for table `duplicate_tables`
---
-ALTER TABLE `duplicate_tables`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `holiday`
 --
 ALTER TABLE `holiday`
@@ -14796,11 +14606,6 @@ ALTER TABLE `borrowcart`
 ALTER TABLE `classification`
   MODIFY `classificationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
--- AUTO_INCREMENT for table `duplicate_tables`
---
-ALTER TABLE `duplicate_tables`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
---
 -- AUTO_INCREMENT for table `holiday`
 --
 ALTER TABLE `holiday`
@@ -14814,7 +14619,7 @@ ALTER TABLE `publisher`
 -- AUTO_INCREMENT for table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `reservationID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `reservationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `returncart`
 --

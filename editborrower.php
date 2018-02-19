@@ -11,19 +11,7 @@ if(!empty($_POST)) {
 	$contactnumber = $_POST['contactnumber'];
 	$course=$_POST['course'];
 	$acctype = $_POST['accounttype'];
-	$getidnumber = $_POST['idnumber'];
 
-	if($course=='pa') {
-		$course="AB Public Administration";
-	} else if ($course=='english') {
-		$course="AB English";
-	} else if ($course=='psych') {
-		$course="BS Psychology";
-	} else if ($course=='elemeduc') {
-		$course="BEED";
-	} else if ($course=='secondaryeduc') {
-		$course="BSED";
-	} 
  
 	if($acctype=='Student') {
 		$acctype="Student";
@@ -34,11 +22,11 @@ if(!empty($_POST)) {
 	if(!is_numeric($idnumber) || !is_numeric($contactnumber)) {
 		echo "Need Numeric Values";
 	} else {
-			$updateborrowerSQL = "UPDATE borrower SET IDNumber='$idnumber', lastname='$lastname', firstname='$firstname', mi='$mi', contactnumber='$contactnumber', course='$course', accounttype='$acctype' WHERE IDNumber='$getidnumber'";
+			$updateborrowerSQL = "UPDATE borrower SET lastname='$lastname', firstname='$firstname', mi='$mi', contactnumber='$contactnumber', course='$course', accounttype='$acctype' WHERE IDNumber='$idnumber'";
 			$updateborrower = mysqli_query($dbconnect, $updateborrowerSQL);
 
 
-			$borrowerSQL = "SELECT * FROM borrower WHERE IDNumber='$getidnumber'";
+			$borrowerSQL = "SELECT * FROM borrower WHERE IDNumber='$idnumber'";
 			$borrowerQuery = mysqli_query($dbconnect, $borrowerSQL);
 			$borrower = mysqli_fetch_assoc($borrowerQuery);
 ?>
@@ -53,7 +41,7 @@ if(!empty($_POST)) {
 			<table cellpadding="10">
 				<tr>
 					<td>ID Number:</td>
-					<td><input type="text" name="idnumber" class="form-control" value="<?php echo $borrower['IDNumber']; ?>" style="width:400px;"></td>
+					<td><input type="text" name="idnumber" class="form-control" value="<?php echo $borrower['IDNumber']; ?>" style="width:400px;" disabled></td>
 				</tr>
 				<tr>
 					<td>Contact No: </td>
@@ -117,6 +105,51 @@ if(!empty($_POST)) {
 								 ?>
 
 							>BSED</option>
+							<option value="MAed"
+									<?php
+										if($borrower['course']=="MAed") {
+											echo 'selected="selected"';
+										}
+
+									 ?>
+
+								>MAed</option>
+								<option value="MPA"
+									<?php
+										if($borrower['course']=="MPA") {
+											echo 'selected="selected"';
+										}
+
+									 ?>
+
+								>MPA</option>
+								<option value="DPA"
+									<?php
+										if($borrower['course']=="DPA") {
+											echo 'selected="selected"';
+										}
+
+									 ?>
+
+								>DPA</option>
+								<option value="MBA"
+									<?php
+										if($borrower['course']=="MBA") {
+											echo 'selected="selected"';
+										}
+
+									 ?>
+
+								>MBA</option>
+								<option value="EdD"
+									<?php
+										if($borrower['course']=="EdD") {
+											echo 'selected="selected"';
+										}
+
+									 ?>
+
+								>EdD</option>
 						</select>
 					</td>
 				</tr>

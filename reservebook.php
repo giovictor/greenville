@@ -38,7 +38,7 @@ include "modals.php";
 		$nextday = date("D", ($datetimestamp + $addday));
 		$nextdaydate = date("Y-m-d",($datetimestamp + $addday));
 
-		if($nextday=="Sat" || $nextday=="Sun") {
+		if($nextday=="Sun") {
 			$i--;
 		} else if(in_array($nextdaydate, $holidaydate)) {
 			$i--;
@@ -176,7 +176,7 @@ include "modals.php";
 			?>
 					<button type="button" id="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#notallowborrow">Reserve</button>
 			<?php
-					} else if($day=="Sat" || $day=="Sun") {
+					} else if($day=="Sun") {
 			?>
 					<button type="button" id="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#weekends3">Reserve</button>
 			<?php
