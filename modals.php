@@ -418,6 +418,22 @@
 	</div>
 </div>
 
+<div class="modal fade" id="invalidyearsearch">
+	<div class="modal-dialog alertmodal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<p>Invalid year.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success btn-md button" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="modal fade" id="invalidsearch">
 	<div class="modal-dialog alertmodal">
 		<div class="modal-content">
@@ -1009,7 +1025,7 @@
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body">
-				<p>Some fields need numeric values. (ID Number, Contact Number)</p>
+				<p>Some fields need numeric values. (Contact Number)</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-success btn-md button" data-dismiss="modal">Close</button>

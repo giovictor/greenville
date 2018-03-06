@@ -27,7 +27,7 @@
 					</div>
 					<input class="btn btn-success btn-sm form-control" id="aedsearchbutton" type="submit" name="mngbookbutton" value="Search">
 			</form>
-			<form style="margin-top:10px;" method="GET" class="form-inline" id="booktablesearchform">
+			<form style="margin-top:10px;" method="GET" class="form-inline" id="booktableyearsearchform">
 				<div class="form-group">
 					Filter by year range: 
 					<input class="form-control aedsearchbox startyear" type="text" name="startyear" placeholder="Start Year">
@@ -180,7 +180,17 @@
 				var startyear = $(".startyear").val();
 				var endyear = $(".endyear").val();
 
-				if(keyword=="" || startyear=="" || endyear=="") {
+				if(keyword=="") {
+					$("#emptysearch").modal("show");
+					e.preventDefault();
+				} 
+			});
+
+			$("#booktableyearsearchform").submit(function(e) {
+				var startyear = $(".startyear").val();
+				var endyear = $(".endyear").val();
+
+				if(startyear=="" || endyear=="") {
 					$("#emptysearch").modal("show");
 					e.preventDefault();
 				} 

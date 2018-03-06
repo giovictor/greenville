@@ -25,7 +25,7 @@ if(!empty($_POST)) {
 	$password = substr($idnumber, 6, 5);
 	$passwordmd5 = md5($password);
 
-	if(!is_numeric($idnumber) || !is_numeric($contactnumber)) {
+	if(!is_numeric($contactnumber)) {
 		echo "Need Numeric Values";
 	} else {
 

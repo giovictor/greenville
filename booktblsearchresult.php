@@ -57,11 +57,11 @@
 					</div>
 					<input class="btn btn-success btn-sm form-control" id="aedsearchbutton" type="submit" name="mngbookbutton" value="Search">
 			</form>
-			<form style="margin-top:10px;" method="GET" class="form-inline" id="booktablesearchform">
+			<form style="margin-top:10px;" method="GET" class="form-inline" id="booktableyearsearchform">
 				<div class="form-group">
 					Filter by year range: 
-					<input class="form-control aedsearchbox startyear" type="text" name="startyear" placeholder="Start Year">
-					<input class="form-control aedsearchbox endyear" type="text" name="endyear" placeholder="End Year">
+					<input class="form-control startyear" type="text" name="startyear" placeholder="Start Year">
+					<input class="form-control endyear" type="text" name="endyear" placeholder="End Year">
 				</div>
 				<input class="btn btn-success btn-sm form-control" id="aedsearchbutton" type="submit" name="mngbookbutton" value="Search">
 			</form>
@@ -164,13 +164,16 @@
 				$endyear = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['endyear']));
 
 				if(!is_numeric($startyear) && !is_numeric($endyear)) {
-					echo "Invalid Year.";
+					echo "Invalid Year";
 				} else {
 					$totalbookSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classificationID, classification.classification, publishingyear, ISBN, book.status, COUNT(DISTINCT book.accession_no) AS copies, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE publishingyear BETWEEN $startyear AND $endyear AND book.status!='Archived' GROUP BY book.accession_no ORDER BY book.accession_no DESC";
 					$booksperpages = 10;
 					$totalbookQuery = mysqli_query($dbconnect, $totalbookSQL);
 					$totalbookresults = mysqli_num_rows($totalbookQuery);
-					$numberofpages = ceil($totalbookresults/$booksperpages);
+
+					if($totalbookresults>=1) {
+						$numberofpages = ceil($totalbookresults/$booksperpages);
+					}
 
 					if(!isset($_GET['bookpage'])) {
 						$page = 1;
@@ -374,12 +377,22 @@
 		$(document).ready(function(){
 			$("#booktablesearchform").submit(function(e) {
 				var keyword = $(".aedsearchbox").val();
-				var startyear = $(".startyear").val();
-				var endyear = $(".endyear").val();
-				if(keyword=="" || startyear=="" || endyear=="") {
+				if(keyword=="") {
 					$("#emptysearch").modal("show");
 					e.preventDefault();
 				} 
+			});
+
+
+			$("#booktableyearsearchform").submit(function(e) {
+				var startyear = $(".startyear").val();
+				var endyear = $(".endyear").val();
+
+				if(startyear=="" || endyear=="") {
+					$("#emptysearch").modal("show");
+					e.preventDefault();
+				} 
+
 			});
 
 			$(document).on("click", "#deletebook", function(){
