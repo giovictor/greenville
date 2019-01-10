@@ -1,50 +1,12 @@
-/*============================MEDIA QUERIES========================
-320px (Nokia Lumia 520, iPhone 4, iPhone 5)
-360px (Galaxy Series)
-375px (iPhone 6, iPhone 7, iPhone 8, iPhone X)
-414px (iPhone 6 Plus, iPhone 7 Plus, iPhone 8 Plus)
-768px (iPad)
-
-
-        .advancedsearch {
-            margin: 0;
-            width: 100%;
-            padding-left: 30px;
-        }
-        .advancedsearch .selectsearchtype {
-            width: 140px;
-            display: inline;
-        }
-        .searchbox {
-            width: 200px;
-            display: inline;
-        }
-        .andor {
-            width: 100px;
-            display: inline;
-        }
-
-*/
-
-@media screen and (max-width:950px) {
-    #homepageslider .carousel-inner .item img {
-        height: 300px;
-    }
-}
-
 @media screen and (max-width:768px) {
-    /*HOMEPAGE*/
-    #sidebar {
-        float: none;
-        width: 100%;
-    }
     .basicsearch {
         margin: 0;
         width: 100%;
         height: 230px;
         padding-left: 30px;
     }
-      #basicsearchbox {
+
+    #basicsearchbox {
         width: 450px;
         display: inline;
     }
@@ -54,19 +16,3 @@
     }
 }
 
-@media screen and (max-width:572px) {
-    .basicsearch {
-        margin: 0;
-        width: 100%;
-        height: 230px;
-        padding-left: 20px;
-    }
-    #basicsearchbox {
-        width: 350px;
-        display: inline;
-    }
-    .selectsearchtype {
-        width: 150px;
-        display: inline;
-    }
-}

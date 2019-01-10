@@ -40,8 +40,6 @@
 							?>
 						</ul>
 					</li>
-					<li><a href="?page=newcollections">New Acquisitions</a></li>
-					<li><a href="?page=top10books">Top 10 Books</a></li>
 			<?php
 				}
 			

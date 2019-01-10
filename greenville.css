@@ -419,11 +419,8 @@ body {
 
 .basicsearch {
 	background-color:#E8E6E6;
-	height:200px;
-	margin-top:20px; 
-	padding-left:5%;
-	padding-top:20px;
-	margin-left:27%;
+	margin:10px 0; 
+	padding:50px 50px;
 }
 .basicsearch .form-group:nth-child(1) {
 	padding-bottom:10px;
@@ -498,7 +495,7 @@ input[id=resetbutton] {
 }
 .resultsbar {
 	margin-top:20px;
-	background-color:FAD1#E5;
+	background-color:#E5FAD1;
 	height:35px;
 	padding:5px;
 }
