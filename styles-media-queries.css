@@ -1,0 +1,18 @@
+@media screen and (max-width:768px) {
+    #gvcnavbarcollapse {
+        padding:0;
+    }
+
+    #navbarright {
+        margin:0;
+    }
+
+    #navbarright .dropdown-items {
+        padding-left: 30px;
+    }
+
+    #navbarright .open a, #navbarright .open a:active {
+        background-color:#1C8A43;
+    }  
+}
+

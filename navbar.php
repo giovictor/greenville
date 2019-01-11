@@ -26,19 +26,10 @@
 			?>
 					<li><a href="index.php">HOME</a></li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="#" class="dropdown-toggle">
 							Classifications
 							<div class="caret"></div>
 						</a>
-						<ul class="dropdown-menu">
-							<?php
-								do {
-							?>
-									<li><a href="?page=collections&classificationID=<?php echo $classification['classificationID'];?>"><?php echo $classification['classification'];?></a></li>
-							<?php
-								} while($classification = mysqli_fetch_assoc($classificationQuery));
-							?>
-						</ul>
 					</li>
 			<?php
 				}
@@ -54,7 +45,6 @@
 						<ul class="dropdown-menu">
 							<li><a href="?page=reservations">Reservations</a></li>
 							<li><a href="?page=borrowerbooklogs">Book Logs</a></li>
-							<!--<li><a href="#">Edit Profile</a></li>-->
 							<li><a data-toggle="modal" data-target="#changepassword">Change Password</a></li>
 							<li><a href="sessionunset.php">Log Out</a></li>
 						</ul>
@@ -65,8 +55,6 @@
 					<li class="dropdown">
 						<a href="#" data-toggle="dropdown" class="dropdown-toggle"><?php echo $_SESSION['librarian'];?> <div class="caret"></div></a>
 						<ul class="dropdown-menu">
-							<!--<li><a href="#">Edit Profile</a></li>
-							<li><a data-toggle="modal" data-target="#changepassword">Change Password</a></li>-->
 							<li><a href="sessionunset.php">Log Out</a></li>
 						</ul>
 					</li>
@@ -76,5 +64,14 @@
 		</ul>
 	</div>
 </nav>
+<ul class="dropdown-items">
+	<?php
+		do {
+	?>
+			<li><a href="?page=collections&classificationID=<?php echo $classification['classificationID'];?>"><?php echo $classification['classification'];?></a></li>
+	<?php
+		} while($classification = mysqli_fetch_assoc($classificationQuery));
+	?>
+</ul>
 
 

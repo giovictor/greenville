@@ -7,10 +7,12 @@
     <link rel="icon" href="pics/gvclogo.png" sizes="16x16">
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="greenville.css">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="styles-media-queries.css">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Ubuntu" rel="stylesheet">
 	<script src="jquery-3.2.0.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>   
+	<script src="scripts.js"></script>   
 	<?php if(!isset($_GET['page'])) { echo '<title>Greenville College Library</title>'; } ?>
 </head>
 	<body>
