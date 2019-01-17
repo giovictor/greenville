@@ -10,13 +10,13 @@
 	</ol>
 
 	<div class="carousel-inner">
-		<div class="item active"><img src="pics/carousel1.jpg"></div>
-		<div class="item"><img src="pics/carousel2.jpg"></div>
-		<div class="item"><img src="pics/carousel3.jpg"></div>
-		<div class="item"><img src="pics/carousel4.jpg"></div>
-		<div class="item"><img src="pics/carousel5.jpg"></div>
-		<div class="item"><img src="pics/carousel6.jpg"></div>
-		<div class="item"><img src="pics/carousel7.jpg"></div>
+		<div class="item active"><img src="images/carousel1.jpg"></div>
+		<div class="item"><img src="images/carousel2.jpg"></div>
+		<div class="item"><img src="images/carousel3.jpg"></div>
+		<div class="item"><img src="images/carousel4.jpg"></div>
+		<div class="item"><img src="images/carousel5.jpg"></div>
+		<div class="item"><img src="images/carousel6.jpg"></div>
+		<div class="item"><img src="images/carousel7.jpg"></div>
 	</div>
 
 	<a href="#homepageslider" role="button" class="left carousel-control" data-slide="prev">

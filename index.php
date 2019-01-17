@@ -4,21 +4,20 @@
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="pics/gvclogo.png" sizes="16x16">
-	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="styles.css">
-	<link rel="stylesheet" href="styles-media-queries.css">
+    <link rel="icon" href="images/gvclogo.png" sizes="16x16">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/media-queries.css">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Ubuntu" rel="stylesheet">
-	<script src="jquery-3.2.0.js"></script>
-	<script src="bootstrap/js/bootstrap.min.js"></script>   
-	<script src="scripts.js"></script>   
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>   
+	<script src="js/scripts.js"></script>   
 	<?php if(!isset($_GET['page'])) { echo '<title>Greenville College Library</title>'; } ?>
 </head>
 	<body>
 		<div id="container">
 			<?php
-				ob_start();
 				session_start();
 				include "navbar.php";
 			?>
@@ -181,202 +180,193 @@
 				</script>
 			</div>
 
-			<div id="adminsidebar">
-				<?php
-					if(isset($_SESSION['librarian'])) {
-						include "sidebar.php";
-					}
-				?>
-			</div>
+			<?php
+				/* Admin Sidebar */
+				if(isset($_SESSION['librarian'])) {
+					include "sidebar.php";
+				}
+			?>
 
 			<div class="wrapper">
-				<div id="mainpages">
-					<?php
-						if(!isset($_GET['page']) && !isset($_GET['basicsearch']) && !isset($_GET['collectionssearch']) && !isset($_GET['homesearch']) && !isset($_GET['mngbooksearch']) && !isset($_GET['classification']) && !isset($_GET['startyear']) && !isset($_GET['endyear']) && !isset($_GET['mngborrowersearch']) && !isset($_GET['asearch']) && !isset($_GET['psearch']) && !isset($_GET['csearch']) && !isset($_GET['reservedate']) && !isset($_GET['expdate']) && !isset($_GET['dateborrowed']) && !isset($_GET['duedate']) && !isset($_GET['borrower']) && !isset($_GET['book']) && !isset($_GET['datereturned']) && !isset($_GET['logintime']) && !isset($_GET['logouttime']) && !isset($_GET['logindate']) && !isset($_GET['logoutdate']) && !isset($_GET['archivedcsearch']) && !isset($_GET['archivedasearch']) && !isset($_GET['archivedpsearch']) && !isset($_GET['archivedborrowersearch']) && !isset($_GET['archivedbooksearch']) && !isset($_GET['archivedbookclassification']) && !isset($_GET['archivedreservedate']) && !isset($_GET['archivedexpdate']) && !isset($_GET['archivedborrower']) && !isset($_GET['archivedbook']) && !isset($_GET['archiveddateborrowed']) && !isset($_GET['archivedatereturned']) && !isset($_GET['archivedlogindate']) && !isset($_GET['archivedlogintime']) && !isset($_GET['archivedlogoutdate']) && !isset($_GET['archivedlogouttime'])) {
-							if(isset($_SESSION['borrower']) || empty($_SESSION)) {
-								include "homepageslider.php";					
-								include "basicsearch.php";
-							} else if(isset($_SESSION['librarian'])) {
-								include "dashboard.php";
-							}
-						} 
-					?>
-				</div>
+				<?php
+					/* Homepage Views */
+					if(!isset($_GET['page']) && !isset($_GET['basicsearch']) && !isset($_GET['collectionssearch']) && !isset($_GET['homesearch']) && !isset($_GET['mngbooksearch']) && !isset($_GET['classification']) && !isset($_GET['startyear']) && !isset($_GET['endyear']) && !isset($_GET['mngborrowersearch']) && !isset($_GET['asearch']) && !isset($_GET['psearch']) && !isset($_GET['csearch']) && !isset($_GET['reservedate']) && !isset($_GET['expdate']) && !isset($_GET['dateborrowed']) && !isset($_GET['duedate']) && !isset($_GET['borrower']) && !isset($_GET['book']) && !isset($_GET['datereturned']) && !isset($_GET['logintime']) && !isset($_GET['logouttime']) && !isset($_GET['logindate']) && !isset($_GET['logoutdate']) && !isset($_GET['archivedcsearch']) && !isset($_GET['archivedasearch']) && !isset($_GET['archivedpsearch']) && !isset($_GET['archivedborrowersearch']) && !isset($_GET['archivedbooksearch']) && !isset($_GET['archivedbookclassification']) && !isset($_GET['archivedreservedate']) && !isset($_GET['archivedexpdate']) && !isset($_GET['archivedborrower']) && !isset($_GET['archivedbook']) && !isset($_GET['archiveddateborrowed']) && !isset($_GET['archivedatereturned']) && !isset($_GET['archivedlogindate']) && !isset($_GET['archivedlogintime']) && !isset($_GET['archivedlogoutdate']) && !isset($_GET['archivedlogouttime'])) {
+						if(isset($_SESSION['borrower']) || empty($_SESSION)) {
+							include "homepageslider.php";					
+							include "basicsearch.php";
+						} else if(isset($_SESSION['librarian'])) {
+							include "dashboard.php";
+						}
+					} 
+				?>
 					
-
-				<div class="collection">
-					<?php
-						if(isset($_GET['page'])) {
-							$page=$_GET['page'];
-							if($page=="collections") {
-								include "collectionssearch.php";
-								include "collections.php";
-							} 
+				<?php
+					/* Collections View */
+					if(isset($_GET['page'])) {
+						$page=$_GET['page'];
+						if($page=="collections") {
+							include "collectionssearch.php";
+							include "collections.php";
 						} 
-					?>
-				</div>
+					} 
+				?>
 				
-				<div class="searchresult">
-					<?php
-						if(isset($_GET['basicsearch'])) {
+				<?php
+					/* Search Results View */
+					if(isset($_GET['basicsearch'])) {
 						include "basicsearchresult.php";
-						} else if(isset($_GET['mngbooksearch']) || isset($_GET['classification']) || isset($_GET['startyear']) || isset($_GET['endyear'])) {
+					} else if(isset($_GET['mngbooksearch']) || isset($_GET['classification']) || isset($_GET['startyear']) || isset($_GET['endyear'])) {
 						include "booktblsearchresult.php";
-						} else if(isset($_GET['mngborrowersearch'])) {
+					} else if(isset($_GET['mngborrowersearch'])) {
 						include "borrowertblsearchresult.php";
-						} else if(isset($_GET['asearch'])) {
+					} else if(isset($_GET['asearch'])) {
 						include "manageauthorsearchresults.php";
-						} else if(isset($_GET['psearch'])) {
+					} else if(isset($_GET['psearch'])) {
 						include "managepublishersearchresults.php";
-						} else if(isset($_GET['csearch'])) {
+					} else if(isset($_GET['csearch'])) {
 						include "manageclassificationsearchresults.php";
-						} else if(isset($_GET['book']) && isset($_GET['borrower']) && isset($_GET['reservedate']) && isset($_GET['expdate'])) {
+					} else if(isset($_GET['book']) && isset($_GET['borrower']) && isset($_GET['reservedate']) && isset($_GET['expdate'])) {
 						include "viewreservationssearchresults.php";
-						} else if(isset($_GET['book']) && isset($_GET['borrower']) && isset($_GET['dateborrowed']) && isset($_GET['duedate'])) {
+					} else if(isset($_GET['book']) && isset($_GET['borrower']) && isset($_GET['dateborrowed']) && isset($_GET['duedate'])) {
 						include "viewborrowedsearchresults.php";
-						} else if(isset($_GET['book']) && isset($_GET['borrower']) && isset($_GET['dateborrowed']) && isset($_GET['datereturned'])) {
+					} else if(isset($_GET['book']) && isset($_GET['borrower']) && isset($_GET['dateborrowed']) && isset($_GET['datereturned'])) {
 						include "booklogssearchresults.php";
-						} else if(isset($_GET['book']) && isset($_GET['duedate']) && isset($_GET['dateborrowed']) && isset($_GET['datereturned'])) {
+					} else if(isset($_GET['book']) && isset($_GET['duedate']) && isset($_GET['dateborrowed']) && isset($_GET['datereturned'])) {
 						include "borrowerbooklogssearchresults.php";
-						} else if (isset($_GET['borrower']) && isset($_GET['logintime']) && isset($_GET['logouttime']) && isset($_GET['logindate']) && isset($_GET['logoutdate'])) {
+					} else if (isset($_GET['borrower']) && isset($_GET['logintime']) && isset($_GET['logouttime']) && isset($_GET['logindate']) && isset($_GET['logoutdate'])) {
 						include "borrowerlogssearchresults.php";
-						} else if(isset($_GET['archivedcsearch'])) {
+					} else if(isset($_GET['archivedcsearch'])) {
 						include "archivedclassificationssearchresults.php";
-						} else if(isset($_GET['archivedasearch'])) {
+					} else if(isset($_GET['archivedasearch'])) {
 						include "archivedauthorssearchresults.php";
-						} else if(isset($_GET['archivedpsearch'])) {
+					} else if(isset($_GET['archivedpsearch'])) {
 						include "archivedpublisherssearchresults.php";
-						} else if(isset($_GET['archivedborrowersearch'])) {
+					} else if(isset($_GET['archivedborrowersearch'])) {
 						include "archivedborrowerssearchresults.php";
-						}  else if(isset($_GET['archivedbooksearch']) || isset($_GET['archivedbookclassification'])) {
+					}  else if(isset($_GET['archivedbooksearch']) || isset($_GET['archivedbookclassification'])) {
 						include "archivedbookssearchresults.php";
-						} else if(isset($_GET['archivedreservedate']) && isset($_GET['archivedexpdate']) && isset($_GET['archivedborrower']) && isset($_GET['archivedbook'])) {
+					} else if(isset($_GET['archivedreservedate']) && isset($_GET['archivedexpdate']) && isset($_GET['archivedborrower']) && isset($_GET['archivedbook'])) {
 						include "archivedreservationssearchresults.php";
-						} else if(isset($_GET['archiveddateborrowed']) && isset($_GET['archiveddatereturned']) && isset($_GET['archivedborrower']) && isset($_GET['archivedbook'])) {
+					} else if(isset($_GET['archiveddateborrowed']) && isset($_GET['archiveddatereturned']) && isset($_GET['archivedborrower']) && isset($_GET['archivedbook'])) {
 						include "archivedbooklogssearchresults.php";
-						} else if(isset($_GET['archivedborrower']) && isset($_GET['archivedlogindate']) && isset($_GET['archivedlogintime']) && isset($_GET['archivedlogoutdate']) && isset($_GET['archivedlogouttime'])) {
+					} else if(isset($_GET['archivedborrower']) && isset($_GET['archivedlogindate']) && isset($_GET['archivedlogintime']) && isset($_GET['archivedlogoutdate']) && isset($_GET['archivedlogouttime'])) {
 						include "archivedborrowerlogssearchresults.php";
-						} else if(isset($_GET['collectionssearch'])) {
+					} else if(isset($_GET['collectionssearch'])) {
 						include "collectionssearchresult.php";
+					}
+				?>
+
+				<?php
+					/* Admin Views */
+					if(isset($_GET['page'])) {
+						$page=$_GET['page'];
+						if($page=='addbook') {
+							include "managebook.php";
+						} else if($page=='editbook') {
+							include "editbook.php";
+						} else if($page=='addborrower') {
+							include "manageborrower.php";
+						} else if($page=='addborrower') {
+							include "addborrower.php";
+						} else if($page=='editupdateborrower') {
+							include "editupdateborrower.php";
+						} else if($page=='editborrower') {
+							include "editborrower.php";
+						} else if($page=='deleteborrower') {
+							include "deleteborrower.php";
+						} else if($page=='vrs') {
+							include "viewreservations.php";
+						} else if($page=='bklogs') {
+							include "booklogs.php";
+						} else if($page=='classifications') {
+							include "manageclassifications.php";
+						} else if($page=='authors') {
+							include "manageauthors.php";
+						} else if($page=='publishers') {
+							include "managepublishers.php";
+						} else if($page=='editclassification') {
+							include "editupdateclassification.php";
+						} else if($page=='editauthor') {
+							include "editupdateauthor.php";
+						} else if($page=='editpublisher') {
+							include "editupdatepublisher.php";
+						} else if($page=='vbr') {
+							include "viewborrowed.php";
+						} else if($page=='archvs') {
+							include "managearchives.php";
+						} else if($page=='archvsc') {
+							include "archivedclassifications.php";
+						} else if($page=='archvsa') {
+							include "archivedauthors.php";
+						} else if($page=='archvsp') {
+							include "archivedpublishers.php";
+						} else if($page=='archvsbklogs') {
+							include "archivedbooklogs.php";
+						} else if($page=='archvsrs') {
+							include "archivedreservations.php";
+						} else if($page=='brlogs') {
+							include "borrowerlogs.php";
+						} else if($page=='archvsbrlogs') {
+							include "archivedborrowerlogs.php";
+						} else if($page=='archvsbooks') {
+							include "archivedbooks.php";
+						} else if($page=='archvsborrowers') {
+							include "archivedborrowers.php";
+						} else if($page=='librarysettings') {
+							include "settings.php";
+						} else if($page=='editupdateholiday') {
+							include "editupdateholiday.php";
+						} else if($page=='updatebook') {
+							include "updatebook.php";
+						} else if($page=='genbc') {
+							include "barcodegenerator.php";
+						} else if($page=='books') {
+							include "booktbl.php";
+						} else if($page=='borrowers') {
+							include "borrowertbl.php";
 						}
-					?>
-				</div>
+					}
+				?>
+			
+				<?php
+					/* Book Transaction Views */
+					if(isset($_GET['page'])) {
+						$page=$_GET['page'];
+						if($page=='chkreservebook') {
+							include "chkreservebook.php";
+						} else if($page=='reservations') {
+							include "borrowerreservations.php";
+						} else if($page=='borrowerbooklogs') {
+							include "borrowerbooklogs.php";
+						} else if($page=='chkcancelreserve') {
+							include "chkborrowercancelreserve.php";
+						} else if($page=='borrowbook') {
+							include "manageborrowbook.php";
+							include "reserveexpire.php";
+						} else if($page=='chkborrowbook') {
+							include "chkborrowbook.php";
+						} else if($page=='returnbook') {
+							include "managereturnbook.php";
+						} 
+					}
 
-				<div class="adminforms">
-					<?php
-						if(isset($_GET['page'])) {
-							$page=$_GET['page'];
-							if($page=='addbook') {
-								include "managebook.php";
-							} else if($page=='editbook') {
-								include "editbook.php";
-							} else if($page=='addborrower') {
-								include "manageborrower.php";
-							} else if($page=='addborrower') {
-								include "addborrower.php";
-							} else if($page=='editupdateborrower') {
-								include "editupdateborrower.php";
-							} else if($page=='editborrower') {
-								include "editborrower.php";
-							} else if($page=='deleteborrower') {
-								include "deleteborrower.php";
-							} else if($page=='vrs') {
-								include "viewreservations.php";
-							} else if($page=='bklogs') {
-								include "booklogs.php";
-							} else if($page=='classifications') {
-								include "manageclassifications.php";
-							} else if($page=='authors') {
-								include "manageauthors.php";
-							} else if($page=='publishers') {
-								include "managepublishers.php";
-							} else if($page=='editclassification') {
-								include "editupdateclassification.php";
-							} else if($page=='editauthor') {
-								include "editupdateauthor.php";
-							} else if($page=='editpublisher') {
-								include "editupdatepublisher.php";
-							} else if($page=='vbr') {
-								include "viewborrowed.php";
-							} else if($page=='archvs') {
-								include "managearchives.php";
-							} else if($page=='archvsc') {
-								include "archivedclassifications.php";
-							} else if($page=='archvsa') {
-								include "archivedauthors.php";
-							} else if($page=='archvsp') {
-								include "archivedpublishers.php";
-							} else if($page=='archvsbklogs') {
-								include "archivedbooklogs.php";
-							} else if($page=='archvsrs') {
-								include "archivedreservations.php";
-							} else if($page=='brlogs') {
-								include "borrowerlogs.php";
-							} else if($page=='archvsbrlogs') {
-								include "archivedborrowerlogs.php";
-							} else if($page=='archvsbooks') {
-								include "archivedbooks.php";
-							} else if($page=='archvsborrowers') {
-								include "archivedborrowers.php";
-							} else if($page=='librarysettings') {
-								include "settings.php";
-							} else if($page=='editupdateholiday') {
-								include "editupdateholiday.php";
-							} else if($page=='updatebook') {
-								include "updatebook.php";
-							} else if($page=='genbc') {
-								include "barcodegenerator.php";
-							} else if($page=='books') {
-								include "booktbl.php";
-							} else if($page=='borrowers') {
-								include "borrowertbl.php";
-							}
-						}
-					?>
-
-				</div>
-
-				<div class="transactions">
-					<?php
-						if(isset($_GET['page'])) {
-							$page=$_GET['page'];
-							if($page=='chkreservebook') {
-								include "chkreservebook.php";
-							} else if($page=='reservations') {
-								include "borrowerreservations.php";
-							} else if($page=='borrowerbooklogs') {
-								include "borrowerbooklogs.php";
-							} else if($page=='chkcancelreserve') {
-								include "chkborrowercancelreserve.php";
-							} else if($page=='borrowbook') {
-								include "manageborrowbook.php";
-								include "reserveexpire.php";
-							} else if($page=='chkborrowbook') {
-								include "chkborrowbook.php";
-							} else if($page=='returnbook') {
-								include "managereturnbook.php";
-							} 
-						}
-
-
-					?>
-					<script>
-						$(document).ready(function(){
-							$.ajax({
-								url:"truncateborrowcart.php"
-							});
-
-							$.ajax({
-								url:"truncatereturncart.php"
-							});
-							
-							$.ajax({
-								url:"reserveexpire.php"
-							});
-						
+				?>
+				<script>
+					$(document).ready(function(){
+						$.ajax({
+							url:"truncateborrowcart.php"
 						});
-					</script>
-				</div>
+
+						$.ajax({
+							url:"truncatereturncart.php"
+						});
+						
+						$.ajax({
+							url:"reserveexpire.php"
+						});
+					
+					});
+				</script>
 			</div>
 		</div>
 	</body>

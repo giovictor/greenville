@@ -12,7 +12,7 @@ require "dbconnect.php";
 					echo "<p>".$noofbooks['noofbooks']."</p>";
 				?>
 			</div>
-			<img src="pics/booksicon.png" class="wellicon">
+			<img src="images/booksicon.png" class="wellicon">
 			<p>Books</p>
 		</div>
 	</a>
@@ -26,7 +26,7 @@ require "dbconnect.php";
 					echo "<p>".$noofborrowers['noofborrowers']."</p>";
 				?>
 			</div>
-			<img src="pics/borrowersicon.png" id="borrowersicon">
+			<img src="images/borrowersicon.png" id="borrowersicon">
 			<p>Borrowers</p>
 		</div>
 	</a>
@@ -40,7 +40,7 @@ require "dbconnect.php";
 					echo "<p>".$noofreservation['noofreservation']."</p>";
 				?>
 			</div>
-			<img src="pics/reservedbooksicon.png" class="wellicon">
+			<img src="images/reservedbooksicon.png" class="wellicon">
 			<p>Reserved Books</p>
 		</div>
 	</a>
@@ -54,7 +54,7 @@ require "dbconnect.php";
 					echo "<p>$noborrowedbooks</p>";
 				?>
 			</div>
-			<img src="pics/borrowedbooksicon.png" class="wellicon">
+			<img src="images/borrowedbooksicon.png" class="wellicon">
 			<p>Borrowed Books</p>
 		</div>
 	</a>
@@ -67,7 +67,7 @@ require "dbconnect.php";
 				echo "<p>".$noofavailablebooks['noofavailablebooks']."</p>";
 			?>
 		</div>
-		<img src="pics/availablebooksicon.png" class="wellicon">
+		<img src="images/availablebooksicon.png" class="wellicon">
 		<p> Available Books</p>
 	</div>
 	<a href="?page=classifications">
@@ -80,7 +80,7 @@ require "dbconnect.php";
 					echo "<p>".$noofclassification['noofclassification']."</p>";
 				?>
 			</div>
-			<img src="pics/classificationsicon.png" class="wellicon">
+			<img src="images/classificationsicon.png" class="wellicon">
 			<p>Classifications</p>
 		</div>
 	</a>
@@ -94,7 +94,7 @@ require "dbconnect.php";
 					echo "<p>".$noofauthors['noofauthors']."</p>";
 				?>
 			</div>
-			<img src="pics/authorsicon.png" class="wellicon">
+			<img src="images/authorsicon.png" class="wellicon">
 			<p>Authors</p>
 		</div>
 	</a>
@@ -108,7 +108,7 @@ require "dbconnect.php";
 					echo "<p>".$noofpublishers['noofpublishers']."</p>";
 				?>
 			</div>
-			<img src="pics/publishersicon.png" class="wellicon">
+			<img src="images/publishersicon.png" class="wellicon">
 			<p>Publishers</p>
 		</div>
 	</a>

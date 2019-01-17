@@ -35,7 +35,7 @@ if(isset($_GET['idnumber'])) {
 	$fpdf = new FPDF("P","mm",array(90,125));
 	$fpdf->AddPage();
 	$fpdf->SetFont("Arial","",10);
-	$fpdf->Image("pics/gvclogo.png",5,7,-500);
+	$fpdf->Image("images/gvclogo.png",5,7,-500);
 	$fpdf->Cell(75,5,"GREENVILLE COLLEGE LIBRARY",0,1,"C");
 
 	$fpdf->SetFont("Arial","",5.5);

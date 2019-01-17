@@ -12,7 +12,7 @@
 					echo "<p>".$archivedbook['noofarchivedbooks']."</p>";
 				?>
 			</div>
-			<img src="pics/booksicon.png" class="wellicon">
+			<img src="images/booksicon.png" class="wellicon">
 			<p>Books</p>
 		</div>
 	</a>
@@ -26,7 +26,7 @@
 					echo "<p>".$archivedborrower['noofarchivedborrowers']."</p>";
 				?>
 			</div>
-			<img src="pics/borrowersicon.png" id="borrowersicon">
+			<img src="images/borrowersicon.png" id="borrowersicon">
 			<p>Borrowers</p>
 		</div>
 	</a>
@@ -40,7 +40,7 @@
 					echo "<p>".$archivedreservation['noofarchivedreservations']."</p>";
 				?>
 			</div>
-			<img src="pics/reservedbooksicon.png" class="wellicon">
+			<img src="images/reservedbooksicon.png" class="wellicon">
 			<p>Reservations</p>
 		</div>
 	</a>
@@ -54,7 +54,7 @@
 					echo "<p>".$archivedbooklog['noofarchivedbooklogs']."</p>";
 				?>
 			</div>
-			<img src="pics/borrowedbooksicon.png" class="wellicon">
+			<img src="images/borrowedbooksicon.png" class="wellicon">
 			<p>Book Logs</p>
 		</div>
 	</a>
@@ -68,7 +68,7 @@
 					echo "<p>".$archivedborrowerlog['noofarchivedborrowerlogs']."</p>";
 				?>
 			</div>
-			<img src="pics/borrowerlogsicon.png" class="wellicon">
+			<img src="images/borrowerlogsicon.png" class="wellicon">
 			<p>Borrower Logs</p>
 		</div>
 	</a>
@@ -82,7 +82,7 @@
 					echo "<p>".$archivedclassification['noofarchivedclassifications']."</p>";
 				?>
 			</div>
-			<img src="pics/classificationsicon.png" class="wellicon">
+			<img src="images/classificationsicon.png" class="wellicon">
 			<p>Classifications</p>
 		</div>
 	</a>
@@ -96,7 +96,7 @@
 					echo "<p>".$archivedauthor['noofarchivedauthors']."</p>";
 				?>
 			</div>
-			<img src="pics/authorsicon.png" class="wellicon">
+			<img src="images/authorsicon.png" class="wellicon">
 			<p>Authors</p>
 		</div>
 	</a>
@@ -110,7 +110,7 @@
 					echo "<p>".$archivedpublisher['noofarchivedpublishers']."</p>";
 				?>
 			</div>
-			<img src="pics/publishersicon.png" class="wellicon">
+			<img src="images/publishersicon.png" class="wellicon">
 			<p>Publishers</p>
 		</div>
 	</a>
