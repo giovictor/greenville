@@ -447,11 +447,18 @@ body {
 .basicsearch {
 	background-color:#E8E6E6;
 	margin:10px 0; 
-	padding:50px 50px;
+	padding:35px 50px;
 }
-.basicsearch .form-group:nth-child(1) {
-	padding-bottom:10px;
+
+#basicsearchbox {
+	width:400px;
+	display:inline-block;
 }
+
+.selectsearchtype  {
+	width:400px;
+}
+
 .collectionsearch {
 	background-color:#E8E6E6;
 	height:220px;

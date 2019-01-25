@@ -1,5 +1,5 @@
 <div class="basicsearch">
-<h3>Basic Search</h3>
+<h3>Greenville College Library</h3>
 <h4>Search for library's materials and collections</h4>
 <?php
 require "dbconnect.php";
@@ -9,12 +9,10 @@ if(isset($_GET['basicsearch'])) {
 	$searchtype = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['selectsearchtype']));
 ?>
 		<title><?php echo $keyword;?> - Search Results</title>
-		<form method="GET" class="form-inline" id="basicsearchform">
+		<form method="GET" id="basicsearchform">
 			<div class="form-group">
 				<input id="basicsearchbox" type="text" name="basicsearch" class="form-control" size="50" value="<?php echo $keyword;?>">
-				<input id="button" class="btn btn-success btn-sm" type="submit" name="basicsearchbutton" value="Search">
 			</div>
-			<br>
 			<div class="form-group">
 			Limit to: <select name="selectsearchtype" class="selectsearchtype form-control">
 				<option value="any"
@@ -67,6 +65,7 @@ if(isset($_GET['basicsearch'])) {
 				>Accession Number</option>
 			</select>
 			</div>
+			<button type="submit" id="button" class="btn btn-success btn-sm">Search</button>
 		</form>
 		</div>
 <?php

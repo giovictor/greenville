@@ -1,7 +1,7 @@
 <?php
 require "dbconnect.php";
 include "modals.php";
-if(isset($_GET['searchbutton'])) {
+if(isset($_GET['collectionssearch'])) {
 	$keyword = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['collectionssearch']));
 	$searchtype = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['selectsearchtype']));
 	$classificationID = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['classificationID']));
@@ -71,7 +71,7 @@ if(isset($_GET['searchbutton'])) {
 		</div>
 		<div class="form-group">
 			<input class="form-control collectionssearchbox" type="text" name="collectionssearch">
-			<input id="button" class="btn btn-success btn-sm" type="submit" name="searchbutton" value="Search">
+			<button id="button" class="btn btn-success btn-sm collectionssearchbtn" type="submit">Search</button>
 		</div>
 		<input type="hidden" name="classificationID" value="<?php echo $classificationID;?>">
 	</form>

@@ -21,7 +21,7 @@ require "dbconnect.php";
 			</div>
 			<div class="form-group">
 				<input class="form-control collectionssearchbox" type="text" name="collectionssearch">
-				<input id="button" class="btn btn-success btn-sm" type="submit" name="searchbutton" value="Search">
+				<button id="button" class="btn btn-success btn-sm collectionssearchbtn" type="submit">Search</button>
 			</div>
 			<input type="hidden" name="classificationID" value="<?php echo $classificationID;?>">
 		</form>
