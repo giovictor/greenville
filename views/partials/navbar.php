@@ -37,7 +37,7 @@
 							<?php
 								foreach($classifications as $classification) {
 							?>
-									<li><a href="?classification=<?php echo $classification['classificationID'];?>"><?php echo $classification['classification'];?></a></li>
+									<li><a href="?page=classifications&classificationID=<?php echo $classification['classificationID'];?>"><?php echo $classification['classification'];?></a></li>
 							<?php
 								}
 							?>
