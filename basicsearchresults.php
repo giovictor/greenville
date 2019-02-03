@@ -4,20 +4,20 @@
 <?php
 require "dbconnect.php";
 
-if(isset($_GET['basicsearch'])) {
-	$keyword = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['basicsearch']));
-	$searchtype = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['searchtype']));
+if(isset($_GET['q'])) {
+	$keyword = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['q']));
+	$type = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['type']));
 ?>
 		<title><?php echo $keyword;?> - Search Results</title>
 		<form method="GET" id="basicsearchform">
 			<div class="form-group">
-				<input id="basicsearchbox" type="text" name="basicsearch" class="form-control" size="50" value="<?php echo $keyword;?>">
+				<input id="basicsearchbox" type="text" name="q" class="form-control" size="50" value="<?php echo $keyword;?>">
 			</div>
 			<div class="form-group">
-			Limit to: <select name="searchtype" class="searchtype form-control">
+			Limit to: <select name="type" class="searchtype form-control">
 				<option value="any"
 					<?php
-						if($_GET['searchtype']=="any") {
+						if($_GET['type']=="any") {
 							echo "selected='selected'";
 						}
 
@@ -25,7 +25,7 @@ if(isset($_GET['basicsearch'])) {
 				>Any Field</option>
 				<option value="booktitle"
 					<?php
-						if($_GET['searchtype']=="booktitle") {
+						if($_GET['type']=="booktitle") {
 							echo "selected='selected'";
 						}
 
@@ -33,7 +33,7 @@ if(isset($_GET['basicsearch'])) {
 				>Title</option>
 				<option value="author"
 					<?php
-						if($_GET['searchtype']=="author") {
+						if($_GET['type']=="author") {
 							echo "selected='selected'";
 						}
 
@@ -41,7 +41,7 @@ if(isset($_GET['basicsearch'])) {
 				>Author</option>
 				<option value="publisher"
 					<?php
-						if($_GET['searchtype']=="publisher") {
+						if($_GET['type']=="publisher") {
 							echo "selected='selected'";
 						}
 
@@ -49,7 +49,7 @@ if(isset($_GET['basicsearch'])) {
 				>Publisher</option>
 				<option value="publishingyear"
 					<?php
-						if($_GET['searchtype']=="publishingyear") {
+						if($_GET['type']=="publishingyear") {
 							echo "selected='selected'";
 						}
 
@@ -57,7 +57,7 @@ if(isset($_GET['basicsearch'])) {
 				>Year</option>
 				<option value="accession_no"
 					<?php
-						if($_GET['searchtype']=="accession_no") {
+						if($_GET['type']=="accession_no") {
 							echo "selected='selected'";
 						}
 
@@ -73,12 +73,12 @@ if(isset($_GET['basicsearch'])) {
 		echo "Please type a keyword.";	
 	} else {
 		$booksperpages = 10;
-		if($searchtype=="any") {
+		if($type=="any") {
 			$totalsearchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE booktitle LIKE '%$keyword%' OR author.author LIKE '%$keyword%' OR publisher.publisher LIKE '%$keyword%' OR publishingyear LIKE '%$keyword%' OR classification LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID";
-		} else if ($searchtype=="accession_no") {
+		} else if ($type=="accession_no") {
 			$totalsearchresultsSQL = "SELECT bookID,book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID";
 		} else {
-			$totalsearchresultsSQL = "SELECT bookID,book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID";
+			$totalsearchresultsSQL = "SELECT bookID,book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $type LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID";
 		}
 
 		$totalsearchresultsQuery = mysqli_query($dbconnect, $totalsearchresultsSQL);
@@ -104,12 +104,12 @@ if(isset($_GET['basicsearch'])) {
 
 		$firstresult = ($page - 1) * $booksperpages;
 		
-		if($searchtype=="any") {
+		if($type=="any") {
 			$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE booktitle LIKE '%$keyword%' OR author.author LIKE '%$keyword%' OR publisher.publisher LIKE '%$keyword%' OR publishingyear LIKE '%$keyword%' OR classification LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID LIMIT $firstresult, $booksperpages";
-		} else if ($searchtype=="accession_no") {
+		} else if ($type=="accession_no") {
 			$searchresultsSQL = "SELECT bookID,book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID LIMIT $firstresult, $booksperpages";
 		} else {
-			$searchresultsSQL = "SELECT bookID,book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $searchtype LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID LIMIT $firstresult, $booksperpages";
+			$searchresultsSQL = "SELECT bookID,book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $type LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID LIMIT $firstresult, $booksperpages";
 		}
 			if($rows==0) {
 				echo "<center><h4 style='margin-top:20px;'>No results found. Try searching again.</h4</center>";
@@ -268,7 +268,7 @@ if(isset($_GET['basicsearch'])) {
 			</table>
 		</div>
 		<input type="hidden" name="keyword" class="keyword" id="<?php echo $keyword;?>">
-		<input type="hidden" name="searchtype" class="searchtype" id="<?php echo $searchtype;?>">
+		<input type="hidden" name="type" class="type" id="<?php echo $type;?>">
 		<input type="hidden" name="booksperpages" id="booksperpages" value="<?php echo $booksperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
 		<?php
@@ -280,11 +280,11 @@ if(isset($_GET['basicsearch'])) {
 		<?php
 			if($page > 1) {
 				$previous = $page - 1;
-				$pagination .= '<a href="index.php?basicsearch='.$keyword.'&basicsearchbutton=Search&searchtype='.$searchtype.'&bookpage='.$previous.'">Previous</a>&nbsp;';
+				$pagination .= '<a href="index.php?q='.$keyword.'&type='.$type.'&bookpage='.$previous.'">Previous</a>&nbsp;';
 
 				for($i = $page - 3; $i < $page; $i++) {
 					if($i > 0) {
-						$pagination .= '<a href="index.php?basicsearch='.$keyword.'&basicsearchbutton=Search&searchtype='.$searchtype.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+						$pagination .= '<a href="index.php?q='.$keyword.'&type='.$type.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
 					}
 				}
 			}
@@ -293,7 +293,7 @@ if(isset($_GET['basicsearch'])) {
 			$pagination .= ''.$page.'&nbsp;';
 
 			for($i = $page + 1; $i <= $numberofpages; $i++) {
-				$pagination .= '<a href="index.php?basicsearch='.$keyword.'&basicsearchbutton=Search&searchtype='.$searchtype.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+				$pagination .= '<a href="index.php?q='.$keyword.'&type='.$type.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
 				if($i >= $page + 3) {
 					break;
 				}
@@ -301,7 +301,7 @@ if(isset($_GET['basicsearch'])) {
 
 			if($page != $numberofpages) {
 				$next = $page + 1;
-				$pagination .= '<a href="index.php?basicsearch='.$keyword.'&basicsearchbutton=Search&searchtype='.$searchtype.'&bookpage='.$next.'">Next</a>&nbsp;';	
+				$pagination .= '<a href="index.php?q='.$keyword.'&type='.$type.'&bookpage='.$next.'">Next</a>&nbsp;';	
 			}
 ?>
 			<div class="pagination"><?php echo $pagination;?></div>
@@ -317,13 +317,13 @@ $(document).ready(function() {
 		$(this).css("opacity", "0.7");
 		var accession_no = $(this).attr("id");
 		var keyword = $(".keyword").attr("id");
-		var searchtype = $(".searchtype").attr("id");
+		var type = $(".type").attr("id");
 		var booksperpages = $("#booksperpages").val();
 		var firstresult = $("#firstresult").val();
 			$.ajax({
 				url:"reservebook.php",
 				method:"GET",
-				data:{accession_no:accession_no, keyword:keyword, searchtype:searchtype, booksperpages:booksperpages, firstresult:firstresult},
+				data:{accession_no:accession_no, keyword:keyword, type:type, booksperpages:booksperpages, firstresult:firstresult},
 				success:function(data) {
 					$(".searchresults").html(data);
 				}
@@ -347,8 +347,8 @@ $(document).ready(function() {
 		$("input:checkbox").not(this).prop("checked", this.checked);
 	});
 
-	$("#basicsearchform").submit(function(e) {
-	var searchbox = $("#basicsearchbox").val();
+	$("#qform").submit(function(e) {
+	var searchbox = $("#qbox").val();
 		if(searchbox=="") {
 			$("#emptysearch").modal("show");
 			e.preventDefault();

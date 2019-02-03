@@ -1,12 +1,12 @@
 <div class="basicsearch">
 <h3>Greenville College Library</h3>
 <h4>Search for library's materials and collections</h4>
-		<form method="GET"  id="basicsearchform">
+		<form method="GET" id="basicsearchform">
 			<div class="form-group">
-				<input id="basicsearchbox" type="text" name="basicsearch" class="form-control" size="50">
+				<input id="basicsearchbox" type="text" name="q" class="form-control" size="50">
 			</div>
 			<div class="form-group">
-				Limit to: <select name="selectsearchtype" class="selectsearchtype form-control">
+				Limit to: <select name="type" class="searchtype form-control">
 					<option value="any">Any Field</option>
 					<option value="booktitle">Title</option>
 					<option value="author">Author</option>
