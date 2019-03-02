@@ -371,12 +371,16 @@ $(document).ready(function() {
 		$keyword = $_GET['q'];
 		$type = $_GET['type'];
 
-		$book = new Book($dbconnect);
-		$books = $book->searchBookWithTotalResults($keyword, $type);
+		$firstresult = 0;
+		$booksperpages = 10;
 
-		foreach($books as $book) {
-			echo $book['booktitle']."<br>";
-		}
+		$book = new Book($dbconnect);
+		$books = $book->searchBookWithLimitedResults($keyword, $type, $firstresult, $booksperpages);
+
+		echo "<pre>";
+		print_r($books);
+		echo "</pre>";
+		
 	}
 ?>
 

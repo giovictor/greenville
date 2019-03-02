@@ -7,7 +7,6 @@
 			</div>
 			<div class="form-group">
 				Limit to: <select name="type" class="searchtype form-control">
-					<option value="any">Any Field</option>
 					<option value="booktitle">Title</option>
 					<option value="author">Author</option>
 					<option value="publisher">Publisher</option>

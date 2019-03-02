@@ -212,7 +212,7 @@
 				<?php
 					/* Search Results View */
 					if(isset($_GET['q'])) {
-						include "search.php";
+						include "views/borrower/search.php";
 					} else if(isset($_GET['mngbooksearch']) || isset($_GET['classification']) || isset($_GET['startyear']) || isset($_GET['endyear'])) {
 						include "booktblsearchresult.php";
 					} else if(isset($_GET['mngborrowersearch'])) {
