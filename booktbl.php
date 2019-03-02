@@ -10,6 +10,7 @@
 		<div class="panel-heading">
 			<h4>Search Books <span class="glyphicon glyphicon-search"></span></h4>
 		</div>
+
 		<div class="panel-body">
 			<form method="GET" class="form-inline" id="booktablesearchform">
 					<div class="form-group">
@@ -27,6 +28,7 @@
 					</div>
 					<input class="btn btn-success btn-sm form-control" id="aedsearchbutton" type="submit" name="mngbookbutton" value="Search">
 			</form>
+
 			<form style="margin-top:10px;" method="GET" class="form-inline" id="booktableyearsearchform">
 				<div class="form-group">
 					Filter by year range: 
@@ -35,6 +37,7 @@
 				</div>
 				<input class="btn btn-success btn-sm form-control" id="aedsearchbutton" type="submit" name="mngbookbutton" value="Search">
 			</form>
+
 			<form style="margin-top:10px;" method="GET" class="form-inline" id="booktablesearchform">
 				Filter by classification:
 				<div class="form-group">
@@ -54,8 +57,10 @@
 				</div>
 				<input class="btn btn-success btn-sm form-control" id="aedsearchbutton" type="submit" name="mngbookbutton" value="Search">
 			</form>
+
 		</div>
 	</div>
+
 	<div class="booktblfilter">
 		<form class="form-inline">
 			<span>Group by:</span>
@@ -65,8 +70,9 @@
 			</select>
 		</form>
 	</div>
+
 	<?php 
-	require "dbconnect.php";
+		require "dbconnect.php";
 		$booksperpages = 10;
 		$totalbookSQL = "SELECT bookID, book.accession_no, callnumber, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors, publisher.publisher, publishingyear, classification.classification, COUNT(DISTINCT book.accession_no) AS copies, book.status, price FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.status!='Archived' GROUP BY bookID ORDER BY accession_no DESC";
 		$totalbookQuery = mysqli_query($dbconnect, $totalbookSQL);

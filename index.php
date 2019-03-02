@@ -12,16 +12,17 @@
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Ubuntu" rel="stylesheet">
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>   
-	<script src="js/scripts.js"></script>   
+	<script src="http://pagination.js.org/dist/2.1.4/pagination.min.js"></script>
+	<!-- <script src="js/scripts.js"></script>    -->
 	<?php if(!isset($_GET['page'])) { echo '<title>Greenville College Library</title>'; } ?>
 </head>
 	<body>
 		<div id="container">
 			<?php
 				session_start();
-				include "navbar.php";
+				include "views/partials/navbar.php";
 			?>
-			<div id="modalscripts">
+			<!-- <div id="modalscripts">
 				<?php
 					include "modals.php";
 				?>
@@ -178,7 +179,7 @@
 					});
 				});
 				</script>
-			</div>
+			</div> -->
 
 			<?php
 				/* Admin Sidebar */
@@ -187,7 +188,7 @@
 				}
 			?>
 
-			<div class="wrapper">
+			<div class="wrapper <?php if(isset($_SESSION['librarian'])) { echo 'adminwrapper';} ?>">
 				<?php
 					/* Homepage Views */
 					if(empty($_GET)) {
@@ -202,19 +203,16 @@
 					
 				<?php
 					/* Collections View */
-					if(isset($_GET['page'])) {
-						$page=$_GET['page'];
-						if($page=="collections") {
-							include "collectionssearch.php";
-							include "collections.php";
-						} 
+					if(isset($_GET['classifications'])) {
+						include "views/borrower/classifications-search.php";
+						include "views/borrower/classifications.php";
 					} 
 				?>
 				
 				<?php
 					/* Search Results View */
 					if(isset($_GET['q'])) {
-						include "basicsearchresults.php";
+						include "search.php";
 					} else if(isset($_GET['mngbooksearch']) || isset($_GET['classification']) || isset($_GET['startyear']) || isset($_GET['endyear'])) {
 						include "booktblsearchresult.php";
 					} else if(isset($_GET['mngborrowersearch'])) {
@@ -251,8 +249,8 @@
 						include "archivedbooklogssearchresults.php";
 					} else if(isset($_GET['archivedborrower']) && isset($_GET['archivedlogindate']) && isset($_GET['archivedlogintime']) && isset($_GET['archivedlogoutdate']) && isset($_GET['archivedlogouttime'])) {
 						include "archivedborrowerlogssearchresults.php";
-					} else if(isset($_GET['collectionssearch'])) {
-						include "collectionssearchresult.php";
+					} else if(isset($_GET['classification_search'])) {
+						include "views/borrower/classifications-search-results.php";
 					}
 				?>
 

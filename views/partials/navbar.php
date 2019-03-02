@@ -1,5 +1,5 @@
 <?php
-	include 'config/DatabaseConnection.php';
+	include_once 'config/DatabaseConnection.php';
 	include 'models/Classification.php';
 
 	$database = new Database();
@@ -37,7 +37,7 @@
 							<?php
 								foreach($classifications as $classification) {
 							?>
-									<li><a href="?page=classifications&classificationID=<?php echo $classification['classificationID'];?>"><?php echo $classification['classification'];?></a></li>
+									<li><a href="?classifications&classificationID=<?php echo $classification['classificationID'];?>"><?php echo $classification['classification'];?></a></li>
 							<?php
 								}
 							?>

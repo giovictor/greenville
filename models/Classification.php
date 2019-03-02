@@ -1,6 +1,7 @@
 <?php 
 
-class Classification  {
+class Classification  
+{
     public $dbconnect;
 
     public function __construct($dbconnect)

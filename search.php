@@ -1,4 +1,4 @@
-<div class="basicsearch">
+<!-- <div class="basicsearch">
 	<h3>Greenville College Library</h3>
 	<h4>Search for library's materials and collections</>
 <?php
@@ -358,4 +358,25 @@ $(document).ready(function() {
 
 </script>
 
+-->
+
+<?php
+	include_once 'config/DatabaseConnection.php';
+	include 'models/Book.php';
+
+	$database = new Database();
+	$dbconnect = $database->connect();
+
+	if(isset($_GET['q']) && isset($_GET['type'])) {
+		$keyword = $_GET['q'];
+		$type = $_GET['type'];
+
+		$book = new Book($dbconnect);
+		$books = $book->searchBookWithTotalResults($keyword, $type);
+
+		foreach($books as $book) {
+			echo $book['booktitle']."<br>";
+		}
+	}
+?>
 

@@ -287,9 +287,7 @@ body {
 	background-color:#444;
 	height:100%;
 	width:14%;
-	float:left;
-	padding-bottom:100%;
-	margin-bottom:-100%;
+	position:absolute;
 	font-size:0.9em;
 }
 
@@ -315,6 +313,15 @@ body {
 
 .adminsidebar ul li a:hover {
 	text-decoration:none;
+}
+
+.adminwrapper {
+	margin-left:14%;	
+}
+
+#info {
+	position:relative;
+	margin-left:14%;
 }
 
 #submenubook, #submenuborrower,#archives {
@@ -435,11 +442,8 @@ body {
 
 /*==================================MAIN====================================*/
 .wrapper {
-	/*border:solid black 1px;*/
 	margin-left:2%;
 	margin-right:2%;
-	height:100%;
-	padding-bottom:145px;
 }
 
 /*SEARCH FORMS*/
