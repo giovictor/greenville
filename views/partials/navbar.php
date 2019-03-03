@@ -1,6 +1,6 @@
 <?php
 	include_once 'config/DatabaseConnection.php';
-	include 'models/Classification.php';
+	include_once 'models/Classification.php';
 
 	$database = new Database();
 	$dbconnect = $database->connect();

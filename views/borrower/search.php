@@ -1,4 +1,4 @@
-<!-- <div class="basicsearch">
+<!--<div class="basicsearch">
 	<h3>Greenville College Library</h3>
 	<h4>Search for library's materials and collections</>
 <?php
@@ -72,7 +72,7 @@ if(isset($_GET['q'])) {
 	if(empty($keyword)) {
 		echo "Please type a keyword.";	
 	} else {
-		$booksperpages = 10;
+		$itemsperpages = 10;
 		if($type=="any") {
 			$totalsearchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE booktitle LIKE '%$keyword%' OR author.author LIKE '%$keyword%' OR publisher.publisher LIKE '%$keyword%' OR publishingyear LIKE '%$keyword%' OR classification LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID";
 		} else if ($type=="accession_no") {
@@ -83,7 +83,7 @@ if(isset($_GET['q'])) {
 
 		$totalsearchresultsQuery = mysqli_query($dbconnect, $totalsearchresultsSQL);
 		$rows = mysqli_num_rows($totalsearchresultsQuery);
-		$numberofpages = ceil($rows/$booksperpages);
+		$numberofpages = ceil($rows/$itemsperpages);
 
 		if(!isset($_GET['bookpage'])) {
 			$page = 1;
@@ -102,14 +102,14 @@ if(isset($_GET['q'])) {
 
 		
 
-		$firstresult = ($page - 1) * $booksperpages;
+		$firstresult = ($page - 1) * $itemsperpages;
 		
 		if($type=="any") {
-			$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE booktitle LIKE '%$keyword%' OR author.author LIKE '%$keyword%' OR publisher.publisher LIKE '%$keyword%' OR publishingyear LIKE '%$keyword%' OR classification LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID LIMIT $firstresult, $booksperpages";
+			$searchresultsSQL = "SELECT bookID, book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE booktitle LIKE '%$keyword%' OR author.author LIKE '%$keyword%' OR publisher.publisher LIKE '%$keyword%' OR publishingyear LIKE '%$keyword%' OR classification LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID LIMIT $firstresult, $itemsperpages";
 		} else if ($type=="accession_no") {
-			$searchresultsSQL = "SELECT bookID,book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID LIMIT $firstresult, $booksperpages";
+			$searchresultsSQL = "SELECT bookID,book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE book.accession_no='$keyword' AND book.status!='Archived' GROUP BY bookID LIMIT $firstresult, $itemsperpages";
 		} else {
-			$searchresultsSQL = "SELECT bookID,book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $type LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID LIMIT $firstresult, $booksperpages";
+			$searchresultsSQL = "SELECT bookID,book.accession_no, booktitle, GROUP_CONCAT(DISTINCT author SEPARATOR', ') AS authors , publisher.publisher, callnumber, classification.classification, publishingyear, ISBN, book.status FROM book LEFT JOIN bookauthor ON book.accession_no=bookauthor.accession_no LEFT JOIN author ON author.authorID=bookauthor.authorID LEFT JOIN publisher ON publisher.publisherID=book.publisherID JOIN classification ON classification.classificationID=book.classificationID WHERE $type LIKE '%$keyword%' AND book.status!='Archived' GROUP BY bookID LIMIT $firstresult, $itemsperpages";
 		}
 			if($rows==0) {
 				echo "<center><h4 style='margin-top:20px;'>No results found. Try searching again.</h4</center>";
@@ -269,7 +269,7 @@ if(isset($_GET['q'])) {
 		</div>
 		<input type="hidden" name="keyword" class="keyword" id="<?php echo $keyword;?>">
 		<input type="hidden" name="type" class="type" id="<?php echo $type;?>">
-		<input type="hidden" name="booksperpages" id="booksperpages" value="<?php echo $booksperpages;?>">
+		<input type="hidden" name="itemsperpages" id="itemsperpages" value="<?php echo $itemsperpages;?>">
 		<input type="hidden" name="firstresult" id="firstresult" value="<?php echo $firstresult;?>">
 		<?php
 			if($numberofpages > 1) {
@@ -318,12 +318,12 @@ $(document).ready(function() {
 		var accession_no = $(this).attr("id");
 		var keyword = $(".keyword").attr("id");
 		var type = $(".type").attr("id");
-		var booksperpages = $("#booksperpages").val();
+		var itemsperpages = $("#itemsperpages").val();
 		var firstresult = $("#firstresult").val();
 			$.ajax({
 				url:"reservebook.php",
 				method:"GET",
-				data:{accession_no:accession_no, keyword:keyword, type:type, booksperpages:booksperpages, firstresult:firstresult},
+				data:{accession_no:accession_no, keyword:keyword, type:type, itemsperpages:itemsperpages, firstresult:firstresult},
 				success:function(data) {
 					$(".searchresults").html(data);
 				}
@@ -357,12 +357,13 @@ $(document).ready(function() {
 });
 
 </script>
-
 -->
+
 
 <?php
 	include_once 'config/DatabaseConnection.php';
-	include 'models/Book.php';
+	include_once 'models/Book.php';
+	include_once 'utilities/Pagination.php';
 
 	$database = new Database();
 	$dbconnect = $database->connect();
@@ -371,16 +372,37 @@ $(document).ready(function() {
 		$keyword = $_GET['q'];
 		$type = $_GET['type'];
 
-		$firstresult = 0;
-		$booksperpages = 10;
+		echo "<title>".$keyword." -  Search Results</title>";
 
 		$book = new Book($dbconnect);
-		$books = $book->searchBookWithLimitedResults($keyword, $type, $firstresult, $booksperpages);
+		$totalResultsCount = $book->searchBookWithTotalResultsCount($keyword, $type);
 
-		echo "<pre>";
-		print_r($books);
-		echo "</pre>";
-		
+		$pagination = new Pagination();
+		$pagination->computeNumberOfPages($totalResultsCount);
+		$numberofpages = $pagination->numberofPages();
+
+		$pagination->pageValidator($numberofpages);
+		$page = $pagination->pageNumber();
+		$itemsperpages = $pagination->itemsperpages;
+
+		$pagination->computefirstResult($page, $itemsperpages);
+		$firstresult = $pagination->firstResult();
+
+		$books = $book->searchBookWithLimitedResults($keyword, $type, $firstresult, $itemsperpages);
+
+		foreach($books as $book) {
+?>
+			<div class="col-sm-4" style="height:200px;">
+				<div class="well">
+					<p><?php echo $book['booktitle'];?></p>
+					<p><?php echo $book['authors'];?></p>
+					<p><?php echo $book['publisher'];?></p>
+					<p><?php echo $book['classification'];?></p>
+				</div>
+			</div>
+<?php
+		}
+		$pagination->paginate($numberofpages, $page, $totalResultsCount, $keyword, $type);
 	}
 ?>
 
