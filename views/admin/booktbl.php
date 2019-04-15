@@ -80,7 +80,7 @@
 			$(".confirmbtn").click(function(){
 				var accession_no = $(this).data("id");
 				$.ajax({
-					url:"controllers/books/deletebook.php",
+					url:"controllers/books/delete.php",
 					method:"POST",
 					data:{accession_no:accession_no},
 					beforeSend:function() {
