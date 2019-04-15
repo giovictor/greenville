@@ -9,10 +9,12 @@
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/styles.css">
 	<link rel="stylesheet" href="css/media-queries.css">
+    <link rel="stylesheet" href="css/datatables.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Ubuntu" rel="stylesheet">
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>   
-	<script src="http://pagination.js.org/dist/2.1.4/pagination.min.js"></script>
+    <script src="js/datatables.min.js"></script>
+	<!-- <script src="http://pagination.js.org/dist/2.1.4/pagination.min.js"></script> -->
 	<!-- <script src="js/scripts.js"></script>    -->
 	<?php if(empty($_GET)) { echo '<title>Greenville College Library</title>'; } ?>
 </head>
@@ -22,7 +24,7 @@
 				session_start();
 				include "views/partials/navbar.php";
 			?>
-			<!-- <div id="modalscripts">
+			<div id="modalscripts">
 				<?php
 					include "modals.php";
 				?>
@@ -179,7 +181,7 @@
 					});
 				});
 				</script>
-			</div> -->
+			</div>
 
 			<?php
 				/* Admin Sidebar */
@@ -320,7 +322,7 @@
 						} else if($page=='genbc') {
 							include "barcodegenerator.php";
 						} else if($page=='books') {
-							include "booktbl.php";
+							include "views/admin/booktbl.php";
 						} else if($page=='borrowers') {
 							include "borrowertbl.php";
 						}

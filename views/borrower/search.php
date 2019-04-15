@@ -389,7 +389,6 @@ $(document).ready(function() {
 		$firstresult = $pagination->firstResult();
 
 		$books = $book->searchBookWithLimitedResults($keyword, $type, $firstresult, $itemsperpages);
-
 		foreach($books as $book) {
 ?>
 			<div class="col-sm-4" style="height:200px;">
