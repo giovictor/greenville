@@ -322,7 +322,7 @@
 						} else if($page=='genbc') {
 							include "barcodegenerator.php";
 						} else if($page=='books') {
-							include "views/admin/booktbl.php";
+							include "views/admin/books.php";
 						} else if($page=='borrowers') {
 							include "borrowertbl.php";
 						}

@@ -153,7 +153,10 @@ body {
 	background-color:#1C8A43;
 	margin:0;
 	padding:0;
-	border:0;
+    border:0;
+    position:fixed;
+    top:0;
+    width:100%;
 }
 
 #gvclogo {
@@ -287,7 +290,8 @@ body {
 	background-color:#444;
 	height:100%;
 	width:14%;
-	position:absolute;
+    position:fixed;
+    top:60px;
 	font-size:0.9em;
 }
 
@@ -443,7 +447,9 @@ body {
 /*==================================MAIN====================================*/
 .wrapper {
 	margin-left:2%;
-	margin-right:2%;
+    margin-right:2%;
+    position:relative;
+    top:60px;
 }
 
 /*SEARCH FORMS*/
