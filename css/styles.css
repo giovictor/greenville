@@ -319,6 +319,10 @@ body {
 	text-decoration:none;
 }
 
+.caret {
+    cursor:pointer;
+}
+
 .adminwrapper {
 	margin-left:14%;	
 }
@@ -1127,3 +1131,17 @@ input[id=aedsearchbutton] {
 	color:white;
 	font-weight:normal;
 }
+
+/* Datatables custom CSS */
+
+.pagination li a, .pagination li a:hover, .pagination li a:active, .pagination li a:visited {
+    color:#1C8A43;
+}
+
+.pagination .active a, .pagination .active a:hover {
+    background-color:#1C8A43;
+    color:#ffffff;
+}
+
+
+
