@@ -1,8 +1,8 @@
 <?php
 require "dbconnect.php";
 include "modals.php";
-if(isset($_GET['classification_search'])) {
-	$keyword = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['classification_search']));
+if(isset($_GET['searchbutton'])) {
+	$keyword = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['collectionssearch']));
 	$searchtype = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['selectsearchtype']));
 	$classificationID = mysqli_real_escape_string($dbconnect, htmlspecialchars($_GET['classificationID']));
 	
@@ -70,8 +70,8 @@ if(isset($_GET['classification_search'])) {
 		</select>
 		</div>
 		<div class="form-group">
-			<input class="form-control collectionssearchbox" type="text" name="classification_search">
-			<button id="button" class="btn btn-success btn-sm collectionssearchbtn" type="submit">Search</button>
+			<input class="form-control collectionssearchbox" type="text" name="collectionssearch">
+			<input id="button" class="btn btn-success btn-sm" type="submit" name="searchbutton" value="Search">
 		</div>
 		<input type="hidden" name="classificationID" value="<?php echo $classificationID;?>">
 	</form>
@@ -270,11 +270,11 @@ if(isset($_GET['classification_search'])) {
 			<?php
 				if($page > 1) {
 					$previous = $page - 1;
-					$pagination .= '<a href="?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$previous.'">Previous</a>&nbsp;';
+					$pagination .= '<a href="index.php?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$previous.'">Previous</a>&nbsp;';
 
 					for($i = $page - 3; $i < $page; $i++) {
 						if($i > 0) {
-							$pagination .= '<a href="?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+							$pagination .= '<a href="index.php?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
 						}
 					}
 				}
@@ -282,7 +282,7 @@ if(isset($_GET['classification_search'])) {
 				$pagination .= ''.$page.'&nbsp;';
 
 				for($i = $page + 1; $i <= $numberofpages; $i++) {
-					$pagination .= '<a href="?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+					$pagination .= '<a href="index.php?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
 					if($i >= $page + 3) {
 						break;
 					}
@@ -290,7 +290,7 @@ if(isset($_GET['classification_search'])) {
 
 				if($page != $numberofpages) {
 					$next = $page + 1;
-					$pagination .= '<a href="?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$next.'">Next</a>&nbsp;';	
+					$pagination .= '<a href="index.php?selectsearchtype='.$searchtype.'&collectionssearch='.$keyword.'&searchbutton=Search&classificationID='.$classificationID.'&bookpage='.$next.'">Next</a>&nbsp;';	
 				}
 			?>
 			<div class="pagination"><?php echo $pagination;?></div>

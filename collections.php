@@ -211,11 +211,11 @@ include "modals.php";
 		if($numberofpages > 1) {
 			if($page > 1) {
 				$previous = $page - 1;
-				$pagination .= '<a href="?collections&classificationID='.$classificationID.'&bookpage='.$previous.'">Previous</a>&nbsp;';
+				$pagination .= '<a href="?page=collections&classificationID='.$classificationID.'&bookpage='.$previous.'">Previous</a>&nbsp;';
 
 				for($i = $page - 3; $i < $page; $i++) {
 					if($i > 0) {
-						$pagination .= '<a href="?collections&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+						$pagination .= '<a href="?page=collections&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
 					}
 				}
 			}
@@ -223,7 +223,7 @@ include "modals.php";
 			$pagination .= ''.$page.'&nbsp;';
 
 			for($i = $page + 1; $i <= $numberofpages; $i++) {
-				$pagination .= '<a href="?collections&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
+				$pagination .= '<a href="?page=collections&classificationID='.$classificationID.'&bookpage='.$i.'">'.$i.'</a>&nbsp;';
 				if($i >= $page + 3) {
 					break;
 				}
@@ -231,7 +231,7 @@ include "modals.php";
 
 			if($page != $numberofpages) {
 				$next = $page + 1;
-				$pagination .= '<a href="?collections&classificationID='.$classificationID.'&bookpage='.$next.'">Next</a>&nbsp;';	
+				$pagination .= '<a href="?page=collections&classificationID='.$classificationID.'&bookpage='.$next.'">Next</a>&nbsp;';	
 			}
 	?>
 			<div class="pagination"><?php echo $pagination;?></div>

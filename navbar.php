@@ -1,17 +1,14 @@
 <?php
-	include_once 'config/DatabaseConnection.php';
-	include_once 'models/Classification.php';
+	require "dbconnect.php";
+	$classificationSQL = "SELECT * FROM classification WHERE status=1";
+	$classificationQuery = mysqli_query($dbconnect, $classificationSQL);
+	$classification = mysqli_fetch_assoc($classificationQuery);
 
-	$database = new Database();
-	$dbconnect = $database->connect();
-
-	$classification = new Classification($dbconnect);
-	$classifications = $classification->index();
 ?>
 
 <nav class="navbar navbar-default navbar-static-top" id="gvcnavbar">
 	<div class="navbar-header">
-		<a href="/greenville/" class="navbar-brand">
+		<a href="index.php" class="navbar-brand">
 			<span><img src="images/gvclogo.png" id="gvclogo"></span>
 			Greenville College Library
 		</a>
@@ -27,7 +24,7 @@
 			<?php
 				if(empty($_SESSION) || isset($_SESSION['borrower'])){
 			?>
-					<li><a href="/greenville/">HOME</a></li>
+					<li><a href="index.php">HOME</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							Classifications
@@ -35,11 +32,11 @@
 						</a>
 						<ul class="dropdown-menu">
 							<?php
-								foreach($classifications as $classification) {
+								do {
 							?>
-									<li><a href="?classifications&classificationID=<?php echo $classification['classificationID'];?>"><?php echo $classification['classification'];?></a></li>
+									<li><a href="?page=collections&classificationID=<?php echo $classification['classificationID'];?>"><?php echo $classification['classification'];?></a></li>
 							<?php
-								}
+								} while($classification = mysqli_fetch_assoc($classificationQuery));
 							?>
 						</ul>
 					</li>

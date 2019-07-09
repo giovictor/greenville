@@ -9,20 +9,17 @@
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/styles.css">
 	<link rel="stylesheet" href="css/media-queries.css">
-    <link rel="stylesheet" href="css/datatables.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Ubuntu" rel="stylesheet">
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>   
-    <script src="js/datatables.min.js"></script>
-	<!-- <script src="http://pagination.js.org/dist/2.1.4/pagination.min.js"></script> -->
-	<!-- <script src="js/scripts.js"></script>    -->
-	<?php if(empty($_GET)) { echo '<title>Greenville College Library</title>'; } ?>
+	<script src="js/scripts.js"></script>   
+	<?php if(!isset($_GET['page'])) { echo '<title>Greenville College Library</title>'; } ?>
 </head>
 	<body>
 		<div id="container">
 			<?php
 				session_start();
-				include "views/partials/navbar.php";
+				include "navbar.php";
 			?>
 			<div id="modalscripts">
 				<?php
@@ -190,32 +187,34 @@
 				}
 			?>
 
-			<div class="wrapper <?php if(isset($_SESSION['librarian'])) { echo 'adminwrapper';} ?>">
+			<div class="wrapper">
 				<?php
 					/* Homepage Views */
-					if(empty($_GET)) {
+					if(!isset($_GET['page']) && !isset($_GET['basicsearch']) && !isset($_GET['collectionssearch']) && !isset($_GET['homesearch']) && !isset($_GET['mngbooksearch']) && !isset($_GET['classification']) && !isset($_GET['startyear']) && !isset($_GET['endyear']) && !isset($_GET['mngborrowersearch']) && !isset($_GET['asearch']) && !isset($_GET['psearch']) && !isset($_GET['csearch']) && !isset($_GET['reservedate']) && !isset($_GET['expdate']) && !isset($_GET['dateborrowed']) && !isset($_GET['duedate']) && !isset($_GET['borrower']) && !isset($_GET['book']) && !isset($_GET['datereturned']) && !isset($_GET['logintime']) && !isset($_GET['logouttime']) && !isset($_GET['logindate']) && !isset($_GET['logoutdate']) && !isset($_GET['archivedcsearch']) && !isset($_GET['archivedasearch']) && !isset($_GET['archivedpsearch']) && !isset($_GET['archivedborrowersearch']) && !isset($_GET['archivedbooksearch']) && !isset($_GET['archivedbookclassification']) && !isset($_GET['archivedreservedate']) && !isset($_GET['archivedexpdate']) && !isset($_GET['archivedborrower']) && !isset($_GET['archivedbook']) && !isset($_GET['archiveddateborrowed']) && !isset($_GET['archivedatereturned']) && !isset($_GET['archivedlogindate']) && !isset($_GET['archivedlogintime']) && !isset($_GET['archivedlogoutdate']) && !isset($_GET['archivedlogouttime'])) {
 						if(isset($_SESSION['borrower']) || empty($_SESSION)) {
 							include "homepageslider.php";					
 							include "basicsearch.php";
 						} else if(isset($_SESSION['librarian'])) {
 							include "dashboard.php";
 						}
-					}
+					} 
 				?>
 					
 				<?php
 					/* Collections View */
-					if(isset($_GET['classifications'])) {
-						include "views/borrower/classifications-search.php";
-						include "views/borrower/classifications.php";
+					if(isset($_GET['page'])) {
+						$page=$_GET['page'];
+						if($page=="collections") {
+							include "collectionssearch.php";
+							include "collections.php";
+						} 
 					} 
 				?>
 				
 				<?php
 					/* Search Results View */
-					if(isset($_GET['q'])) {
-						include "basicsearch.php";
-						include "views/borrower/search.php";
+					if(isset($_GET['basicsearch'])) {
+						include "basicsearchresult.php";
 					} else if(isset($_GET['mngbooksearch']) || isset($_GET['classification']) || isset($_GET['startyear']) || isset($_GET['endyear'])) {
 						include "booktblsearchresult.php";
 					} else if(isset($_GET['mngborrowersearch'])) {
@@ -252,8 +251,8 @@
 						include "archivedbooklogssearchresults.php";
 					} else if(isset($_GET['archivedborrower']) && isset($_GET['archivedlogindate']) && isset($_GET['archivedlogintime']) && isset($_GET['archivedlogoutdate']) && isset($_GET['archivedlogouttime'])) {
 						include "archivedborrowerlogssearchresults.php";
-					} else if(isset($_GET['classification_search'])) {
-						include "views/borrower/classifications-search-results.php";
+					} else if(isset($_GET['collectionssearch'])) {
+						include "collectionssearchresult.php";
 					}
 				?>
 
@@ -322,7 +321,7 @@
 						} else if($page=='genbc') {
 							include "barcodegenerator.php";
 						} else if($page=='books') {
-							include "views/admin/books.php";
+							include "booktbl.php";
 						} else if($page=='borrowers') {
 							include "borrowertbl.php";
 						}
