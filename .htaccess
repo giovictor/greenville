@@ -1,0 +1,4 @@
+RewriteEngine on
+
+RewriteRule ^search index.php?q=$1&type=$2 [NC]
+RewriteRule ^classifications/([0-9]+) index.php?page=collections&classificationID=$1 [NC]
