@@ -7,7 +7,7 @@ Admin login:
 **username**: admin  
 **password**: gvclib112  
 
-Borrower login:
+Borrower login:  
 **username**: borrower  
 **password**: gvclib112
 
